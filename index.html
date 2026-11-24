@@ -8,7 +8,7 @@
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EvaluaSeguro · Exámenes en línea que no se pueden copiar</title>
-<meta name="description" content="EvaluaSeguro: plataforma de exámenes en línea para docentes y centros educativos. 12+ tipos de pregunta interactivos, antitrampa, resultados en vivo y corrección automática.">
+<meta name="description" content="EvaluaSeguro: plataforma de exámenes en línea para docentes y centros educativos. 30 tipos de pregunta interactivos, antitrampa, resultados en vivo y corrección automática.">
 <meta name="theme-color" content="#120d33">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="EvaluaSeguro">
@@ -279,6 +279,35 @@
   .demo-panel h3 { font-size: 20px; }
   .demo-panel p { font-size: 15px; margin: 8px 0 16px; }
   @media (max-width: 820px) { .demo { grid-template-columns: 1fr; padding: 28px 20px; } }
+  /* Selector de demos */
+  .sel-demo { grid-column: 1 / -1; display: grid; gap: 18px; padding: 24px; border-radius: 20px; background: rgb(255 255 255 / .06); border: 1px solid rgb(255 255 255 / .16); }
+  .sel-demo fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .sel-demo legend, .sel-demo .rot { display: block; padding: 0; margin-bottom: 10px; font: 800 15px var(--cuerpo); color: #fff; }
+  .sel-fila { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: end; }
+  .seg { display: inline-flex; padding: 4px; border-radius: 999px; background: rgb(0 0 0 / .25); border: 1px solid rgb(255 255 255 / .16); }
+  .seg label { position: relative; }
+  .seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .seg span { display: inline-flex; align-items: center; min-height: 40px; padding: 8px 18px; border-radius: 999px; font-weight: 700; color: rgb(255 255 255 / .8); }
+  .seg input:checked + span { background: var(--menta); color: var(--noche); }
+  .seg input:focus-visible + span { outline: 3px solid var(--coral); outline-offset: 2px; }
+  .sel-demo select { width: 100%; min-height: 48px; padding: 10px 14px; border-radius: 14px; border: 1px solid rgb(255 255 255 / .25); background: rgb(0 0 0 / .25); color: #fff; font: 600 16px var(--cuerpo); }
+  .sel-demo select option { color: var(--tinta); }
+  .tipos-cab { display: flex; gap: 8px; margin-bottom: 12px; }
+  .mini { min-height: 36px; padding: 6px 14px; border-radius: 999px; border: 1px solid rgb(255 255 255 / .3); background: transparent; color: #fff; font: 700 14px var(--cuerpo); cursor: pointer; }
+  .mini:hover { background: rgb(255 255 255 / .1); }
+  .grupos { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .grupo { padding: 14px; border-radius: 16px; background: rgb(0 0 0 / .2); border: 1px solid rgb(255 255 255 / .1); }
+  .grupo legend { float: left; width: 100%; font-size: 14px; color: var(--menta); margin-bottom: 8px; }
+  .grupo legend + label { clear: both; }
+  .grupo label { position: relative; display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 15px; cursor: pointer; }
+  .grupo input { width: 18px; height: 18px; flex: none; accent-color: var(--menta); }
+  .grupo .tip { position: absolute; left: 28px; bottom: calc(100% + 4px); z-index: 5; width: max-content; max-width: min(260px, 70vw); padding: 8px 12px; border-radius: 10px; background: #fff; color: var(--tinta); font-size: 13.5px; line-height: 1.4; box-shadow: var(--sombra); opacity: 0; pointer-events: none; transform: translateY(4px); transition: opacity .15s, transform .15s; }
+  .grupo label:hover .tip, .grupo label:focus-within .tip { opacity: 1; transform: none; }
+  .sel-pie { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+  .sel-pie .nota-papel { flex: 1 1 260px; margin: 0; font-size: 14px; color: rgb(255 255 255 / .75); }
+  .sel-msg { width: 100%; margin: 0; font-weight: 700; color: var(--coral); min-height: 1.2em; }
+  @media (max-width: 560px) { .sel-demo { padding: 16px; } .sel-fila { grid-template-columns: 1fr; } .sel-pie .btn { width: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .grupo .tip { transition: none; } }
 
   /* IA */
   .ia-sec { background: #fff; }
@@ -366,7 +395,7 @@
         </div>
         <a class="estudiante revelar" style="--d:.3s" href="examen.html">Soy estudiante, tengo un código <span aria-hidden="true">→</span></a>
         <div class="cifras revelar" style="--d:.36s">
-          <div><strong data-contar="12" data-sufijo="+">12+</strong><span>tipos de pregunta</span></div>
+          <div><strong data-contar="30">30</strong><span>tipos de pregunta</span></div>
           <div><strong data-contar="0" data-prefijo="RD$">RD$0</strong><span>para instalar</span></div>
           <div><strong data-contar="14">14</strong><span>días de prueba gratis</span></div>
         </div>
@@ -401,10 +430,10 @@
       <div class="tarjetas">
         <article class="tarjeta ancha revelar">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7M17.5 14v7"/></svg></div>
-          <h3>Más de 12 tipos de pregunta interactivos</h3>
-          <p>Mucho más que marcar una opción: tus estudiantes arrastran, conectan, ordenan y construyen.</p>
+          <h3>30 tipos de pregunta interactivos</h3>
+          <p>Mucho más que marcar una opción: tus estudiantes arrastran, conectan, tocan la imagen, grafican, programan, deciden en casos y juegan.</p>
           <ul class="chips" aria-label="Tipos de pregunta">
-            <li>Selección</li><li>Verdadero o falso</li><li>V/F justificada</li><li>Respuesta corta</li><li>Ordenar</li><li>Relacionar con líneas</li><li>Clasificar</li><li>Completar</li><li>Banco de palabras</li><li>Numéricas con tolerancia</li><li>Armar algoritmos</li><li>Diagramas de flujo</li><li class="media">Imágenes</li><li class="media">Video</li><li class="media">Audio</li>
+            <li>Selección</li><li>Varias correctas</li><li>Verdadero o falso</li><li>V/F justificada</li><li>Respuesta corta</li><li>Numérica</li><li>Expresión matemática</li><li>Completar</li><li>Banco de palabras</li><li>Listas desplegables</li><li>Matriz</li><li>Tabla</li><li>Marcar palabras</li><li>Corregir el texto</li><li>Ordenar</li><li>Relacionar con líneas</li><li>Clasificar</li><li>Armar algoritmos</li><li>Diagramas de flujo</li><li>Tocar zonas</li><li>Etiquetar imágenes</li><li>Graficar</li><li>Deslizadores</li><li>Programación</li><li>Escenarios con decisiones</li><li>Concordancia</li><li>Ensayo con rúbrica</li><li>Crucigrama</li><li>Sopa de letras</li><li class="media">Video con pausas</li><li class="media">Imágenes</li><li class="media">Audio</li>
           </ul>
         </article>
 
@@ -477,16 +506,30 @@
         <div>
           <span class="eti">Demo</span>
           <h2 id="titulo-demo">Tómalo como si fueras tu estudiante</h2>
-          <p>Un examen de muestra con todos los tipos de pregunta: ordenar, relacionar con líneas, clasificar, completar, diagramas de flujo, algoritmos, numéricas, V/F justificada, imágenes, audio y video.</p>
-          <div class="acciones">
-            <a class="btn btn-menta" href="examen.html?demo" target="_blank" rel="noopener">Prueba la demo<span class="sr"> (se abre en una pestaña nueva)</span> <span aria-hidden="true">↗</span></a>
-          </div>
+          <p>Elige el nivel y la materia o carrera, marca los tipos de pregunta que quieres ver y ábrela como la vería tu estudiante. Cada demo trae los 30 tipos con contenido real del nivel, y al final ves la nota y las respuestas correctas.</p>
         </div>
         <aside class="demo-panel">
           <h3>¿Y el panel docente?</h3>
           <p>Para probar el panel (crear exámenes, la rejilla en vivo, la IA y los reportes) solicita la prueba gratis: 14 días con todas las funciones.</p>
           <button class="btn btn-claro" type="button" data-plan="prueba">Solicitar prueba gratis</button>
         </aside>
+        <form class="sel-demo" id="selDemo" novalidate aria-label="Elegir la demo">
+          <div class="sel-fila">
+            <fieldset><legend>1. Nivel</legend>
+              <div class="seg" id="selNivel"><label><input type="radio" name="nivel" value="Secundaria" checked><span>Secundaria</span></label><label><input type="radio" name="nivel" value="Universidad"><span>Universidad</span></label></div>
+            </fieldset>
+            <div><label class="rot" for="selMateria" id="rotMateria">2. Materia</label><select id="selMateria"></select></div>
+          </div>
+          <fieldset class="tipos-fs"><legend>3. Tipos de pregunta</legend>
+            <div class="tipos-cab"><button type="button" class="mini" id="tiposTodos">Todos</button><button type="button" class="mini" id="tiposNinguno">Ninguno</button></div>
+            <div class="grupos" id="grupos"></div>
+          </fieldset>
+          <div class="sel-pie">
+            <button class="btn btn-menta" type="submit">Abrir demo<span class="sr"> (se abre en una pestaña nueva)</span> <span aria-hidden="true">↗</span></button>
+            <p class="nota-papel">Las versiones impresas (PDF o Word) conservan solo los tipos que funcionan en papel; los interactivos (deslizadores, escenarios, video con pausas) se quitan con aviso.</p>
+            <p class="sel-msg" id="selMsg" role="status" aria-live="polite"></p>
+          </div>
+        </form>
       </div>
     </div>
   </section>
@@ -836,6 +879,62 @@
   } else {
     document.querySelectorAll('.revelar').forEach(function (el) { el.classList.add('visto'); });
   }
+
+  // Selector de demos: nivel → materia o carrera → tipos. Usa la acción «demos» del servidor; si no responde, la lista fija.
+  var DEMOS = [
+    { codigo: 'DEMO-SEC-MAT', nivel: 'Secundaria', materia: 'Matemática' }, { codigo: 'DEMO-SEC-LEN', nivel: 'Secundaria', materia: 'Lengua Española' },
+    { codigo: 'DEMO-SEC-CIE', nivel: 'Secundaria', materia: 'Ciencias de la Naturaleza' }, { codigo: 'DEMO-SEC-SOC', nivel: 'Secundaria', materia: 'Ciencias Sociales' },
+    { codigo: 'DEMO-SEC-ING', nivel: 'Secundaria', materia: 'Inglés' }, { codigo: 'DEMO-UNI-MED', nivel: 'Universidad', materia: 'Medicina' },
+    { codigo: 'DEMO-UNI-SOF', nivel: 'Universidad', materia: 'Ingeniería de Software' }, { codigo: 'DEMO-UNI-DER', nivel: 'Universidad', materia: 'Derecho' },
+    { codigo: 'DEMO-UNI-CON', nivel: 'Universidad', materia: 'Contabilidad y Finanzas' }, { codigo: 'DEMO-UNI-PSI', nivel: 'Universidad', materia: 'Psicología' },
+    { codigo: 'DEMO-UNI-EDU', nivel: 'Universidad', materia: 'Educación' }
+  ];
+  var GRUPOS = [
+    ['Clásicas', [['MC', 'Selección', 'Una sola respuesta correcta.'], ['MULTIPLE', 'Varias correctas', 'Marca todas las correctas; marcar de más resta.'], ['VF', 'Verdadero o falso', 'Decide si la afirmación es cierta.'],
+      ['VFJ', 'V/F justificada', 'Elige V o F y explica por qué; el docente revisa la justificación.'], ['CORTA', 'Respuesta corta', 'Escribe una palabra o frase.'], ['COMPLETAR', 'Completar', 'Escribe lo que falta en los espacios.'],
+      ['PALABRAS', 'Banco de palabras', 'Llena los espacios con palabras de un banco.'], ['DESPLEGABLE', 'Listas desplegables', 'Elige en listas dentro del párrafo.'], ['MATRIZ', 'Matriz', 'Una opción por fila, como una tabla de casillas.'],
+      ['RESALTAR', 'Marcar palabras', 'Toca las palabras pedidas en un texto.'], ['CORREGIR', 'Corregir el texto', 'Toca cada error y escribe la corrección.'], ['ENSAYO', 'Ensayo con rúbrica', 'Respuesta larga con contador de palabras; la corrige el docente.']]],
+    ['Arrastrar y conectar', [['ORDENAR', 'Ordenar', 'Pon los pasos en orden.'], ['RELACIONAR', 'Relacionar con líneas', 'Une cada elemento con su pareja.'], ['CLASIFICAR', 'Clasificar', 'Lleva cada elemento a su grupo.'],
+      ['ALGORITMO', 'Armar algoritmos', 'Ordena las líneas de un pseudocódigo.'], ['FLUJO', 'Diagrama de flujo', 'Arma el diagrama de arriba hacia abajo.']]],
+    ['Imágenes y gráficos', [['HOTSPOT', 'Tocar zonas', 'Toca la parte correcta de la imagen.'], ['ETIQUETAR', 'Etiquetar imágenes', 'Pon cada nombre en su número.'], ['GRAFICAR', 'Graficar', 'Ubica puntos en el plano cartesiano.'],
+      ['VIDEO_PAUSA', 'Video con pausas', 'El video se detiene y pregunta.']]],
+    ['Matemáticas y ciencias', [['NUMERICA', 'Numérica', 'Un número, con tolerancia.'], ['EXPRESION', 'Expresión matemática', 'Acepta formas equivalentes: 2(x+3) = 2x+6.'], ['TABLA', 'Tabla para completar', 'Llena celdas: asientos, conversiones, datos.'],
+      ['CODIGO', 'Programación', 'Escribe una función en JavaScript y pruébala; la corrige el docente.']]],
+    ['Casos y simulaciones', [['ESCENARIO', 'Escenario con decisiones', 'Cada decisión lleva a otro paso del caso.'], ['CONCORDANCIA', 'Concordancia', 'Razonamiento: cómo cambia una hipótesis con un dato nuevo.'],
+      ['CONTROLES', 'Deslizadores', 'Mueve controles hasta cumplir la meta.']]],
+    ['Juegos', [['CRUCIGRAMA', 'Crucigrama', 'Se arma solo con las palabras del tema.'], ['SOPA', 'Sopa de letras', 'Una sopa distinta para cada estudiante.']]]
+  ];
+  (function () {
+    var form = document.getElementById('selDemo'), sel = document.getElementById('selMateria'), msg = document.getElementById('selMsg'), caja = document.getElementById('grupos');
+    caja.innerHTML = GRUPOS.map(function (g) {
+      return '<fieldset class="grupo"><legend>' + escapar(g[0]) + '</legend>' + g[1].map(function (t) {
+        return '<label><input type="checkbox" name="tipo" value="' + t[0] + '" checked>' + escapar(t[1]) + '<span class="tip" role="tooltip">' + escapar(t[2]) + '</span></label>';
+      }).join('') + '</fieldset>';
+    }).join('');
+    var marcas = function () { return [].slice.call(caja.querySelectorAll('input[name="tipo"]')); };
+    var llenar = function () {
+      var nivel = form.querySelector('input[name="nivel"]:checked').value, ant = sel.value;
+      document.getElementById('rotMateria').textContent = nivel === 'Universidad' ? '2. Carrera' : '2. Materia';
+      sel.innerHTML = DEMOS.filter(function (d) { return d.nivel === nivel; }).map(function (d) { return '<option value="' + escapar(d.codigo) + '"' + (d.codigo === ant ? ' selected' : '') + '>' + escapar(d.materia) + '</option>'; }).join('');
+    };
+    form.querySelectorAll('input[name="nivel"]').forEach(function (r) { r.addEventListener('change', llenar); });
+    document.getElementById('tiposTodos').onclick = function () { marcas().forEach(function (c) { c.checked = true; }); msg.textContent = ''; };
+    document.getElementById('tiposNinguno').onclick = function () { marcas().forEach(function (c) { c.checked = false; }); };
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var t = marcas().filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+      if (!t.length) { msg.textContent = 'Marca al menos un tipo de pregunta.'; return; }
+      if (!sel.value) { msg.textContent = 'Elige una materia o carrera.'; return; }
+      msg.textContent = '';
+      window.open('examen.html?demo=' + encodeURIComponent(sel.value) + (t.length < marcas().length ? '&tipos=' + t.join(',') : ''), '_blank', 'noopener');
+    });
+    llenar();
+    if (!window.EXAMEN_API || !window.fetch) return;
+    fetch(window.EXAMEN_API, { method: 'POST', body: JSON.stringify({ action: 'demos' }), redirect: 'follow' }).then(function (r) { return r.json(); }).then(function (r) {
+      var l = r && r.ok && Array.isArray(r.demos) ? r.demos.filter(function (d) { return /^(Secundaria|Universidad)$/.test(d.nivel) && d.codigo && d.materia; }) : [];
+      if (l.length) { DEMOS = l; llenar(); }
+    }).catch(function () {});   // sin servidor: queda la lista fija
+  })();
 
   // Maqueta: rejilla de estudiantes × preguntas que se va llenando
   var NOMBRES = ['Ana P.', 'Luis M.', 'Carla R.', 'Diego S.', 'Sofía T.', 'Marco V.'], NP = 8;
