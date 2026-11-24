@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de Examen Seguro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="es.css?v=4">
+<script src="config.js?v=3"></script>
+<script src="es.js?v=7"></script>
+<style>
+  .guia { max-width: 900px; margin: 0 auto; padding: 28px 16px 80px; }
+  .portada { padding: 30px 28px; border-radius: 26px; color: #fff; background: var(--marca); position: relative; overflow: hidden; margin-bottom: 22px; }
+  .portada::after { content: ''; position: absolute; width: 280px; height: 280px; right: -80px; top: -120px; border-radius: 50%; background: rgb(255 255 255 / .14); }
+  .portada h1 { color: #fff; font-size: 32px; margin: 10px 0 6px; } .portada p { margin: 0; color: rgb(255 255 255 / .88); }
+  .indice { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin: 0 0 22px; }
+  .indice a { display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 14px; background: var(--sup-fuerte); border: 1px solid var(--linea); font-weight: 700; text-decoration: none; color: var(--texto); }
+  section.tarjeta { margin-bottom: 18px; padding: 22px 24px; }
+  section h2 { display: flex; gap: 10px; align-items: center; margin-top: 0; }
+  section h3 { margin: 16px 0 6px; font-size: 16px; }
+  ol, ul { padding-left: 22px; } li { margin: 5px 0; }
+  .nota { padding: 12px 14px; border-radius: 14px; background: var(--sup2); font-size: 14.5px; margin: 10px 0; }
+  pre { padding: 14px; border-radius: 14px; background: var(--sup2); overflow-x: auto; font-size: 13.5px; white-space: pre-wrap; }
+  .tabla td, .tabla th { vertical-align: top; }
+  .acciones-g { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  @media print { .no-imprimir, .fondo { display: none !important; } body { background: #fff !important; } section.tarjeta { box-shadow: none; break-inside: avoid; border: 1px solid #ddd; } .portada { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="fondo"><i></i><i></i><i></i><i></i></div>
+<main class="guia" data-marca-texto>
+  <div class="portada">
+    <div class="chip-ico" id="logoG" style="background:rgb(255 255 255 / .2);color:#fff"></div>
+    <h1>Guía de Examen Seguro</h1>
+    <p>Para docentes, coordinación y estudiantes · <span data-version>v2.2</span></p>
+    <div class="acciones-g no-imprimir"><a class="btn claro" href="docente.html">Ir al panel docente</a><a class="btn claro" href="index.html">Página del estudiante</a><button class="btn claro" onclick="print()">Imprimir o guardar en PDF</button></div>
+  </div>
+
+  <nav class="indice no-imprimir">
+    <a href="#entrar">1. Entrar por primera vez</a><a href="#crear">2. Crear un examen</a><a href="#preguntas">3. Escribir o pegar preguntas</a>
+    <a href="#dinamicas">3b. Preguntas dinámicas</a><a href="#media">3c. Imagen, video y audio</a><a href="#ayudante">3d. Demo y Ayudante</a><a href="#ia">3e. Generar con IA</a><a href="#reglas">4. Elegir las restricciones</a><a href="#aplicar">5. Aplicarlo en el aula</a><a href="#corregir">6. Corregir respuestas cortas</a>
+    <a href="#resultados">7. Resultados, Excel y PDF</a><a href="#reportes">8. Reportes por curso</a><a href="#banco">9. Banco de exámenes</a>
+    <a href="#papel">10. Versión en papel</a><a href="#estudiante">11. Lo que ve el estudiante</a><a href="#coordinacion">12. Coordinación</a><a href="#preguntas-f">13. Preguntas frecuentes</a>
+  </nav>
+
+  <section class="tarjeta" id="video">
+    <h2><span class="chip-ico"></span>Video tutorial</h2>
+    <video controls preload="metadata" playsinline style="width:100%;border-radius:16px;background:#0b0b14;aspect-ratio:16/9" src="material/tutorial.mp4" poster="material/tutorial.jpg"></video>
+    <p class="suave pequeno">Si no carga, abre el panel ▸ Ayuda.</p>
+  </section>
+
+  <section class="tarjeta" id="entrar">
+    <h2>1. Entrar por primera vez</h2>
+    <ol>
+      <li>La coordinación te entrega tu <b>usuario</b> (por ejemplo <code>nombre.apellido</code>) y un <b>código de activación</b> (XXXX-XXXX).</li>
+      <li>Abre el <b>panel docente</b> y pulsa <b>Activar mi cuenta</b>.</li>
+      <li>Escribe el usuario, el código y crea tu contraseña (mínimo 8 caracteres). El código deja de servir al usarlo.</li>
+      <li>Las próximas veces entra con <b>Entrar</b>: usuario y contraseña.</li>
+    </ol>
+    <div class="nota">¿Olvidaste la contraseña? Pide a la coordinación «Reiniciar acceso»: te da un código nuevo. Puedes cambiar tu contraseña en <b>Mi cuenta</b>.</div>
+  </section>
+
+  <section class="tarjeta" id="crear">
+    <h2>2. Crear un examen</h2>
+    <ol>
+      <li><b>Exámenes ▸ Nuevo examen</b> (o desde el <a href="#banco">Banco</a>, con «Usar en mi curso»).</li>
+      <li><b>Datos</b>: título, curso, materia y tipo: <b>Examen</b> (con nota, un intento) o <b>Práctica / quiz</b> (intentos libres y ve las respuestas).</li>
+      <li><b>Minutos</b>: el reloj del estudiante (0 = sin límite). <b>Preguntas a mostrar</b>: si pones menos que las del banco, a cada estudiante le tocan otras al azar.</li>
+      <li><b>Abre / Cierra</b> (opcional): fuera de ese horario el código no funciona.</li>
+      <li><b>Nota mínima</b>: para contar aprobados (70 por defecto).</li>
+      <li>Pulsa <b>Guardar</b>: obtienes el código, el enlace y el QR.</li>
+    </ol>
+  </section>
+
+  <section class="tarjeta" id="preguntas">
+    <h2>3. Escribir o pegar preguntas</h2>
+    <p>Hay tres tipos: <b>Selección múltiple</b>, <b>Verdadero o falso</b> y <b>Respuesta corta</b>. Cada pregunta tiene sus puntos (la nota final se calcula sobre 100).</p>
+    <h3>Pegar muchas de un golpe</h3>
+    <p>Preguntas ▸ <b>Pegar preguntas</b>. Separa cada pregunta con una línea en blanco y marca la correcta con <b>*</b>:</p>
+<pre>1. ¿Qué instrucción muestra un valor en pantalla?
+a) Leer
+*b) Escribir
+c) Definir
+d) Mientras
+Explicación: Escribir muestra datos.
+
+2. El tipo Real guarda decimales.
+Respuesta: V
+
+3. ¿Qué es una variable?
+Respuesta: espacio de memoria que guarda un dato</pre>
+    <div class="nota">Sin opciones y con «Respuesta:» se vuelve <b>respuesta corta</b>. Esa respuesta es la <b>respuesta modelo</b>: te sirve de guía, pero la nota de esa pregunta la pones tú (ver <a href="#corregir">Corregir</a>).</div>
+  </section>
+
+  <section class="tarjeta" id="dinamicas">
+    <h2>3b. Preguntas dinámicas</h2>
+    <p>Además de selección, verdadero o falso y respuesta corta, hay estos tipos. Casi todos se califican solos y dan <b>puntos parciales</b> (cada parte bien suma):</p>
+    <table class="tabla">
+      <thead><tr><th>Tipo</th><th>Qué hace el estudiante</th><th>Cómo lo escribes</th></tr></thead>
+      <tbody>
+        <tr><td>Ordenar pasos</td><td>Arrastra los pasos (o usa las flechas) al orden correcto.</td><td>Un paso por línea, en orden.</td></tr>
+        <tr><td>Armar algoritmo</td><td>Ordena líneas de pseudocódigo (se ve como código, con sangría).</td><td>Una línea por renglón, en orden; la sangría con espacios.</td></tr>
+        <tr><td>Diagrama de flujo</td><td>Arma el diagrama con bloques de colores y flechas.</td><td>Un bloque por línea. La forma sale sola: Inicio/Fin, Leer/Escribir, «¿…?» o «Si…» = decisión.</td></tr>
+        <tr><td>Relacionar columnas (con líneas)</td><td>Toca un elemento de la izquierda y su pareja de la derecha: se traza una línea de color.</td><td>Una pareja por línea: <code>CPU = Procesa los datos</code></td></tr>
+        <tr><td>Clasificar en grupos</td><td>Arrastra cada elemento a su grupo (o lo toca y toca el grupo).</td><td>Un grupo por línea: <code>Hardware: Teclado, Monitor</code></td></tr>
+        <tr><td>Completar espacios</td><td>Escribe en los espacios en blanco del texto o del código.</td><td>Respuestas entre corchetes dobles: <code>se usa [[Escribir|Mostrar]]</code></td></tr>
+        <tr><td>Completar con banco de palabras</td><td>Elige en cada espacio la palabra correcta de un banco (con palabras de relleno).</td><td>La oración con <code>[[palabra]]</code> y abajo las palabras de relleno.</td></tr>
+        <tr><td>Respuesta numérica</td><td>Escribe un número.</td><td>La respuesta y un margen (±) opcional.</td></tr>
+        <tr><td>V o F con justificación</td><td>Elige V o F y explica por qué.</td><td>Marca V o F. La elección vale la mitad y se califica sola; la justificación la corriges tú en «Por corregir».</td></tr>
+      </tbody>
+    </table>
+    <h3>Pegarlas de un golpe</h3>
+<pre>Tipo: algoritmo
+Arma el algoritmo que muestra el mayor
+Inicio
+Leer A, B
+Si A > B entonces
+    Escribir A
+Sino
+    Escribir B
+FinSi
+Fin
+
+Tipo: relacionar
+Relaciona cada parte con su función
+CPU = Procesa los datos
+RAM = Memoria temporal
+
+Para mostrar datos se usa [[Escribir]] y para pedirlos [[Leer]].
+
+Tipo: numérica
+¿Cuánto es 7 / 2?
+Respuesta: 3.5
+Tolerancia: 0.01
+
+Tipo: palabras
+El [[teclado]] es de entrada y la [[impresora]] es de salida.
+Relleno: memoria, disco
+
+Tipo: justifica
+La memoria RAM guarda los datos al apagar la computadora.
+Respuesta: F
+Explicación: La RAM es volátil.</pre>
+    <div class="nota">Al estudiante siempre le salen desordenados. En la versión en papel salen como «numera del 1 al N», columnas con letras o espacios en blanco, con su clave.</div>
+  </section>
+
+  <section class="tarjeta" id="media">
+    <h2>3c. Imagen, video y audio en una pregunta</h2>
+    <p>Cualquier pregunta puede llevar una imagen, un video o un audio. Así haces «Observa la imagen y elige», «Analiza esta imagen y contesta», «Mira el video y responde» o «Escucha y responde» (ideal para Inglés).</p>
+    <ol>
+      <li>En la pregunta abre <b>Imagen, video o audio</b>.</li>
+      <li><b>Subir imagen</b>: una foto o captura de tu equipo. Se achica sola para que quepa.</li>
+      <li>O pega un <b>enlace</b>: imagen de internet, video de YouTube, archivo de Google Drive o un MP3. El tipo (imagen, video o audio) se elige solo; cámbialo si hace falta.</li>
+      <li>De Google Drive: comparte el archivo como «Cualquier persona con el enlace».</li>
+    </ol>
+    <p>Para pegar muchas: agrega una línea <code>Imagen: https://…</code> (o <code>Video:</code>, <code>Audio:</code>) dentro de la pregunta.</p>
+    <div class="nota">El estudiante puede tocar la imagen para verla más grande. Tocar el video no cuenta como salida de la ventana.</div>
+  </section>
+
+  <section class="tarjeta" id="ia">
+    <h2>3e. Generar preguntas con IA</h2>
+    <p>En el paso <b>Preguntas</b> pulsa <b>✨ Generar con IA</b>:</p>
+    <ol>
+      <li>Escribe el <b>tema</b> o pega el <b>texto</b> de tu clase (si pegas texto, las preguntas salen solo de ese texto).</li>
+      <li>Elige la <b>dificultad</b>: fácil, media, difícil o mixta, y cuántas preguntas quieres (hasta 30).</li>
+      <li>Marca <b>solo los tipos que quieres</b>: selección, V/F, V/F justificada, respuesta corta, ordenar, algoritmo, diagrama de flujo, relacionar, clasificar, completar, banco de palabras o numérica.</li>
+      <li>Pulsa <b>Generar</b>. En pocos segundos ves cada pregunta con su respuesta. Desmarca las que no te gusten y pulsa <b>Agregar</b>.</li>
+      <li>Revísalas, corrige lo que haga falta y pulsa <b>Guardar</b>.</li>
+    </ol>
+    <div class="nota">Usa IA gratis (Gemini de Google; si está ocupada, Groq u OpenRouter). Puede equivocarse: revisa siempre las respuestas. No pegues nombres, cédulas ni teléfonos de estudiantes: el sistema bloquea cédulas y teléfonos. Límite: 25 generaciones cada 6 horas por docente.</div>
+  </section>
+  <section class="tarjeta" id="mi-ia">
+    <h2>3f. Conectar tu propia IA</h2>
+    <p>Si usas una IA en tu computadora (Claude Code, Gemini CLI, Codex o Cursor), puedes conectarla a Examen Seguro. Así le pides, por ejemplo: <i>«créame un examen de 20 preguntas de redes para 5to B, en borrador»</i>, y ella lo crea en tu cuenta.</p>
+    <video controls preload="none" playsinline style="width:100%;border-radius:16px;background:#0b0b14;aspect-ratio:16/9" src="material/conectar-ia.mp4" poster="material/conectar-ia.jpg"></video>
+    <div class="nota" style="border:2px solid #dc2626"><b>⚠ Muy importante:</b> la línea que copias lleva tu <b>clave</b>, y la clave entra con tu cuenta. <b>Nunca la pegues en el chat de tu IA</b> (ni en ChatGPT, Gemini, WhatsApp o un correo). Se pega <b>solo en PowerShell</b> (o en el archivo de configuración de tu IA), como se explica abajo.</div>
+
+    <h3>Paso 1. Crear tu clave</h3>
+    <ol>
+      <li>En el panel docente entra a <b>Mi cuenta</b> y baja hasta <b>Conectar mi IA</b>.</li>
+      <li>Escribe un nombre para recordarla (por ejemplo «Claude en mi laptop») y pulsa <b>Crear clave</b>.</li>
+      <li>Aparecen varias líneas, una por cada IA. Pulsa el botón <b>copiar</b> que está al lado de la tuya. <b>Hazlo en ese momento:</b> la clave no se vuelve a mostrar. Si cierras la página sin copiarla, crea otra.</li>
+    </ol>
+
+    <h3>Paso 2. Pegarla en PowerShell (Claude Code)</h3>
+    <ol>
+      <li>Pulsa la tecla <b>Windows</b> ⊞ del teclado, escribe <b>PowerShell</b> y abre <b>Windows PowerShell</b>. Se abre una ventana azul o negra.</li>
+      <li>Haz <b>clic derecho</b> dentro de la ventana (o pulsa <b>Ctrl+V</b>). Aparece la línea que empieza con <code>claude mcp add --transport http --scope user examen-seguro …</code></li>
+      <li>Pulsa <b>Enter</b>. Debe salir: <code>Added HTTP MCP server examen-seguro to user config</code>. Ya puedes cerrar PowerShell.</li>
+      <li>Si sale «claude no se reconoce como comando», primero instala Claude Code y vuelve a intentarlo.</li>
+    </ol>
+
+    <h3>Paso 3. Comprobar en tu IA</h3>
+    <ol>
+      <li>Abre Claude Code (en PowerShell escribe <code>claude</code> y pulsa Enter, o ábrelo desde la app de escritorio).</li>
+      <li>Escribe <code>/mcp</code> y pulsa Enter: debe salir <b>examen-seguro ✔ connected</b>.</li>
+      <li>Pídele: <i>«Muéstrame mis cursos y exámenes de Examen Seguro»</i>. Si responde con tu lista, ya está conectada. La primera vez te pedirá permiso para usar las herramientas: acéptalo.</li>
+    </ol>
+
+    <h3>Paso 4. Crear y subir un examen con tu IA</h3>
+    <ol>
+      <li>Pídeselo con tus palabras, por ejemplo: <i>«En Examen Seguro, créame un examen en borrador de 10 preguntas de redes, capa de red, para 5to B, de 30 minutos, con selección múltiple y verdadero o falso»</i>.</li>
+      <li>Tu IA lee los tipos de pregunta, escribe las preguntas con sus respuestas y guarda el examen <b>en borrador</b> (inactivo). Al final te dice el título y el código.</li>
+      <li>Vuelve al panel ▸ <b>Exámenes</b>. Abre el examen nuevo, revisa cada pregunta y corrige lo que haga falta.</li>
+      <li>Cuando esté bien, márcalo <b>Activo</b>, pulsa <b>Guardar</b> y luego <b>Compartir</b> para dar el código, el enlace o el QR a tus estudiantes.</li>
+      <li>También puedes pedirle a tu IA: <i>«agrega 5 preguntas de ordenar pasos»</i>, <i>«dame los resultados del examen de redes»</i> o <i>«qué respuestas cortas me faltan por corregir»</i>.</li>
+    </ol>
+
+    <h3>Otras IA</h3>
+    <ul>
+      <li><b>Gemini CLI:</b> abre el archivo <code>.gemini/settings.json</code> de tu carpeta de usuario y agrega el bloque <code>mcpServers</code> (si ya tienes uno, agrega solo <code>examen-seguro</code> dentro). Reinicia Gemini y escribe <code>/mcp</code>.</li>
+      <li><b>Codex:</b> agrega las dos líneas al final de <code>.codex/config.toml</code> en tu carpeta de usuario.</li>
+      <li><b>Cursor:</b> en <b>Settings ▸ MCP ▸ Add new MCP server</b>, o pega el bloque en <code>.cursor/mcp.json</code>.</li>
+      <li><b>Otra IA:</b> usa la «dirección del servidor MCP (HTTP)» en su configuración de servidores MCP, nunca en el chat.</li>
+    </ul>
+    <p><b>Qué puede hacer tu IA:</b> lo mismo que tú en el panel: crear, cambiar, copiar y borrar exámenes, usar el banco, generar preguntas, ver resultados, corregir respuestas cortas, dar más tiempo, anular intentos y ver o agregar estudiantes de tus cursos. <b>No puede</b> cambiar contraseñas, crear claves ni administrar docentes.</p>
+    <div class="nota">Al crearla eliges si dura <b>30 días</b> o es <b>permanente</b>. Funciona en el centro y el modo (Docente o Administración) en que estabas al crearla. Entra como tú: no la compartas ni la publiques. Si la pierdes o termina el plazo, revócala y crea otra. Puedes tener hasta 5 claves activas. Cada clave permite 150 acciones por hora. Tu IA verá los <b>nombres</b> y notas de tus estudiantes, pero nunca edad, dirección ni teléfono (Examen Seguro no los guarda). Revisa siempre lo que crea la IA antes de activar un examen.</div>
+  </section>
+  <section class="tarjeta" id="ayudante">
+    <h2>3d. Examen demo y Ayudante</h2>
+    <p><b>Demo:</b> en la página de inicio, el botón <b>«Probar la demo»</b> (o el código <code>DEMO</code>) abre un examen de práctica con un ejemplo de cada tipo de pregunta. Lo puede abrir cualquiera, no cuenta como nota y se borra solo. También está en el Banco: «Usar en mi curso» lo copia para que lo edites.</p>
+    <p><b>Ayudante:</b> el botón morado <b>«Ayudante»</b> del panel (abajo a la derecha) te pregunta qué quieres hacer y te señala, paso a paso, dónde tocar: crear un examen, agregar preguntas con imagen o video, usar el banco, aplicar el examen, ver resultados, corregir, dar más tiempo, reportes e imprimir.</p>
+  </section>
+  <section class="tarjeta" id="reglas">
+    <h2>4. Elegir las restricciones</h2>
+    <p>En el paso <b>Restricciones</b> usa un atajo o enciende y apaga cada regla:</p>
+    <table class="tabla">
+      <thead><tr><th>Regla</th><th>Qué hace</th></tr></thead>
+      <tbody>
+        <tr><td>Pantalla completa</td><td>El examen ocupa toda la pantalla, sin barra de direcciones ni pestañas.</td></tr>
+        <tr><td>Entregar si sale</td><td>Si cambia de pestaña, minimiza o sale de la pantalla completa, se entrega con lo que tenga.</td></tr>
+        <tr><td>Avisos antes de entregar</td><td>Cuántas salidas se le perdonan con una advertencia (0 = ninguna).</td></tr>
+        <tr><td>Bloquear copiar y pegar</td><td>No puede seleccionar, copiar, pegar, imprimir ni usar el clic derecho.</td></tr>
+        <tr><td>Señuelos anti-IA</td><td>Agrega una nota gris que señala una opción al azar (solo en selección múltiple) para confundir a una IA si fotografían la pregunta. Los estudiantes saben que deben ignorarla.</td></tr>
+        <tr><td>Marca de agua</td><td>Su nombre aparece de fondo; desanima las fotos.</td></tr>
+        <tr><td>Permitir celulares</td><td>Deja entrar desde equipos sin pantalla completa (iPhone) y vigila las salidas.</td></tr>
+        <tr><td>Una pregunta por página</td><td>Cada pregunta sale sola en pantalla y se pasa con «Siguiente». Apagado: todas en una sola página.</td></tr><tr><td>Solo hacia adelante</td><td>Con una por página: no puede volver a la anterior (el servidor bloquea los cambios). Apagado: puede ir y volver con «Anterior».</td></tr><tr><td>Preguntas / opciones al azar</td><td>Cada estudiante recibe otro orden.</td></tr>
+        <tr><td>Mostrar nota / respuestas</td><td>Al terminar ve su nota y, si lo permites, cuáles falló con la explicación.</td></tr>
+        <tr><td>Intentos permitidos</td><td>Cuántas veces puede hacerlo (0 = sin límite).</td></tr>
+      </tbody>
+    </table>
+    <p class="suave pequeno">Atajos: <b>Estricto</b> (examen en el laboratorio), <b>Con avisos</b> (da 2 avisos), <b>Práctica guiada</b> (repaso con respuestas) y <b>Libre</b> (tarea en casa, sirve en celular).</p>
+  </section>
+
+  <section class="tarjeta" id="aplicar">
+    <h2>5. Aplicarlo en el aula</h2>
+    <ol>
+      <li>En <b>Compartir</b> copia el código, el enlace o proyecta el <b>QR</b> («Mostrar en grande»).</li>
+      <li>En un examen, publica en Classroom solo el enlace y da el código en el aula («Copiar texto para Classroom» lo arma por ti).</li>
+      <li>Abre <b>Resultados ▸ Ver en vivo</b>: se actualiza cada 15 segundos y ves quién está dentro, cuántas lleva y quién salió de la ventana.</li>
+      <li>Si a alguien se le va el internet o llega tarde, pulsa el <b>reloj ⏱</b> en su fila para darle +5, +10 o +15 minutos.</li>
+      <li>Puedes <b>entregar ya</b> un intento en curso o <b>anular</b> uno para que lo repita.</li>
+    </ol>
+  </section>
+
+  <section class="tarjeta" id="corregir">
+    <h2>6. Corregir respuestas cortas</h2>
+    <p>Solo el docente sabe si una respuesta abierta está bien. Por eso:</p>
+    <ol>
+      <li>Al entregar, el estudiante ve una <b>nota provisional</b> y el aviso de que corregirás sus respuestas cortas.</li>
+      <li>En la tarjeta del examen verás «<b>N por corregir</b>».</li>
+      <li>Abre <b>Resultados ▸ Por corregir</b>: aparece cada pregunta con la respuesta modelo y la respuesta de cada estudiante, una debajo de otra.</li>
+      <li>Toca <b>0</b>, <b>la mitad</b> o <b>el puntaje completo</b>, o escribe los puntos exactos.</li>
+      <li>Pulsa <b>Guardar correcciones</b>: la nota se recalcula sola en resultados, Excel, PDF y reportes.</li>
+    </ol>
+    <div class="nota">Las filas amarillas aún no están corregidas. «Coincide con el modelo» es solo una pista.</div>
+  </section>
+
+  <section class="tarjeta" id="resultados">
+    <h2>7. Resultados, Excel y PDF</h2>
+    <ul>
+      <li><b>Indicadores</b>: entregas, promedio, mediana, aprobados, tiempo promedio y cuántos salieron de la ventana.</li>
+      <li><b>Distribución de notas</b> y lista de quienes <b>no presentaron</b>.</li>
+      <li>Pestaña <b>Estudiantes</b>: nota, correctas, tiempo, salidas y cómo terminó. El ojo 👁 muestra sus respuestas una por una.</li>
+      <li>Pestaña <b>Preguntas</b>: de la más fallada a la más fácil y qué opción eligieron. Úsala para repasar en clase.</li>
+      <li><b>Excel</b>: hoja de resultados y hoja de análisis por pregunta. <b>PDF</b>: lista para imprimir o archivar (notas bajas en rojo).</li>
+    </ul>
+  </section>
+
+  <section class="tarjeta" id="reportes">
+    <h2>8. Reportes por curso</h2>
+    <ol>
+      <li>Menú <b>Reportes</b> ▸ elige el curso y, si quieres, la materia.</li>
+      <li>Verás una tabla: un estudiante por fila, un examen por columna y su promedio (se toma la mejor nota de cada uno).</li>
+      <li>Descárgala en <b>Excel</b> o en <b>PDF</b>. «—» = no lo presentó; «*» = tiene respuestas cortas sin corregir.</li>
+    </ol>
+  </section>
+
+  <section class="tarjeta" id="banco">
+    <h2>9. Banco de exámenes</h2>
+    <ul>
+      <li><b>Modelos</b>: exámenes listos de cada materia, de <b>Formación Académica</b> (por ciclo) y de <b>Formación Técnico Profesional</b> (por módulo).</li>
+      <li><b>Referencia</b>: los que tus colegas comparten. Para compartir el tuyo: Editar ▸ Datos ▸ «Compartir en el banco de exámenes». Nadie ve las notas de tus estudiantes.</li>
+      <li>Filtra por <b>Académico</b>, <b>Técnico</b> o <b>Mis materias</b>, y busca por tema.</li>
+      <li><b>Ver preguntas</b> para revisarlo y <b>Usar en mi curso</b> para crear tu copia. Cambia lo que quieras antes de aplicarla.</li>
+    </ul>
+  </section>
+
+  <section class="tarjeta" id="papel">
+    <h2>10. Versión en papel</h2>
+    <p>Editar ▸ <b>Compartir</b> ▸ <b>Versión en papel (PDF)</b>: el examen con espacio para nombre y nota y, en la última hoja, la clave de respuestas. Sirve si falla el internet o para estudiantes que lo necesiten.</p>
+  </section>
+
+  <section class="tarjeta" id="estudiante">
+    <h2>11. Lo que ve el estudiante</h2>
+    <ol>
+      <li>Abre la página del estudiante (o escanea el QR), escribe el <b>código</b> y elige su nombre de la lista.</li>
+      <li>Lee las reglas y pulsa <b>Empezar</b>: el examen se abre en pantalla completa con el reloj arriba.</li>
+      <li>Puede saltar entre preguntas y marcar «Revisar». Las respuestas se guardan solas.</li>
+      <li>Si sale de la ventana, el examen se entrega (o recibe un aviso, según tus reglas). El botón <b>Salir</b> también entrega.</li>
+      <li>Al terminar ve su nota (provisional si hay respuestas cortas) y, en las prácticas, las respuestas correctas.</li>
+    </ol>
+  </section>
+
+  <section class="tarjeta" id="coordinacion">
+    <h2>12. Administración y varios centros</h2>
+    <p><b>Entrar como Docente o como Administración.</b> En la pantalla de entrada eliges cómo entrar. Como <b>Docente</b> ves solo tus exámenes, cursos y reportes. Como <b>Administración</b> (solo si tu cuenta lo es) ves todo lo del centro y el menú <b>Docentes</b>. Puedes cambiar sin salir con el selector debajo del nombre del centro, en la barra de la izquierda.</p>
+    <p><b>Varios centros.</b> Si das clases en otro lugar (universidad, instituto, academia), entra a <b>Mi cuenta ▸ Mis centros</b>:</p>
+    <ul>
+      <li><b>Crear un centro:</b> escribe el nombre y pulsa <b>Crear</b>. Quedas como su administración: agrega docentes, cursos y listas de estudiantes.</li>
+      <li><b>Unirme con un código:</b> la administración del otro centro te da su <b>código de invitación</b> (está en el menú <b>Docentes</b>). Lo escribes y quedas como docente allí, con la misma cuenta y contraseña.</li>
+      <li>Cada centro tiene sus propios cursos, estudiantes, exámenes, reportes y banco compartido. Cambias de centro con el selector de la barra izquierda.</li>
+    </ul>
+    <ul>
+      <li>Menú <b>Docentes</b>: ver quién activó su cuenta, copiar usuario y código de activación, reiniciar el acceso, cambiar el rol o desactivar.</li>
+      <li>Botón de <b>materias</b>: cursos y materias de cada docente (vienen del horario).</li>
+      <li>La administración ve todos los exámenes y reportes de su centro, no los de otros centros.</li>
+      <li>El acceso de un docente que también está en otro centro no se puede reiniciar desde un solo centro (protege su cuenta).</li>
+    </ul>
+  </section>
+
+  <section class="tarjeta" id="preguntas-f">
+    <h2>13. Preguntas frecuentes</h2>
+    <h3>¿Funciona en celular?</h3><p>Sí. En exámenes estrictos, activa «Permitir celulares» si algunos lo harán desde el teléfono; en iPhone no hay pantalla completa, pero se registran las salidas.</p>
+    <h3>Un estudiante dice que se le cerró el examen</h3><p>Mira en Resultados «Cómo terminó» y sus salidas. Si fue un fallo real, <b>anula</b> el intento para que lo repita.</p>
+    <h3>¿Puedo cambiar una pregunta después de aplicarlo?</h3><p>Sí, pero las notas ya entregadas no se recalculan. Para corregir puntos de un estudiante usa «Por corregir».</p>
+    <h3>¿Dónde quedan los datos?</h3><p>En la hoja de Google del centro. Las respuestas correctas nunca llegan al navegador del estudiante antes de entregar.</p>
+  </section>
+</main>
+<script>document.getElementById('logoG').innerHTML = LOGO_HTML(); document.querySelectorAll('section h2 .chip-ico').forEach(function (x) { x.innerHTML = ICO('video'); });</script>
+</body>
+</html>

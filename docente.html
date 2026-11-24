@@ -1,0 +1,1360 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Examen Seguro · Panel docente</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="es.css?v=4">
+<script src="config.js?v=3"></script>
+<script src="es.js?v=7"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="ayudante.js?v=1" defer></script>
+<style>
+  /* Acceso */
+  .acceso { min-height: 100vh; display: grid; place-items: center; padding: 20px 16px; }
+  .acceso .vidrio { width: min(440px, 100%); overflow: hidden; }
+  .heroe { padding: 28px 26px 22px; color: #fff; background: var(--marca); position: relative; overflow: hidden; }
+  .heroe::after { content: ''; position: absolute; width: 240px; height: 240px; right: -70px; top: -100px; border-radius: 50%; background: rgb(255 255 255 / .14); }
+  .heroe h1 { color: #fff; } .heroe p { margin: 0; color: rgb(255 255 255 / .85); }
+  .logo-b { width: 50px; height: 50px; border-radius: 16px; display: grid; place-items: center; background: rgb(255 255 255 / .2); margin-bottom: 16px; }
+  .logo-b .ico { width: 26px; height: 26px; }
+  /* Estructura */
+  .app { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
+  .lateral { position: sticky; top: 0; height: 100vh; padding: 18px 14px; display: flex; flex-direction: column; gap: 6px; border-right: 1px solid var(--linea);
+    background: var(--sup); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
+  .marca-l { display: flex; gap: 10px; align-items: center; padding: 6px 8px 16px; }
+  .marca-l .logo { width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; background: var(--marca); color: #fff; }
+  .marca-l b { display: block; } .marca-l span { font-size: 12px; color: var(--suave); }
+  .nav { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 14px; border: 0; background: transparent; color: var(--suave); font-weight: 700; cursor: pointer; text-align: left; width: 100%; }
+  .nav:hover { background: var(--sup2); color: var(--texto); }
+  .nav.on { background: var(--sup-solida); color: var(--acento); box-shadow: var(--sombra); }
+  .yo { margin-top: auto; padding: 12px; border-radius: 16px; background: var(--sup2); display: flex; gap: 10px; align-items: center; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--marca-2); color: #fff; font-weight: 800; flex: none; }
+  .yo b { display: block; font-size: 14px; } .yo span { font-size: 12px; color: var(--suave); }
+  .contenido { padding: 22px 26px 100px; min-width: 0; }
+  .cabeza { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .cabeza .tit { flex: 1; min-width: 220px; }
+  .cabeza h1 { font-size: 26px; }
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .lateral { position: fixed; top: auto; bottom: 0; left: 0; right: 0; height: auto; z-index: 40; flex-direction: row; padding: 8px calc(8px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)); border-right: 0; border-top: 1px solid var(--linea); overflow-x: auto; }
+    .marca-l, .yo, .lateral .solo-escritorio { display: none; }
+    .nav { flex-direction: column; gap: 3px; font-size: 11px; padding: 7px 8px; min-width: 64px; align-items: center; }
+    .contenido { padding: 16px 14px 110px; }
+  }
+  /* Indicadores */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .kpi { padding: 16px 18px; display: flex; gap: 12px; align-items: center; }
+  .kpi b { display: block; font-size: 24px; letter-spacing: -.03em; line-height: 1.1; } .kpi span { font-size: 13px; color: var(--suave); }
+  .rejilla { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .examen-t { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .examen-t .franja { height: 6px; background: var(--marca); } .examen-t.practica .franja { background: var(--marca-2); }
+  .examen-t .cuerpo { padding: 16px 18px; flex: 1; }
+  .examen-t h3 { margin: 8px 0 4px; font-size: 17px; }
+  .metricas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 0; }
+  .metricas div { padding: 9px 10px; border-radius: 12px; background: var(--sup2); }
+  .metricas b { display: block; font-size: 17px; } .metricas span { font-size: 11.5px; color: var(--suave); }
+  .acciones { display: flex; gap: 4px; padding: 10px 12px; border-top: 1px solid var(--linea); flex-wrap: wrap; }
+  .filtros { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .filtros .entrada { width: auto; min-width: 150px; padding: 10px 14px; }
+  .buscar { position: relative; flex: 1; min-width: 200px; } .buscar .ico { position: absolute; left: 13px; top: 12px; color: var(--tenue); } .buscar input { padding-left: 40px; width: 100%; }
+  /* Editor */
+  .pasos { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .paso { display: inline-flex; gap: 8px; align-items: center; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--linea); background: var(--sup); font-weight: 700; color: var(--suave); cursor: pointer; }
+  .paso.on { background: var(--texto); color: var(--fondo); border-color: var(--texto); }
+  .paso .n { min-width: 22px; height: 22px; border-radius: 99px; display: grid; place-items: center; font-size: 12px; background: var(--sup2); padding: 0 6px; }
+  .paso.on .n { background: rgb(255 255 255 / .2); }
+  .preg-ed { padding: 16px 18px; margin-bottom: 12px; }
+  .preg-ed .top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .preg-ed .num { min-width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; background: var(--marca); color: #fff; }
+  .preg-ed .entrada.mini { width: auto; padding: 8px 12px; }
+  .opcion { display: flex; gap: 8px; align-items: center; margin: 6px 0; }
+  .opcion .correcta { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--linea); background: var(--sup-fuerte); display: grid; place-items: center; cursor: pointer; color: transparent; flex: none; }
+  .opcion .correcta.on { background: var(--verde); border-color: var(--verde); color: #fff; }
+  .opcion .entrada { padding: 9px 12px; }
+  .regla-ed { display: flex; gap: 14px; align-items: center; padding: 14px 16px; border-radius: 16px; background: var(--sup-fuerte); border: 1px solid var(--linea); margin-bottom: 10px; }
+  .regla-ed .txt { flex: 1; } .regla-ed b { display: block; } .regla-ed span.d { font-size: 13.5px; color: var(--suave); }
+  .contador { display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid var(--linea); background: var(--sup-solida); overflow: hidden; }
+  .contador button { border: 0; background: transparent; width: 36px; height: 34px; font-size: 18px; font-weight: 800; cursor: pointer; color: var(--acento); }
+  .contador span { min-width: 34px; text-align: center; font-weight: 800; }
+  .presets { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .preset { text-align: left; padding: 14px; border-radius: 16px; border: 1px solid var(--linea); background: var(--sup-fuerte); cursor: pointer; }
+  .preset:hover { border-color: var(--acento); } .preset b { display: flex; gap: 8px; align-items: center; } .preset span { font-size: 13px; color: var(--suave); }
+  .guardar-fijo { position: sticky; bottom: 14px; z-index: 10; display: flex; gap: 10px; justify-content: flex-end; align-items: center; padding: 12px 14px; margin-top: 16px; }
+  .compartir-codigo { font-size: 34px; font-weight: 800; letter-spacing: .1em; text-align: center; padding: 18px; border-radius: 18px; background: var(--sup2); }
+  #qr { display: grid; place-items: center; padding: 14px; background: #fff; border-radius: 16px; width: max-content; margin: 0 auto; }
+  /* Resultados */
+  .histo { display: flex; align-items: flex-end; gap: 6px; height: 160px; padding: 10px 4px 0; }
+  .histo div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+  .histo i { width: 100%; border-radius: 8px 8px 4px 4px; background: var(--marca); min-height: 3px; transition: height .4s; }
+  .histo i.bajo { background: linear-gradient(180deg, #FF8A8E, #E5484D); } .histo i.medio { background: linear-gradient(180deg, #FFD36B, #D98E04); }
+  .histo small { font-size: 11px; color: var(--tenue); } .histo em { font-style: normal; font-size: 12px; font-weight: 800; }
+  .dos { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 1000px) { .dos { grid-template-columns: 1fr; } }
+  .pq { padding: 14px 16px; border-radius: 16px; background: var(--sup-fuerte); border: 1px solid var(--linea); margin-bottom: 10px; }
+  .pq .linea { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+  .dist { display: grid; gap: 4px; margin-top: 8px; }
+  .dist div { display: grid; grid-template-columns: 1fr 120px 36px; gap: 8px; align-items: center; font-size: 13px; }
+  .dist .b { height: 6px; border-radius: 9px; background: var(--sup2); overflow: hidden; } .dist .b i { display: block; height: 100%; background: var(--rojo); }
+  .dist .ok .b i { background: var(--verde); }
+  .chips-n { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cargando { display: grid; place-items: center; padding: 60px; color: var(--suave); }
+  .girar { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--sup2); border-top-color: var(--acento); animation: gira 0.8s linear infinite; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  /* Corrección manual */
+  .corr { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; background: var(--sup-fuerte); border: 1px solid var(--linea); margin-bottom: 8px; }
+  .corr.pend { border-left: 5px solid var(--amarillo); }
+  .corr .txt div { white-space: pre-line; margin-top: 2px; }
+  .corr .pts { display: flex; gap: 6px; align-items: center; }
+  .corr .pts button { min-width: 42px; height: 38px; border-radius: 12px; border: 1px solid var(--linea); background: var(--sup-solida); font-weight: 800; cursor: pointer; color: var(--texto); }
+  .corr .pts button.on { background: var(--acento); border-color: var(--acento); color: #fff; }
+  .corr .pts input { width: 70px; padding: 8px; border-radius: 12px; border: 1px solid var(--linea); background: var(--sup-solida); color: var(--texto); font-weight: 700; }
+  @media (max-width: 640px) { .corr { grid-template-columns: 1fr; } }
+  /* Banco y reportes */
+  .examen-t.tecnico .franja { background: linear-gradient(90deg, #0EA5E9, #6366F1); } .examen-t.academico .franja { background: linear-gradient(90deg, #F59E0B, #EC4899); }
+  .tabla td.n { text-align: center; font-weight: 700; } .tabla td.n.bajo { color: var(--rojo); } .tabla td.n.medio { color: var(--amarillo); }
+  .tabla th.rot { max-width: 120px; white-space: normal; font-size: 12px; line-height: 1.2; }
+  .ayuda-pasos details { padding: 14px 16px; border-radius: 16px; background: var(--sup-fuerte); border: 1px solid var(--linea); margin-bottom: 10px; }
+  .ayuda-pasos summary { font-weight: 800; cursor: pointer; display: flex; gap: 10px; align-items: center; }
+  .ayuda-pasos ol { margin: 10px 0 0; padding-left: 22px; } .ayuda-pasos li { margin: 4px 0; }
+  .media-ed { margin: 10px 0 4px; padding: 8px 12px; border-radius: 14px; background: var(--sup2); }
+  .media-ed summary { cursor: pointer; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
+  .media-ed summary .ico { width: 16px; height: 16px; }
+  /* Rejilla en vivo */
+  .rej { border-collapse: separate; border-spacing: 4px; }
+  .rej th { font-size: 12px; color: var(--tenue); font-weight: 700; text-align: center; min-width: 36px; padding: 2px; }
+  .rej th.fijo { position: sticky; left: 0; z-index: 2; background: var(--sup-solida); color: var(--texto); text-align: left; min-width: 140px; max-width: 180px; padding: 6px 10px; border-radius: 10px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 13.5px; box-shadow: 4px 0 8px -6px rgb(0 0 0 / .25); }
+  .rej th.fijo small { display: block; font-size: 11.5px; font-weight: 600; color: var(--tenue); }
+  .rej td { padding: 0; }
+  .rej td button { display: block; width: 36px; height: 36px; border-radius: 9px; border: 0; cursor: pointer; }
+  .rej .c1, .leyenda-rej .c1 { background: var(--verde); } .rej .c0, .leyenda-rej .c0 { background: var(--rojo); } .rej .c5, .leyenda-rej .c5 { background: var(--amarillo); }
+  .rej .cn, .leyenda-rej .cn { background: var(--sup2); box-shadow: inset 0 0 0 1px var(--linea); }
+  .leyenda-rej i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin: 0 4px 0 8px; vertical-align: -2px; }
+  /* Celular: avisos y botón Guardar por encima de la barra de abajo */
+  @media (max-width: 900px) { .guardar-fijo { bottom: calc(96px + env(safe-area-inset-bottom)); } .aviso { bottom: calc(104px + env(safe-area-inset-bottom)); } }
+  @media (max-width: 600px) {
+    .cabeza h1 { font-size: 22px; } .cabeza .tit { min-width: 0; flex-basis: 100%; }
+    .tarjeta { padding: 16px 14px; }
+    .kpis { grid-template-columns: 1fr 1fr; gap: 10px; } .kpi { padding: 12px; gap: 8px; } .kpi b { font-size: 20px; }
+    .rejilla, .presets { grid-template-columns: 1fr; }
+    .filtros .entrada, .filtros select.entrada { min-width: 0; flex: 1 1 140px; } .buscar { min-width: 0; flex-basis: 100%; }
+    .btn.mini, .btn.fantasma, .segmento button, .paso { min-height: 40px; }
+    .segmento { display: flex; max-width: 100%; overflow-x: auto; } .segmento button { flex: none; }
+    .pasos { flex-wrap: nowrap; overflow-x: auto; } .paso { flex: none; padding: 8px 12px; }
+    .modal { padding: 0; place-items: end stretch; }
+    .modal > .tarjeta, .modal.ancho > .tarjeta { width: 100%; max-height: 92vh; border-radius: 22px 22px 0 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+    .dist div { grid-template-columns: 1fr 70px 30px; }
+    .regla-ed { padding: 12px; gap: 10px; }
+    .rej td button { width: 40px; height: 40px; } .rej th { min-width: 40px; } .rej th.fijo { min-width: 112px; max-width: 132px; }
+    .lista-est, .lista-est tbody { display: block; } .lista-est thead { display: none; }
+    .lista-est tr { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 4px; border-bottom: 1px solid var(--linea); }
+    .lista-est td { border: 0; padding: 8px 4px; } .lista-est td:first-child { display: none; }
+    .guardar-fijo { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="fondo"><i></i><i></i><i></i><i></i></div>
+
+<!-- Acceso -->
+<section id="vAcceso" class="acceso">
+  <div class="vidrio">
+    <div class="heroe"><div class="logo-b" id="logoA"></div><h1>Panel docente</h1><p>Crea exámenes, elige las reglas y mira los resultados en vivo.</p></div>
+    <div style="padding:22px 26px 26px">
+      <div class="segmento" style="margin-bottom:16px"><button class="on" data-acc="entrar">Entrar</button><button data-acc="activar">Activar mi cuenta</button></div>
+      <form id="fEntrar">
+        <label class="campo"><span>Usuario</span><input class="entrada" id="aUsuario" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="nombre.apellido"></label>
+        <label class="campo"><span>Contraseña</span><input class="entrada" id="aClave" type="password" autocomplete="current-password"></label>
+        <div class="campo"><span>Entrar como</span><div class="segmento" id="aModo"><button type="button" class="on" data-modo="DOCENTE">Docente</button><button type="button" data-modo="ADMIN">Administración</button></div></div>
+        <div class="error" id="aError"></div>
+        <button class="btn primario ancho" type="submit">Entrar</button>
+      </form>
+      <form id="fActivar" class="oculto">
+        <p class="suave pequeno" style="margin-top:0">La coordinación te entrega tu usuario y un código de activación. Aquí creas tu propia contraseña.</p>
+        <label class="campo"><span>Usuario</span><input class="entrada" id="vUsuario" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+        <label class="campo"><span>Código de activación</span><input class="entrada" id="vCodigo" autocomplete="off" autocapitalize="characters" placeholder="XXXX-XXXX"></label>
+        <label class="campo"><span>Nueva contraseña (mínimo 8)</span><input class="entrada" id="vClave" type="password" autocomplete="new-password"></label>
+        <label class="campo"><span>Repite la contraseña</span><input class="entrada" id="vClave2" type="password" autocomplete="new-password"></label>
+        <div class="error" id="vError"></div>
+        <button class="btn primario ancho" type="submit">Activar y entrar</button>
+      </form>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px"><a href="index.html" class="pequeno">Ir a la página del estudiante</a><span class="pequeno suave" data-version></span><div class="tema"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Aplicación -->
+<div id="vApp" class="app oculto">
+  <aside class="lateral">
+    <div class="marca-l"><div class="logo" id="logoL"></div><div><b><span data-marca>Examen Seguro</span> <span class="pildora" data-version style="font-size:11px;padding:2px 8px;vertical-align:middle"></span></b><span id="yoCentro"></span></div></div>
+    <select class="entrada oculto" id="selCentro" title="Cambiar de centro o de modo" style="margin:0 0 10px;font-size:13px;padding:8px 10px"></select>
+    <div id="menu" style="display:contents"></div>
+    <div class="yo"><div class="avatar" id="yoIni"></div><div style="min-width:0;flex:1"><b id="yoNombre"></b><span id="yoRol"></span></div></div>
+    <div class="solo-escritorio" style="display:flex;justify-content:space-between;align-items:center;padding:8px 4px 0"><div class="tema"></div><button class="btn fantasma mini" id="btnSalirApp"></button></div>
+  </aside>
+  <main class="contenido" id="pagina"></main>
+</div>
+
+<div class="modal oculto" id="modal"><div class="tarjeta" id="modalCaja"></div></div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var S = { token: '', yo: null, panel: null, vista: 'inicio', vivo: null };
+  var WEB = location.href.replace(/docente\.html.*$/, '');
+  $('logoA').innerHTML = LOGO_HTML(); $('logoL').innerHTML = LOGO_HTML(); $('btnSalirApp').innerHTML = ICO('salir') + ' Salir';
+  try { S.token = sessionStorage.getItem('es-token') || ''; } catch (e) {}
+
+  /* ---------- Llamadas con sesión ---------- */
+  function A(datos) {
+    return API(Object.assign({ token: S.token }, datos)).catch(function (e) {
+      if (e.sesion === 'fin') { cerrarSesion(); AVISO(e.message, 'error'); }
+      throw e;
+    });
+  }
+  function cargando(msg) { $('pagina').innerHTML = '<div class="cargando"><div class="girar"></div><p>' + esc(msg || 'Cargando…') + '</p></div>'; }
+  function cerrarSesion() { try { sessionStorage.removeItem('es-token'); } catch (e) {} S.token = ''; parar(); $('vApp').classList.add('oculto'); $('vAcceso').classList.remove('oculto'); }
+  function parar() { if (S.vivo) { clearInterval(S.vivo); S.vivo = null; } }
+
+  /* ---------- Acceso ---------- */
+  document.querySelectorAll('[data-acc]').forEach(function (b) {
+    b.onclick = function () {
+      document.querySelectorAll('[data-acc]').forEach(function (x) { x.classList.toggle('on', x === b); });
+      $('fEntrar').classList.toggle('oculto', b.dataset.acc !== 'entrar'); $('fActivar').classList.toggle('oculto', b.dataset.acc !== 'activar');
+    };
+  });
+  $('fEntrar').onsubmit = function (e) {
+    e.preventDefault(); $('aError').textContent = '';
+    var b = e.submitter || this.querySelector('button'); b.disabled = true;
+    API({ action: 'login', usuario: $('aUsuario').value, clave: $('aClave').value, modo: modoEntrada() }).then(entrar).catch(function (er) { $('aError').textContent = er.message; }).then(function () { b.disabled = false; });
+  };
+  function modoEntrada() { var b = document.querySelector('#aModo .on'); return b ? b.dataset.modo : 'DOCENTE'; }
+  $('aModo').onclick = function (e) { var b = e.target.closest('[data-modo]'); if (!b) return; document.querySelectorAll('#aModo [data-modo]').forEach(function (x) { x.classList.toggle('on', x === b); }); try { localStorage.setItem('es-modo', b.dataset.modo); } catch (er) {} };
+  try { if (localStorage.getItem('es-modo') === 'ADMIN') $('aModo').querySelector('[data-modo="ADMIN"]').click(); } catch (er) {}
+  $('fActivar').onsubmit = function (e) {
+    e.preventDefault(); $('vError').textContent = '';
+    if ($('vClave').value !== $('vClave2').value) { $('vError').textContent = 'Las contraseñas no son iguales.'; return; }
+    var b = this.querySelector('button'); b.disabled = true;
+    API({ action: 'activar', usuario: $('vUsuario').value, codigo: $('vCodigo').value, clave: $('vClave').value }).then(entrar).catch(function (er) { $('vError').textContent = er.message; }).then(function () { b.disabled = false; });
+  };
+  function entrar(r) {
+    S.token = r.token; S.yo = r.yo; try { sessionStorage.setItem('es-token', r.token); } catch (e) {}
+    $('aClave').value = ''; $('vClave').value = ''; $('vClave2').value = '';
+    abrirApp();
+  }
+  $('btnSalirApp').onclick = function () { A({ action: 'salir' }).catch(function () {}); cerrarSesion(); };
+
+  function abrirApp() {
+    $('vAcceso').classList.add('oculto'); $('vApp').classList.remove('oculto'); cargando('Abriendo tu panel…');
+    return A({ action: 'panel' }).then(function (p) {
+      S.panel = p; S.yo = p.yo;
+      $('yoNombre').textContent = p.yo.nombre; $('yoRol').textContent = p.yo.rol === 'ADMIN' ? 'Administración' : 'Docente'; $('yoCentro').textContent = p.yo.centroNombre || '';
+      var opc = []; (p.yo.centros || []).forEach(function (c) { opc.push([c.id + '|DOCENTE', c.nombre + ' · Docente']); if (c.rol === 'ADMIN') opc.push([c.id + '|ADMIN', c.nombre + ' · Administración']); });
+      $('selCentro').innerHTML = opc.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join(''); $('selCentro').value = p.yo.centro + '|' + p.yo.rol;
+      $('selCentro').classList.toggle('oculto', opc.length < 2);
+      $('yoIni').textContent = p.yo.nombre.split(' ').map(function (x) { return x[0]; }).slice(0, 2).join('');
+      var items = [['inicio', 'inicio', 'Inicio'], ['examenes', 'examen', 'Exámenes'], ['banco', 'banco', 'Banco'], ['reportes', 'grafica', 'Reportes'], ['estudiantes', 'usuarios', 'Estudiantes']];
+      if (p.yo.rol === 'ADMIN') items.push(['docentes', 'docentes', 'Docentes']);
+      if (p.yo.dueno) items.push(['membresias', 'premio', 'Membresías']);
+      items.push(['ayuda', 'ayuda', 'Ayuda'], ['cuenta', 'cuenta', 'Mi cuenta']);
+      $('menu').innerHTML = items.map(function (x) { return '<button class="nav" data-ir="' + x[0] + '">' + ICO(x[1]) + '<span>' + x[2] + '</span></button>'; }).join('');
+      ir(S.vista === 'editor' || S.vista === 'resultados' ? 'inicio' : S.vista);
+    }).catch(function (e) { if (e.sesion !== 'fin') $('pagina').innerHTML = '<div class="tarjeta"><b>No se pudo abrir el panel.</b><p class="suave">' + esc(e.message) + '</p></div>'; });
+  }
+  /** Cambia de centro o de modo sin salir. */
+  function cambiarCentro(centro, modo) {
+    cargando('Cambiando…');
+    return A({ action: 'cambiarCentro', centro: centro, modo: modo }).then(function () { S.vista = 'inicio'; return abrirApp(); }).catch(function (er) { AVISO(er.message, 'error'); abrirApp(); });
+  }
+  $('selCentro').onchange = function () { var v = this.value.split('|'); cambiarCentro(v[0], v[1]); };
+  $('menu').addEventListener('click', function (e) { var b = e.target.closest('[data-ir]'); if (b) ir(b.dataset.ir); });
+  function ir(v, arg) {
+    parar(); S.vista = v; window.scrollTo(0, 0); $('pagina').onclick = null;
+    document.querySelectorAll('.nav').forEach(function (n) { n.classList.toggle('on', n.dataset.ir === v || (v === 'editor' || v === 'resultados') && n.dataset.ir === 'examenes'); });
+    ({ inicio: inicio, examenes: examenes, banco: banco, reportes: reportes, estudiantes: estudiantes, docentes: docentes, membresias: membresias, ayuda: ayuda, cuenta: cuenta, editor: editor, resultados: resultados })[v](arg);
+  }
+
+  /* ---------- Excel y PDF (librerías bajo demanda) ---------- */
+  window.ES_IR = function (v, a) { ir(v, a); }; window.ES_VISTA = function () { return S.vista; };   // para el Ayudante
+  function cargarJs(u) { return new Promise(function (ok, mal) { var s = document.createElement('script'); s.src = u; s.onload = ok; s.onerror = function () { mal(new Error('No se pudo cargar la herramienta de descarga. Revisa el internet.')); }; document.head.appendChild(s); }); }
+  function libs() {
+    var cdn = 'https://cdnjs.cloudflare.com/ajax/libs/';
+    if (!S.libs) S.libs = Promise.all([cargarJs(cdn + 'xlsx/0.18.5/xlsx.full.min.js'), cargarJs(cdn + 'jspdf/2.5.1/jspdf.umd.min.js')])
+      .then(function () { return cargarJs(cdn + 'jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'); }).catch(function (e) { S.libs = null; throw e; });
+    return S.libs;
+  }
+  function archivo(t) { return String(t).replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').trim().slice(0, 90); }
+  /** hojas = [{ nombre, filas: [[encabezados], [...], ...] }] */
+  function bajarExcel(nombre, hojas) {
+    return libs().then(function () {
+      var wb = XLSX.utils.book_new();
+      hojas.forEach(function (h) {
+        var ws = XLSX.utils.aoa_to_sheet(h.filas);
+        ws['!cols'] = h.filas[0].map(function (_, j) { return { wch: Math.min(50, Math.max.apply(null, h.filas.map(function (f) { return String(f[j] == null ? '' : f[j]).length; })) + 2) }; });
+        XLSX.utils.book_append_sheet(wb, ws, h.nombre.slice(0, 31));
+      });
+      XLSX.writeFile(wb, archivo(nombre) + '.xlsx');
+    }).catch(function (e) { AVISO(e.message, 'error'); });
+  }
+  /** Tabla en PDF carta; minimo marca en rojo las notas bajas de las columnas desdeCol en adelante. */
+  function bajarPdf(nombre, titulo, sub, cab, filas, opc) {
+    opc = opc || {};
+    return libs().then(function () {
+      var doc = new jspdf.jsPDF({ orientation: opc.horizontal ? 'landscape' : 'portrait', unit: 'pt', format: 'letter' }), H = doc.internal.pageSize.getHeight();
+      doc.setFillColor(79, 70, 229); doc.rect(0, 0, doc.internal.pageSize.getWidth(), 6, 'F');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.setTextColor(20); doc.text(titulo, 40, 40);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(90); doc.text(doc.splitTextToSize(sub, doc.internal.pageSize.getWidth() - 80), 40, 56);
+      doc.autoTable({ head: [cab], body: filas, startY: 76, styles: { fontSize: opc.chica ? 7.5 : 8.8, cellPadding: 4, overflow: 'linebreak' }, headStyles: { fillColor: [79, 70, 229], halign: 'center' },
+        alternateRowStyles: { fillColor: [246, 247, 251] }, columnStyles: opc.columnas || {},
+        didParseCell: function (d) { if (d.section === 'body' && opc.minimo && d.column.index >= (opc.desdeCol || 0)) { var v = parseFloat(String(d.cell.raw).replace(',', '.')); if (!isNaN(v)) { d.cell.styles.halign = 'center'; if (v < opc.minimo) d.cell.styles.textColor = [200, 30, 40]; } } },
+        didDrawPage: function () { doc.setFontSize(8); doc.setTextColor(150); doc.text(MARCA + (S.yo && S.yo.centroNombre ? ' · ' + S.yo.centroNombre : '') + ' · ' + new Date().toLocaleString('es-DO'), 40, H - 18); } });
+      doc.save(archivo(nombre) + '.pdf');
+    }).catch(function (e) { AVISO(e.message, 'error'); });
+  }
+  /** Versión en papel del examen con hoja de clave al final. */
+  function bajarPapel(x, preguntas) {
+    return libs().then(function () {
+      var doc = new jspdf.jsPDF({ unit: 'pt', format: 'letter' }), W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), m = 50, y = 50;
+      function linea(t, tam, negrita, gris) {
+        doc.setFont('helvetica', negrita ? 'bold' : 'normal'); doc.setFontSize(tam); doc.setTextColor(gris || 20);
+        doc.splitTextToSize(String(t), W - 2 * m).forEach(function (l) { if (y > H - 50) { doc.addPage(); y = 50; } doc.text(l, m, y); y += tam * 1.4; });
+      }
+      var cab = function () { linea((S.yo && S.yo.centroNombre) || MARCA, 9.5, false, 110); linea(x.titulo, 15, true); linea([x.curso, x.materia].filter(Boolean).join(' · ') + (x.minutos ? ' · ' + x.minutos + ' minutos' : ''), 10, false, 90); };
+      cab(); y += 4; linea('Nombre: _____________________________________   Fecha: ___________   Nota: ______', 10.5); y += 6;
+      if (x.instrucciones) linea(x.instrucciones, 10, false, 70);
+      preguntas.forEach(function (q, i) {
+        y += 8; linea((i + 1) + '. ' + String(q.enunciado).replace(/\[\[(.+?)\]\]/g, '______________') + '   (' + (q.puntos || 1) + ' pt)', 11, true);
+        if (q.media) { var md = String(q.media), dk = md.indexOf(':'), src = md.slice(dk + 1);
+          if (/^data:image\/(png|jpeg)/.test(src)) { try { var pr0 = doc.getImageProperties(src), iw = Math.min(260, pr0.width), ih = pr0.height * iw / pr0.width; if (y + ih > H - 50) { doc.addPage(); y = 50; } doc.addImage(src, m + 18, y, iw, ih); y += ih + 8; } catch (er) {} }
+          else linea('      [' + md.slice(0, dk) + ' en la plataforma: ' + src + ']', 9, false, 110); }
+        var mezcla = function (a) { a = a.slice(); for (var z = a.length - 1; z > 0; z--) { var w = Math.floor(Math.random() * (z + 1)), tmp = a[z]; a[z] = a[w]; a[w] = tmp; } return a; };
+        if (q.tipo === 'CORTA') for (var k = 0; k < 3; k++) linea('_____________________________________________________________________________', 10, false, 160);
+        else if (ORDEN_ED.indexOf(q.tipo) >= 0) { linea('      Numera del 1 al ' + q.opciones.length + ' en el orden correcto:', 10, false, 90); mezcla(q.opciones).forEach(function (o) { linea('      (     )  ' + o, 10.5); }); }
+        else if (q.tipo === 'RELACIONAR') { var pr = q.opciones.map(function (s) { return s.split(' => '); }), der = mezcla(pr.map(function (p) { return p[1]; }));
+          linea('      Escribe en cada número la letra que le corresponde:', 10, false, 90); pr.forEach(function (p, j) { linea('      ' + (j + 1) + '. ' + p[0] + '   ( ___ )', 10.5); }); der.forEach(function (o, j) { linea('      ' + String.fromCharCode(97 + j) + ') ' + o, 10.5); }); }
+        else if (q.tipo === 'CLASIFICAR') { var gr = []; q.opciones.forEach(function (s) { var c = s.split(' => ')[0]; if (gr.indexOf(c) < 0) gr.push(c); });
+          linea('      Grupos: ' + gr.join(' · ') + '. Escribe el grupo de cada elemento:', 10, false, 90); mezcla(q.opciones.map(function (s) { return s.split(' => ')[1]; })).forEach(function (o) { linea('      ' + o + ':  ____________________', 10.5); }); }
+        else if (q.tipo === 'NUMERICA') linea('      Respuesta: ______________', 10.5);
+        else if (q.tipo === 'PALABRAS') { var hs = []; String(q.enunciado).replace(/\[\[(.+?)\]\]/g, function (mm, a) { hs.push(a.split('|')[0]); return mm; }); linea('      Banco de palabras:  ' + mezcla(hs.concat(q.opciones || [])).join('  ·  '), 10.5, false, 60); }
+        else if (q.tipo === 'VFJ') { linea('      (   ) Verdadero      (   ) Falso', 10.5); linea('      ¿Por qué? ____________________________________________________________', 10, false, 120); linea('      _____________________________________________________________________', 10, false, 160); }
+        else if (q.tipo !== 'COMPLETAR') q.opciones.forEach(function (o, j) { linea('      ' + String.fromCharCode(97 + j) + ')  ' + o, 10.5); });
+      });
+      doc.addPage(); y = 50; cab(); y += 6; linea('CLAVE DE RESPUESTAS (solo para el docente)', 12, true);
+      preguntas.forEach(function (q, i) { var j = (q.tipo === 'MC' || q.tipo === 'VF') ? q.opciones.indexOf(q.correcta) : -1; linea((i + 1) + '.  ' + (j >= 0 ? String.fromCharCode(97 + j) + ')  ' : '') + (q.tipo === 'CORTA' ? String(q.correcta).split('|').join(' / ') : claveTexto(q).replace(/\n/g, '   ')), 10.5); });
+      doc.save(archivo('Examen en papel ' + x.titulo) + '.pdf');
+    }).catch(function (e) { AVISO(e.message, 'error'); });
+  }
+  function refrescarPanel() { return A({ action: 'panel' }).then(function (p) { S.panel = p; }); }
+
+  /* ---------- Piezas ---------- */
+  function cabeza(titulo, sub, botones) { return '<div class="cabeza"><div class="tit"><h1>' + titulo + '</h1>' + (sub ? '<p class="suave" style="margin:0">' + sub + '</p>' : '') + '</div>' + (botones || '') + '</div>'; }
+  function kpi(ico, color, valor, texto) { return '<div class="kpi tarjeta"><span class="chip-ico ' + color + '">' + ICO(ico) + '</span><div><b>' + valor + '</b><span>' + texto + '</span></div></div>'; }
+  function claseNota(n) { return n >= 70 ? '' : n >= 50 ? 'medio' : 'bajo'; }
+  function estadoExamen(e) {
+    var ahora = new Date().toISOString().slice(0, 16).replace('T', ' ');
+    if (!e.activo) return '<span class="pildora">Inactivo</span>';
+    if (e.enCurso) return '<span class="pildora verde"><span class="punto vivo"></span>' + e.enCurso + ' en curso</span>';
+    if (e.inicio && e.inicio > ahora) return '<span class="pildora azul">' + ICO('reloj') + ' Abre ' + FECHA(e.inicio) + '</span>';
+    if (e.fin && e.fin < ahora) return '<span class="pildora">Cerrado</span>';
+    return '<span class="pildora morado"><span class="punto"></span>Abierto</span>';
+  }
+  function modal(html, ancho) { $('modalCaja').innerHTML = html; $('modal').classList.toggle('ancho', !!ancho); $('modal').classList.remove('oculto'); }
+  function cerrarModal() { $('modal').classList.add('oculto'); }
+  $('modal').addEventListener('click', function (e) { if (e.target === $('modal') || e.target.closest('[data-cerrar]')) cerrarModal(); });
+  function confirmar(titulo, texto, si, accion, peligro) {
+    modal('<h2>' + esc(titulo) + '</h2><p class="suave">' + esc(texto) + '</p><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px"><button class="btn claro" data-cerrar>Cancelar</button><button class="btn ' + (peligro ? 'peligro' : 'primario') + '" id="mOk">' + esc(si) + '</button></div>');
+    $('mOk').onclick = function () { cerrarModal(); accion(); };
+  }
+  function copiar(t) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { AVISO('Copiado'); }).catch(function () { prompt('Copia esto:', t); }); }
+  window.__copiar = copiar;
+
+  /** Plan y días que quedan (solo en la instalación de venta). soloAviso: nada si faltan más de 5 días. */
+  function avisoMembresia(soloAviso) {
+    var m = S.panel && S.panel.yo.membresia; if (!m || soloAviso && !m.vencida && m.dias > 5) return '';
+    var f = String(m.vence).split('-').reverse().join('/'), col = m.vencida ? 'rojo' : m.dias <= 5 ? 'amarillo' : 'verde';
+    return '<div class="tarjeta" style="margin-bottom:14px;border-left:5px solid var(--' + col + ')"><b>' + ICO('premio') + ' ' + esc(m.plan) + '</b> <span class="pildora ' + col + '">' +
+      (m.vencida ? 'Vencida' : m.dias === 0 ? 'Vence hoy' : m.dias === 1 ? 'Queda 1 día' : 'Quedan ' + m.dias + ' días') + '</span><p class="suave pequeno" style="margin:6px 0 0">' +
+      (m.vencida ? 'Venció el ' + f + '. Puedes entrar y ver o descargar tus resultados, pero para crear o cambiar exámenes (y para que tus estudiantes entren) debes renovar.'
+        : 'Vence el ' + f + '.' + (m.dias <= 5 ? ' Renueva pronto para no perder el acceso a crear exámenes.' : '')) + '</p></div>';
+  }
+
+  /* ---------- Inicio ---------- */
+  function inicio() {
+    var p = S.panel, ex = p.examenes, hora = new Date().getHours();
+    var activos = ex.filter(function (e) { return e.activo; }).length, hoy = ex.reduce(function (a, e) { return a + e.hoy; }, 0), vivo = ex.reduce(function (a, e) { return a + e.enCurso; }, 0);
+    var conProm = ex.filter(function (e) { return e.promedio !== null; }), ent = ex.reduce(function (a, e) { return a + e.entregados; }, 0);
+    var prom = conProm.length ? Math.round(conProm.reduce(function (a, e) { return a + e.promedio * e.entregados; }, 0) / Math.max(1, conProm.reduce(function (a, e) { return a + e.entregados; }, 0))) : '—';
+    var saludo = hora < 12 ? 'Buenos días' : hora < 18 ? 'Buenas tardes' : 'Buenas noches';
+    $('pagina').innerHTML = cabeza(saludo + ', ' + esc(p.yo.nombre.split(' ')[0]) + ' 👋', 'Esto es lo que pasa hoy con tus exámenes.', '<button class="btn primario" data-nuevo>' + ICO('mas') + ' Nuevo examen</button>') + avisoMembresia(true) +
+      '<div class="kpis">' + kpi('examen', '', activos, 'Exámenes activos') + kpi('vivo', 'verde', vivo, 'Haciendo examen ahora') + kpi('check', 'azul', hoy, 'Intentos hoy') + kpi('premio', 'amarillo', prom, 'Promedio general (' + ent + ' entregas)') + '</div>' +
+      (vivo ? '<div class="tarjeta" style="margin-bottom:16px"><h3>' + ICO('vivo') + ' En vivo ahora</h3><div class="chips-n">' + ex.filter(function (e) { return e.enCurso; }).map(function (e) {
+        return '<button class="btn claro mini" data-res="' + e.id + '"><span class="pildora verde"><span class="punto vivo"></span>' + e.enCurso + '</span> ' + esc(e.titulo) + '</button>'; }).join('') + '</div></div>' : '') +
+      '<h2 style="margin:6px 0 12px">Recientes</h2>' + (ex.length ? '<div class="rejilla">' + ex.slice(0, 6).map(tarjetaExamen).join('') + '</div>' :
+        '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('examen') + '</div><h3 style="justify-content:center">Todavía no tienes exámenes</h3><p>Crea el primero en menos de 3 minutos: escribe o pega tus preguntas y elige las reglas.</p><button class="btn primario" data-nuevo>' + ICO('mas') + ' Crear mi primer examen</button></div>');
+  }
+  function tarjetaExamen(e) {
+    var prac = e.modo === 'PRACTICA';
+    return '<article class="tarjeta examen-t' + (prac ? ' practica' : '') + '"><div class="franja"></div><div class="cuerpo">' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap">' + estadoExamen(e) + '<span class="pildora">' + (prac ? ICO('libro') + ' Práctica' : ICO('candado') + ' Examen') + '</span><span class="pildora">' + esc(e.codigo) + '</span>' +
+      (e.porCorregir ? '<span class="pildora amarillo">' + ICO('corregir') + ' ' + e.porCorregir + ' por corregir</span>' : '') + (e.compartido ? '<span class="pildora azul">' + ICO('banco') + ' En el banco</span>' : '') + '</div>' +
+      '<h3>' + esc(e.titulo) + '</h3><div class="suave pequeno">' + esc([e.curso, e.materia].filter(Boolean).join(' · ')) + (S.yo.rol === 'ADMIN' && e.docente ? ' · ' + esc(e.docente) : '') + '</div>' +
+      '<div class="metricas"><div><b>' + e.nPreguntas + '</b><span>preguntas</span></div><div><b>' + e.entregados + (e.estudiantes ? '/' + e.estudiantes : '') + '</b><span>entregas</span></div><div><b>' + (e.promedio === null ? '—' : e.promedio) + '</b><span>promedio</span></div></div></div>' +
+      '<div class="acciones"><button class="btn fantasma mini" data-res="' + e.id + '">' + ICO('grafica') + ' Resultados</button><button class="btn fantasma mini" data-ed="' + e.id + '">' + ICO('editar') + ' Editar</button>' +
+      '<button class="btn fantasma mini" data-comp="' + e.id + '">' + ICO('qr') + '</button><button class="btn fantasma mini" data-dup="' + e.id + '" title="Duplicar">' + ICO('copiar') + '</button></div></article>';
+  }
+  $('pagina').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-nuevo],[data-res],[data-ed],[data-comp],[data-dup]'); if (!t) return;
+    if (t.hasAttribute('data-nuevo')) ir('editor', null);
+    else if (t.dataset.res) ir('resultados', t.dataset.res);
+    else if (t.dataset.ed) ir('editor', t.dataset.ed);
+    else if (t.dataset.comp) ir('editor', { id: t.dataset.comp, paso: 'compartir' });
+    else if (t.dataset.dup) A({ action: 'duplicarExamen', id: t.dataset.dup }).then(function (r) { AVISO('Copia creada (inactiva)'); return refrescarPanel().then(function () { ir('editor', r.id); }); }).catch(function (er) { AVISO(er.message, 'error'); });
+  });
+
+  /* ---------- Exámenes ---------- */
+  function examenes() {
+    var p = S.panel;
+    $('pagina').innerHTML = cabeza('Exámenes', p.examenes.length + ' en total', '<button class="btn primario" data-nuevo>' + ICO('mas') + ' Nuevo examen</button>') +
+      '<div class="filtros"><label class="buscar">' + ICO('buscar') + '<input class="entrada" id="fBuscar" placeholder="Buscar por título, materia o código"></label>' +
+      '<select class="entrada" id="fCurso"><option value="">Todos los cursos</option>' + p.cursos.map(function (c) { return '<option>' + esc(c) + '</option>'; }).join('') + '</select>' +
+      '<div class="segmento" id="fModo"><button class="on" data-m="">Todos</button><button data-m="EXAMEN">Exámenes</button><button data-m="PRACTICA">Prácticas</button></div></div><div id="lista"></div>';
+    var modo = '';
+    function pintar() {
+      var q = $('fBuscar').value.toLowerCase(), c = $('fCurso').value;
+      var l = p.examenes.filter(function (e) { return (!c || e.curso === c) && (!modo || e.modo === modo) && (!q || (e.titulo + ' ' + e.materia + ' ' + e.codigo).toLowerCase().indexOf(q) >= 0); });
+      $('lista').innerHTML = l.length ? '<div class="rejilla">' + l.map(tarjetaExamen).join('') + '</div>' : '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('buscar') + '</div><p>No hay exámenes con ese filtro.</p></div>';
+    }
+    $('fBuscar').oninput = pintar; $('fCurso').onchange = pintar;
+    $('fModo').onclick = function (e) { var b = e.target.closest('[data-m]'); if (!b) return; modo = b.dataset.m; this.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); pintar(); };
+    pintar();
+  }
+
+  /* ---------- Editor ---------- */
+  var PRESETS = {
+    estricto: { t: 'Examen estricto', i: 'candado', d: 'Pantalla completa, se entrega al salir, sin copiar, señuelos anti-IA, 1 intento.', r: { pantallaCompleta: true, salirEntrega: true, toleranciaSalidas: 0, bloquearCopiar: true, senuelosIA: true, marcaAgua: true, permitirCelular: false, barajarPreguntas: true, barajarOpciones: true, mostrarNota: true, mostrarRespuestas: false, intentos: 1, unaPorPagina: false, soloAdelante: false } },
+    flexible: { t: 'Examen con avisos', i: 'alerta', d: 'Como el estricto, pero da 2 avisos antes de entregar si sale.', r: { pantallaCompleta: true, salirEntrega: true, toleranciaSalidas: 2, bloquearCopiar: true, senuelosIA: true, marcaAgua: true, permitirCelular: false, barajarPreguntas: true, barajarOpciones: true, mostrarNota: true, mostrarRespuestas: false, intentos: 1, unaPorPagina: false, soloAdelante: false } },
+    practica: { t: 'Práctica guiada', i: 'libro', d: 'Intentos libres y al final ve las respuestas con explicación.', r: { pantallaCompleta: true, salirEntrega: true, toleranciaSalidas: 0, bloquearCopiar: true, senuelosIA: false, marcaAgua: false, permitirCelular: true, barajarPreguntas: true, barajarOpciones: true, mostrarNota: true, mostrarRespuestas: true, intentos: 0, unaPorPagina: false, soloAdelante: false } },
+    libre: { t: 'Libre (tarea en casa)', i: 'movil', d: 'Sin pantalla completa; solo registra las salidas. Sirve en celular.', r: { pantallaCompleta: false, salirEntrega: false, toleranciaSalidas: 0, bloquearCopiar: true, senuelosIA: true, marcaAgua: false, permitirCelular: true, barajarPreguntas: true, barajarOpciones: true, mostrarNota: true, mostrarRespuestas: false, intentos: 1, unaPorPagina: false, soloAdelante: false } }
+  };
+  var REGLAS = [
+    ['pantallaCompleta', 'pantalla', 'azul', 'Pantalla completa', 'Se abre ocupando toda la pantalla, sin barra de direcciones ni pestañas.'],
+    ['salirEntrega', 'salida', 'rojo', 'Entregar si sale', 'Si cambia de pestaña, minimiza o sale de la pantalla completa, se entrega con lo que tenga.'],
+    ['toleranciaSalidas', 'alerta', 'amarillo', 'Avisos antes de entregar', 'Cuántas salidas se le perdonan con una advertencia (0 = ninguna).', 'n', 5],
+    ['bloquearCopiar', 'candado', 'cielo', 'Bloquear copiar y pegar', 'No puede seleccionar, copiar, pegar, imprimir ni usar el clic derecho.'],
+    ['senuelosIA', 'robot', 'amarillo', 'Señuelos anti-IA', 'Agrega una nota gris que señala una opción al azar (solo en selección múltiple), para confundir a quien fotografíe y le pregunte a una IA.'],
+    ['marcaAgua', 'marca', '', 'Marca de agua con el nombre', 'El nombre del estudiante aparece de fondo (desanima las fotos).'],
+    ['pedirPin', 'llave', 'azul', 'Pedir PIN al estudiante', 'Para entrar escribe su PIN de 4 cifras (Estudiantes ▸ Tarjetas de PIN). Apágalo mientras repartes las tarjetas: entonces basta con elegir su nombre.'],
+    ['permitirCelular', 'movil', 'verde', 'Permitir celulares', 'Si el equipo no tiene pantalla completa (iPhone), deja entrar igual y vigila las salidas.'],
+    ['unaPorPagina', 'lista', 'morado', 'Una pregunta por página', 'Cada pregunta sale sola en pantalla y se pasa con «Siguiente». Apagado: todas en una sola página.'],
+    ['soloAdelante', 'adelante', 'rojo', 'Solo hacia adelante', 'Al pasar a la siguiente no puede volver a la anterior (el servidor bloquea los cambios). Apagado: puede ir y volver.'],
+    ['barajarPreguntas', 'barajar', 'morado', 'Preguntas al azar', 'Cada estudiante recibe las preguntas en otro orden (y otras, si muestras menos que el banco).'],
+    ['barajarOpciones', 'barajar', 'morado', 'Opciones al azar', 'Cambia el orden de las opciones A, B, C, D para cada estudiante.'],
+    ['mostrarNota', 'premio', 'verde', 'Mostrar la nota al terminar', 'El estudiante ve su nota apenas entrega.'],
+    ['mostrarRespuestas', 'ver', 'verde', 'Mostrar respuestas correctas', 'Al terminar ve cuáles falló, la respuesta correcta y la explicación. En modo Examen exige 1 solo intento.'],
+    ['intentos', 'intentos', 'azul', 'Intentos permitidos', 'Cuántas veces puede hacerlo (0 = sin límite).', 'n', 10]
+  ];
+  var E = null;
+  function editor(arg) {
+    var id = arg && typeof arg === 'object' ? arg.id : arg, paso = arg && arg.paso || 'datos';
+    if (!id) { E = { paso: paso, ex: { titulo: '', materia: '', curso: S.panel.cursos[0] || '', modo: 'EXAMEN', minutos: 30, preguntas: 0, notaMinima: 70, inicio: '', fin: '', instrucciones: '', activo: true, reglas: Object.assign(JSON.parse(JSON.stringify(PRESETS.estricto.r)), { pedirPin: true }) }, preguntas: [] }; pintarEditor(); return; }
+    cargando('Abriendo el examen…');
+    A({ action: 'examen', id: id }).then(function (r) {
+      var x = r.examen;
+      E = { paso: paso, ex: { id: x.id, titulo: x.titulo, materia: x.materia || '', curso: x.curso, modo: x.modo === 'PRACTICA' ? 'PRACTICA' : 'EXAMEN', minutos: Number(x.minutos) || 0, preguntas: Number(x.preguntas) || 0,
+        notaMinima: Number(x.notaMinima) || 70, inicio: (x.inicio || '').replace(' ', 'T').slice(0, 16), fin: (x.fin || '').replace(' ', 'T').slice(0, 16), instrucciones: x.instrucciones || '',
+        activo: !/^no$/i.test(String(x.activo)), codigo: x.codigo, reglas: x.reglas, multiBanco: String(x.banco || '').indexOf(',') >= 0, compartido: !!x.compartido }, preguntas: r.preguntas };
+      if (x.soloVer) { AVISO('Ese examen es de otro docente. Úsalo desde el Banco.', 'error'); ir('banco'); return; }
+      pintarEditor();
+    }).catch(function (e) { AVISO(e.message, 'error'); ir('examenes'); });
+  }
+  function pintarEditor() {
+    var x = E.ex, nuevo = !x.id;
+    var pasos = [['datos', 'Datos'], ['preguntas', 'Preguntas', E.preguntas.length], ['reglas', 'Restricciones'], ['compartir', 'Compartir']];
+    $('pagina').innerHTML = cabeza(nuevo ? 'Nuevo examen' : esc(x.titulo || 'Examen'), nuevo ? 'Llena los datos, agrega preguntas y elige las reglas.' : esc(x.curso + (x.materia ? ' · ' + x.materia : '')),
+      '<button class="btn claro" data-volver>' + ICO('atras') + ' Volver</button>' + (nuevo ? '' : '<button class="btn claro" data-res="' + x.id + '">' + ICO('grafica') + ' Resultados</button>')) +
+      '<div class="pasos">' + pasos.map(function (p, i) { return '<button class="paso' + (E.paso === p[0] ? ' on' : '') + '" data-paso="' + p[0] + '"><span class="n">' + (p[2] !== undefined ? p[2] : i + 1) + '</span>' + p[1] + '</button>'; }).join('') + '</div>' +
+      '<div id="edCuerpo"></div><div class="guardar-fijo vidrio"><span class="suave pequeno" id="edEstado" style="margin-right:auto"></span><button class="btn primario" id="edGuardar">' + ICO('check') + ' Guardar</button></div>';
+    ({ datos: pasoDatos, preguntas: pasoPreguntas, reglas: pasoReglas, compartir: pasoCompartir })[E.paso]();
+    document.querySelectorAll('[data-paso]').forEach(function (b) { b.onclick = function () { leerPaso(); E.paso = b.dataset.paso; pintarEditor(); }; });
+    $('pagina').querySelector('[data-volver]').onclick = function () { ir('examenes'); };
+    $('edGuardar').onclick = guardarEditor;
+  }
+  function leerPaso() {
+    if (E.paso === 'datos') {
+      ['titulo', 'materia', 'curso', 'instrucciones', 'inicio', 'fin'].forEach(function (k) { var el = $('ed_' + k); if (el) E.ex[k] = el.value; });
+      ['minutos', 'preguntas', 'notaMinima'].forEach(function (k) { var el = $('ed_' + k); if (el) E.ex[k] = Number(el.value) || 0; });
+      if ($('ed_materiaOtra') && E.ex.materia === '__otra') E.ex.materia = $('ed_materiaOtra').value.trim();
+    }
+    if (E.paso === 'preguntas') leerPreguntas();
+  }
+  function pasoDatos() {
+    var x = E.ex, mats = S.panel.asignaciones.filter(function (a) { return a.curso === x.curso; }).map(function (a) { return a.materia; });
+    var matOpts = mats.slice(); if (x.materia && mats.indexOf(x.materia) < 0) matOpts.push(x.materia);
+    $('edCuerpo').innerHTML = '<div class="tarjeta">' +
+      '<label class="campo"><span>Título</span><input class="entrada" id="ed_titulo" maxlength="140" placeholder="Ej.: Examen final RA03 · Protección de dispositivos" value="' + esc(x.titulo) + '"></label>' +
+      '<div class="fila"><label class="campo"><span>Curso</span><select class="entrada" id="ed_curso">' + S.panel.cursos.map(function (c) { return '<option' + (c === x.curso ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('') + '</select></label>' +
+      '<label class="campo"><span>Materia</span><select class="entrada" id="ed_materia">' + matOpts.map(function (m) { return '<option' + (m === x.materia ? ' selected' : '') + '>' + esc(m) + '</option>'; }).join('') + '<option value="__otra">Otra…</option></select>' +
+      '<input class="entrada oculto" id="ed_materiaOtra" placeholder="Escribe la materia" style="margin-top:6px"></label></div>' +
+      '<label class="campo"><span>Tipo</span><div class="segmento" id="ed_modo"><button type="button" data-m="EXAMEN" class="' + (x.modo === 'EXAMEN' ? 'on' : '') + '">' + ICO('candado') + ' Examen</button><button type="button" data-m="PRACTICA" class="' + (x.modo === 'PRACTICA' ? 'on' : '') + '">' + ICO('libro') + ' Práctica / quiz</button></div></label>' +
+      '<div class="fila"><label class="campo"><span>Minutos (0 = sin límite)</span><input class="entrada" type="number" min="0" id="ed_minutos" value="' + x.minutos + '"></label>' +
+      '<label class="campo"><span>Preguntas a mostrar (0 = todas)</span><input class="entrada" type="number" min="0" id="ed_preguntas" value="' + x.preguntas + '"></label>' +
+      '<label class="campo"><span>Nota mínima para aprobar</span><input class="entrada" type="number" min="0" max="100" id="ed_notaMinima" value="' + x.notaMinima + '"></label></div>' +
+      '<div class="fila"><label class="campo"><span>Abre (opcional)</span><input class="entrada" type="datetime-local" id="ed_inicio" value="' + esc(x.inicio) + '"></label>' +
+      '<label class="campo"><span>Cierra (opcional)</span><input class="entrada" type="datetime-local" id="ed_fin" value="' + esc(x.fin) + '"></label></div>' +
+      '<label class="campo"><span>Indicaciones para el estudiante</span><textarea class="entrada" id="ed_instrucciones" maxlength="600" placeholder="Ej.: Lee con calma. Una sola respuesta correcta en cada pregunta.">' + esc(x.instrucciones) + '</textarea></label>' +
+      '<div class="regla-ed"><span class="chip-ico verde">' + ICO('check') + '</span><div class="txt"><b>Examen activo</b><span class="d">Si lo apagas, el código deja de funcionar.</span></div><label class="interruptor"><input type="checkbox" id="ed_activo"' + (x.activo ? ' checked' : '') + '><i></i></label></div>' +
+      '<div class="regla-ed"><span class="chip-ico azul">' + ICO('banco') + '</span><div class="txt"><b>Compartir en el banco de exámenes</b><span class="d">Tus colegas lo verán como examen de referencia y podrán copiarlo a sus cursos (no ven las notas de tus estudiantes).</span></div><label class="interruptor"><input type="checkbox" id="ed_compartido"' + (x.compartido ? ' checked' : '') + '><i></i></label></div></div>';
+    $('ed_curso').onchange = function () { leerPaso(); E.ex.curso = this.value; E.ex.materia = ''; pasoDatos(); };
+    $('ed_materia').onchange = function () { $('ed_materiaOtra').classList.toggle('oculto', this.value !== '__otra'); };
+    if (!matOpts.length) { $('ed_materia').value = '__otra'; $('ed_materiaOtra').classList.remove('oculto'); }
+    $('ed_activo').onchange = function () { E.ex.activo = this.checked; };
+    $('ed_compartido').onchange = function () { E.ex.compartido = this.checked; };
+    $('ed_modo').onclick = function (e) {
+      var b = e.target.closest('[data-m]'); if (!b || b.dataset.m === E.ex.modo) return; leerPaso();
+      E.ex.modo = b.dataset.m; E.ex.reglas = JSON.parse(JSON.stringify(PRESETS[b.dataset.m === 'PRACTICA' ? 'practica' : 'estricto'].r));
+      AVISO(b.dataset.m === 'PRACTICA' ? 'Reglas de práctica aplicadas' : 'Reglas de examen aplicadas'); pasoDatos();
+    };
+  }
+
+  /* Tipos de pregunta */
+  var TIPOS_ED = { MC: 'Selección múltiple', VF: 'Verdadero o falso', VFJ: 'V o F con justificación', CORTA: 'Respuesta corta', ORDENAR: 'Ordenar pasos', ALGORITMO: 'Armar algoritmo (pseudocódigo)', FLUJO: 'Diagrama de flujo',
+    RELACIONAR: 'Relacionar columnas', CLASIFICAR: 'Clasificar en grupos', COMPLETAR: 'Completar espacios', PALABRAS: 'Completar con banco de palabras', NUMERICA: 'Respuesta numérica' };
+  var DINAMICAS = [['ORDENAR', 'Ordenar', 'barajar'], ['ALGORITMO', 'Algoritmo', 'lista'], ['FLUJO', 'Diagrama de flujo', 'grafica'], ['RELACIONAR', 'Relacionar', 'enlace'], ['CLASIFICAR', 'Clasificar', 'banco'], ['COMPLETAR', 'Completar', 'editar'], ['PALABRAS', 'Banco de palabras', 'libro'], ['NUMERICA', 'Numérica', 'check'], ['VFJ', 'V/F justificada', 'corregir']];
+  var ORDEN_ED = ['ORDENAR', 'ALGORITMO', 'FLUJO'], AUTO = ORDEN_ED.concat(['RELACIONAR', 'CLASIFICAR', 'COMPLETAR', 'PALABRAS']), HUECOS_ED = ['COMPLETAR', 'PALABRAS'];
+  var AYUDA_ED = { ORDENAR: 'Un paso por línea, en el orden correcto (al estudiante le salen desordenados)', ALGORITMO: 'Una línea de pseudocódigo por renglón, en orden. Respeta la sangría con espacios',
+    FLUJO: 'Un bloque por línea, de arriba hacia abajo. La forma sale sola: Inicio/Fin = óvalo; Leer/Escribir = entrada/salida; con «?» o «Si…» = decisión; lo demás = proceso',
+    RELACIONAR: 'Una pareja por línea: izquierda = derecha', CLASIFICAR: 'Un grupo por línea: Grupo: elemento, elemento, elemento',
+    COMPLETAR: 'Escribe el texto en la pregunta y pon cada respuesta entre [[ ]]. Varias respuestas válidas: [[Escribir|Mostrar]]. Si el texto tiene varias líneas se muestra como código.',
+    PALABRAS: 'Escribe la oración en la pregunta y pon cada palabra correcta entre [[ ]]. Abajo, palabras de relleno (una por línea) para que no sea tan fácil' };
+  var EJEMPLO_ED = { ORDENAR: 'Encender la computadora\nAbrir el navegador\nEscribir la dirección\nPulsar Enter', ALGORITMO: 'Inicio\nLeer A, B\nSi A > B entonces\n    Escribir A\nSino\n    Escribir B\nFinSi\nFin',
+    FLUJO: 'Inicio\nLeer N\n¿N es par?\nEscribir "Par"\nFin', RELACIONAR: 'CPU = Procesa los datos\nRAM = Memoria temporal\nDisco duro = Guarda archivos', CLASIFICAR: 'Hardware: Teclado, Monitor, Mouse\nSoftware: Word, Windows, Chrome' };
+  function lineasDe(x) {
+    var o = x.opciones || [];
+    if (x.tipo === 'RELACIONAR') return o.map(function (s) { return s.replace(' => ', ' = '); }).join('\n');
+    if (x.tipo === 'CLASIFICAR') { var g = {}, ord = []; o.forEach(function (s) { var p = s.split(' => '); if (p.length < 2) return; if (!g[p[0]]) { g[p[0]] = []; ord.push(p[0]); } g[p[0]].push(p[1]); }); return ord.map(function (c) { return c + ': ' + g[c].join(', '); }).join('\n'); }
+    return o.join('\n');
+  }
+  function deLineas(tipo, txt) {
+    var l = String(txt).replace(/\r/g, '').split('\n').map(function (s) { return tipo === 'ALGORITMO' ? s.replace(/\s+$/, '') : s.trim(); }).filter(function (s) { return s.trim(); });
+    if (tipo === 'CLASIFICAR') return [].concat.apply([], l.map(function (s) { var k = s.indexOf(':'); if (k < 1) return [s]; var c = s.slice(0, k).trim(); return s.slice(k + 1).split(',').map(function (x) { return x.trim(); }).filter(Boolean).map(function (x) { return c + ' => ' + x; }); }));
+    return l;
+  }
+  function validarP(q, i) {
+    var n = i + 1, ops = (q.opciones || []).filter(function (o) { return String(o).trim(); });
+    if (!q.enunciado.trim()) return n + ' (sin texto)';
+    if (ORDEN_ED.indexOf(q.tipo) >= 0) return ops.length < 3 ? n + ' (necesita al menos 3 pasos)' : null;
+    if (q.tipo === 'RELACIONAR' || q.tipo === 'CLASIFICAR') return ops.length < 2 ? n + ' (necesita al menos 2 parejas)' : null;
+    if (HUECOS_ED.indexOf(q.tipo) >= 0) return /\[\[.+?\]\]/.test(q.enunciado) ? null : n + ' (marca los espacios con [[respuesta]])';
+    if (q.tipo === 'NUMERICA') return isNaN(Number(String(q.correcta).replace(',', '.'))) || !String(q.correcta).trim() ? n + ' (la respuesta debe ser un número)' : null;
+    if (!String(q.correcta || '').trim()) return n + ' (sin respuesta correcta)';
+    return q.tipo === 'MC' && ops.length < 2 ? n + ' (pocas opciones)' : null;
+  }
+  /** Respuesta correcta en texto (vista previa del banco y clave en papel). */
+  function claveTexto(q) {
+    var o = q.opciones || [];
+    if (ORDEN_ED.indexOf(q.tipo) >= 0) return o.map(function (x, j) { return (j + 1) + '. ' + x; }).join('\n');
+    if (q.tipo === 'RELACIONAR') return o.map(function (s) { return s.replace(' => ', ' → '); }).join('\n');
+    if (q.tipo === 'CLASIFICAR') return lineasDe(q);
+    if (HUECOS_ED.indexOf(q.tipo) >= 0) { var h = []; String(q.enunciado).replace(/\[\[(.+?)\]\]/g, function (m, a) { h.push(a.split('|')[0]); return m; }); return h.join(' · '); }
+    if (q.tipo === 'NUMERICA') return q.correcta + (Number(o[0]) ? ' (± ' + o[0] + ')' : '');
+    return String(q.correcta || '').split('|')[0];
+  }
+
+  /* Preguntas */
+  function pasoPreguntas() {
+    var q = E.preguntas;
+    $('edCuerpo').innerHTML = (E.ex.multiBanco ? '<div class="tarjeta" style="margin-bottom:12px"><b>' + ICO('alerta') + ' Este examen usa preguntas de varios bancos.</b><p class="suave" style="margin:4px 0 0">Si guardas aquí, las preguntas se copian a este examen.</p></div>' : '') +
+      '<div class="filtros"><button class="btn claro" data-add="MC">' + ICO('mas') + ' Selección múltiple</button><button class="btn claro" data-add="VF">' + ICO('mas') + ' Verdadero o falso</button>' +
+      '<button class="btn claro" data-add="CORTA">' + ICO('mas') + ' Respuesta corta</button>' + DINAMICAS.map(function (d) { return '<button class="btn claro" data-add="' + d[0] + '">' + ICO(d[2]) + ' ' + d[1] + '</button>'; }).join('') + '<button class="btn primario" id="btnImportar">' + ICO('importar') + ' Pegar preguntas</button><button class="btn primario" id="btnIA">✨ Generar con IA</button>' +
+      '<span class="suave pequeno" style="margin-left:auto">' + q.length + ' preguntas · ' + q.reduce(function (a, x) { return a + (Number(x.puntos) || 1); }, 0) + ' puntos</span></div>' +
+      (q.length ? q.map(htmlPregunta).join('') : '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('lista') + '</div><h3 style="justify-content:center">Sin preguntas todavía</h3><p>Agrega una a una o usa «Pegar preguntas» para cargar muchas de un golpe.</p></div>');
+    var c = $('edCuerpo');
+    c.onclick = function (e) {
+      var t = e.target.closest('[data-add],[data-del],[data-sube],[data-baja],[data-cor],[data-masop],[data-quitaop],[data-sinmedia],#btnImportar,#btnIA'); if (!t) return;
+      if (t.id === 'btnImportar') { leerPreguntas(); importar(); return; }
+      if (t.id === 'btnIA') { leerPreguntas(); generarIA(); return; }
+      leerPreguntas();
+      if (t.dataset.add) { var tp = t.dataset.add; q.push({ tipo: tp, enunciado: '', opciones: tp === 'MC' ? ['', '', '', ''] : tp === 'VF' || tp === 'VFJ' ? ['Verdadero', 'Falso'] : [], correcta: tp === 'VF' || tp === 'VFJ' ? 'Verdadero' : AUTO.indexOf(tp) >= 0 ? 'auto' : '', puntos: 1, explicacion: '', tema: '' }); }
+      var i = Number(t.dataset.del || t.dataset.sube || t.dataset.baja || t.dataset.masop || t.dataset.quitaop || (t.dataset.cor || '').split(':')[0]);
+      if (t.dataset.sinmedia !== undefined) q[Number(t.dataset.sinmedia)].media = '';
+      if (t.dataset.del !== undefined) q.splice(i, 1);
+      if (t.dataset.sube !== undefined && i > 0) q.splice(i - 1, 0, q.splice(i, 1)[0]);
+      if (t.dataset.baja !== undefined && i < q.length - 1) q.splice(i + 1, 0, q.splice(i, 1)[0]);
+      if (t.dataset.masop !== undefined) q[i].opciones.push('');
+      if (t.dataset.quitaop !== undefined) { var j = Number(t.dataset.op); if (q[i].opciones.length > 2) { if (q[i].opciones[j] === q[i].correcta) q[i].correcta = ''; q[i].opciones.splice(j, 1); } }
+      if (t.dataset.cor) { var k = Number(t.dataset.cor.split(':')[1]); q[i].correcta = q[i].opciones[k]; q[i]._cor = k; }
+      pasoPreguntas();
+      if (t.dataset.add) { var ult = c.querySelectorAll('.preg-ed'); if (ult.length) ult[ult.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    };
+    c.onchange = function (e) {
+      if (e.target.dataset.subir !== undefined) { var fl = e.target.files[0], si = Number(e.target.dataset.subir); if (!fl) return; leerPreguntas();
+        comprimir(fl).then(function (d) { q[si].media = 'imagen:' + d; pasoPreguntas(); AVISO('Imagen agregada'); }).catch(function (er) { AVISO(er.message, 'error'); }); return; }
+      if (e.target.dataset.f === 'mediaUrl') { var mu = e.target.value.trim(), ms = c.querySelector('[data-f="mediaTipo"][data-i="' + e.target.dataset.i + '"]');
+        if (mu && !/^https:\/\//.test(mu)) { AVISO('El enlace debe empezar con https://', 'error'); return; }
+        if (mu && ms) ms.value = TIPO_MEDIA(mu); leerPreguntas(); pasoPreguntas(); return; }
+      if (e.target.dataset.tipo !== undefined) { leerPreguntas(); var i = Number(e.target.dataset.tipo), x = q[i]; x.tipo = e.target.value;
+      if (x.tipo === 'VF' || x.tipo === 'VFJ') { x.opciones = ['Verdadero', 'Falso']; x.correcta = 'Verdadero'; } else if (x.tipo === 'MC' && x.opciones.length < 2) { x.opciones = ['', '', '', '']; x.correcta = ''; } else if (x.tipo === 'CORTA') { x.opciones = []; if (x.correcta === 'auto') x.correcta = ''; } else if (TIPOS_ED[x.tipo] && x.tipo !== 'MC' && x.tipo !== 'VF' && x.tipo !== 'VFJ') { x.opciones = []; x.correcta = AUTO.indexOf(x.tipo) >= 0 ? 'auto' : ''; }
+      pasoPreguntas(); } };
+    $('edEstado').textContent = '';
+  }
+  function htmlPregunta(x, i) {
+    var cuerpo;
+    if (x.tipo === 'CORTA') cuerpo = '<label class="campo"><span>Respuestas aceptadas (separa con |)</span><input class="entrada" data-f="correcta" data-i="' + i + '" value="' + esc(x.correcta) + '" placeholder="Ej.: Na|sodio"></label>';
+    else if (x.tipo === 'PALABRAS') cuerpo = '<p class="pequeno suave" style="margin:6px 0">' + AYUDA_ED.PALABRAS + '</p><textarea class="entrada" data-f="lineas" data-i="' + i + '" style="min-height:70px" placeholder="memoria&#10;procesador">' + esc((x.opciones || []).join('\n')) + '</textarea>';
+    else if (AYUDA_ED[x.tipo] && x.tipo !== 'COMPLETAR' && x.tipo !== 'NUMERICA') cuerpo = '<label class="campo"><span>' + AYUDA_ED[x.tipo] + '</span><textarea class="entrada" data-f="lineas" data-i="' + i + '" style="min-height:130px' + (x.tipo === 'ALGORITMO' ? ';font-family:ui-monospace,Consolas,monospace;font-size:13.5px' : '') + '" placeholder="' + esc(EJEMPLO_ED[x.tipo]) + '">' + esc(lineasDe(x)) + '</textarea></label>';
+    else if (x.tipo === 'COMPLETAR') cuerpo = '<p class="pequeno suave" style="margin:6px 0">' + AYUDA_ED.COMPLETAR + '</p>';
+    else if (x.tipo === 'NUMERICA') cuerpo = '<div class="fila"><label class="campo"><span>Respuesta (número)</span><input class="entrada" data-f="correcta" data-i="' + i + '" inputmode="decimal" value="' + esc(x.correcta) + '" placeholder="Ej.: 3.5"></label>' +
+      '<label class="campo"><span>Margen aceptado (±)</span><input class="entrada" data-f="tol" data-i="' + i + '" inputmode="decimal" value="' + esc((x.opciones || [])[0] || '0') + '"></label></div>';
+    else cuerpo = '<div><span class="pequeno suave">Marca el círculo de la respuesta correcta</span>' + x.opciones.map(function (o, j) {
+      var on = x._cor !== undefined ? x._cor === j : (o && o === x.correcta);
+      return '<div class="opcion"><button type="button" class="correcta' + (on ? ' on' : '') + '" data-cor="' + i + ':' + j + '" aria-label="Marcar como correcta">' + ICO('check') + '</button>' +
+        '<input class="entrada" data-f="op" data-i="' + i + '" data-j="' + j + '" value="' + esc(o) + '" placeholder="Opción ' + String.fromCharCode(65 + j) + '"' + (x.tipo === 'VF' || x.tipo === 'VFJ' ? ' readonly' : '') + '>' +
+        (x.tipo === 'MC' ? '<button type="button" class="btn fantasma icono" data-quitaop="' + i + '" data-op="' + j + '" title="Quitar">' + ICO('x') + '</button>' : '') + '</div>';
+    }).join('') + (x.tipo === 'MC' && x.opciones.length < 8 ? '<button type="button" class="btn fantasma mini" data-masop="' + i + '">' + ICO('mas') + ' Opción</button>' : '') + (x.tipo === 'VFJ' ? '<p class="pequeno suave" style="margin:6px 0 0">El estudiante elige V o F y escribe por qué. La elección vale la mitad (se califica sola); la justificación la corriges tú en Resultados ▸ Por corregir. Escribe la justificación modelo en «Explicación».</p>' : '') + '</div>';
+    return '<div class="preg-ed tarjeta"><div class="top"><span class="num">' + (i + 1) + '</span>' +
+      '<select class="entrada mini" data-tipo="' + i + '">' + Object.keys(TIPOS_ED).map(function (k) { return '<option value="' + k + '"' + (x.tipo === k ? ' selected' : '') + '>' + TIPOS_ED[k] + '</option>'; }).join('') + '</select>' +
+      '<label class="pequeno suave" style="display:flex;gap:6px;align-items:center">Puntos <input class="entrada mini" type="number" min="0.5" step="0.5" data-f="puntos" data-i="' + i + '" value="' + (x.puntos || 1) + '" style="width:76px"></label>' +
+      '<span style="margin-left:auto;display:flex;gap:2px"><button class="btn fantasma icono" data-sube="' + i + '" title="Subir">' + ICO('arriba') + '</button><button class="btn fantasma icono" data-baja="' + i + '" title="Bajar">' + ICO('abajo') + '</button>' +
+      '<button class="btn fantasma icono" data-del="' + i + '" title="Borrar" style="color:var(--rojo)">' + ICO('borrar') + '</button></span></div>' +
+      '<textarea class="entrada" data-f="enunciado" data-i="' + i + '" placeholder="' + (x.tipo === 'COMPLETAR' ? 'Ej.: Para mostrar datos se usa [[Escribir]] y para pedirlos [[Leer]].' : x.tipo === 'PALABRAS' ? 'Ej.: El [[teclado]] es de entrada y la [[impresora]] es de salida.' : 'Escribe la pregunta') + '" style="min-height:70px' + (x.tipo === 'COMPLETAR' ? ';font-family:ui-monospace,Consolas,monospace' : '') + '">' + esc(x.enunciado) + '</textarea>' + htmlMedia(x, i) + cuerpo +
+      '<div class="fila" style="margin-top:10px"><input class="entrada" data-f="explicacion" data-i="' + i + '" value="' + esc(x.explicacion || '') + '" placeholder="Explicación (se ve en prácticas, opcional)">' +
+      '<input class="entrada" data-f="tema" data-i="' + i + '" value="' + esc(x.tema || '') + '" placeholder="Tema o criterio (opcional)"></div></div>';
+  }
+  /** Imagen, video o audio de la pregunta: enlace o imagen subida (se comprime para que quepa en la hoja). */
+  function htmlMedia(x, i) {
+    var m = String(x.media || ''), k = m.indexOf(':'), tipo = k > 0 ? m.slice(0, k) : 'imagen', url = k > 0 ? m.slice(k + 1) : '', subida = /^data:/.test(url);
+    return '<details class="media-ed"' + (m ? ' open' : '') + '><summary>' + ICO('video') + ' Imagen, video o audio ' + (m ? '<span class="pildora verde">agregado</span>' : '<span class="suave">(opcional)</span>') + '</summary>' + (m ? MEDIA(m) : '') +
+      '<div class="fila" style="align-items:end"><label class="campo" style="flex:2"><span>Enlace: imagen, YouTube, Google Drive o MP3</span><input class="entrada" data-f="mediaUrl" data-i="' + i + '" value="' + (subida ? '' : esc(url)) + '" placeholder="' + (subida ? 'Imagen subida desde tu equipo' : 'https://…') + '"></label>' +
+      '<label class="campo"><span>Es</span><select class="entrada" data-f="mediaTipo" data-i="' + i + '">' + [['imagen', 'Imagen'], ['video', 'Video'], ['audio', 'Audio']].map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === tipo ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label></div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px"><label class="btn claro mini">' + ICO('importar') + ' Subir imagen<input type="file" accept="image/*" data-subir="' + i + '" hidden></label>' +
+      (m ? '<button type="button" class="btn fantasma mini" data-sinmedia="' + i + '" style="color:var(--rojo)">' + ICO('borrar') + ' Quitar</button>' : '') + '<span class="pequeno suave">De Drive: comparte el archivo como «Cualquier persona con el enlace».</span></div></details>';
+  }
+  /** Foto del equipo → JPEG pequeño (menos de 45 000 caracteres) para guardarlo con la pregunta. */
+  function comprimir(file) {
+    return new Promise(function (ok, mal) {
+      var img = new Image(), u = URL.createObjectURL(file);
+      img.onerror = function () { URL.revokeObjectURL(u); mal(new Error('No se pudo leer esa imagen.')); };
+      img.onload = function () {
+        URL.revokeObjectURL(u);
+        var lado = 1000, d = '';
+        for (var t = 0; t < 8; t++) {
+          var s = Math.min(1, lado / Math.max(img.width, img.height)), cv = document.createElement('canvas'); cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+          var g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, cv.width, cv.height); g.drawImage(img, 0, 0, cv.width, cv.height);
+          d = cv.toDataURL('image/jpeg', t < 3 ? 0.75 : 0.6); if (d.length < 45000) return ok(d);
+          lado *= 0.8;
+        }
+        mal(new Error('La imagen es muy pesada. Usa un enlace de Drive.'));
+      };
+      img.src = u;
+    });
+  }
+  function leerPreguntas() {
+    if (!$('edCuerpo')) return;
+    $('edCuerpo').querySelectorAll('[data-f]').forEach(function (el) {
+      var x = E.preguntas[Number(el.dataset.i)]; if (!x) return;
+      if (el.dataset.f === 'op') { var j = Number(el.dataset.j), viejo = x.opciones[j]; x.opciones[j] = el.value; if (x._cor === j || (x._cor === undefined && viejo && viejo === x.correcta)) { x.correcta = el.value; x._cor = j; } }
+      else if (el.dataset.f === 'puntos') x.puntos = Number(el.value) || 1;
+      else if (el.dataset.f === 'lineas') x.opciones = deLineas(x.tipo, el.value);
+      else if (el.dataset.f === 'tol') x.opciones = [el.value.trim() || '0'];
+      else if (el.dataset.f === 'mediaUrl') x._mu = el.value.trim();
+      else if (el.dataset.f === 'mediaTipo') { var cu = String(x.media || ''), cuUrl = cu.slice(cu.indexOf(':') + 1), mu = x._mu; delete x._mu;
+        x.media = mu ? el.value + ':' + mu : /^data:image\//.test(cuUrl) ? 'imagen:' + cuUrl : ''; }
+      else x[el.dataset.f] = el.value;
+    });
+  }
+  /* Generar preguntas con IA (servidor: Gemini → Groq → OpenRouter). El docente elige tipos, dificultad y cuáles agregar. */
+  var TIPOS_IA_ED = [['MC', 'Selección múltiple'], ['VF', 'Verdadero o falso'], ['VFJ', 'V/F justificada'], ['CORTA', 'Respuesta corta'], ['ORDENAR', 'Ordenar pasos'], ['ALGORITMO', 'Algoritmo'],
+    ['FLUJO', 'Diagrama de flujo'], ['RELACIONAR', 'Relacionar'], ['CLASIFICAR', 'Clasificar'], ['COMPLETAR', 'Completar'], ['PALABRAS', 'Banco de palabras'], ['NUMERICA', 'Numérica']];
+  var IA = { tema: '', texto: '', dificultad: 'MEDIA', cantidad: 10, tipos: ['MC', 'VF', 'CORTA', 'COMPLETAR', 'RELACIONAR', 'ORDENAR'] };
+  try { Object.assign(IA, JSON.parse(localStorage.getItem('es-ia') || '{}'), { texto: '' }); } catch (e) {}
+  function generarIA() {
+    modal('<h2>✨ Generar preguntas con IA</h2><p class="suave pequeno">Escribe el tema o pega el texto de la clase. La IA crea las preguntas, tú eliges cuáles agregar y luego puedes editarlas. No escribas nombres de estudiantes ni datos personales.</p>' +
+      '<label class="campo"><span>Tema</span><input class="entrada" id="iaTema" maxlength="300" placeholder="Ej.: Topologías de red y dispositivos" value="' + esc(IA.tema) + '"></label>' +
+      '<label class="campo"><span>Texto base (opcional): las preguntas salen solo de este texto</span><textarea class="entrada" id="iaTexto" maxlength="15000" style="min-height:110px" placeholder="Pega aquí el contenido de la clase, un resumen o una lectura">' + esc(IA.texto) + '</textarea></label>' +
+      '<div class="fila" style="align-items:end"><label class="campo"><span>Dificultad</span><div class="segmento" id="iaDif">' + [['FACIL', 'Fácil'], ['MEDIA', 'Media'], ['DIFICIL', 'Difícil'], ['MIXTA', 'Mixta']].map(function (x) {
+        return '<button type="button" data-d="' + x[0] + '"' + (IA.dificultad === x[0] ? ' class="on"' : '') + '>' + x[1] + '</button>'; }).join('') + '</div></label>' +
+      '<label class="campo" style="max-width:140px"><span>Cantidad (1-30)</span><input class="entrada" id="iaCant" type="number" min="1" max="30" value="' + IA.cantidad + '"></label></div>' +
+      '<div class="campo"><span>Tipos de pregunta que quieres <button type="button" class="btn fantasma mini" id="iaTodos">Todos</button><button type="button" class="btn fantasma mini" id="iaNinguno">Ninguno</button></span>' +
+      '<div class="chips-n" id="iaTipos">' + TIPOS_IA_ED.map(function (x) { return '<label class="pildora" style="cursor:pointer;gap:6px"><input type="checkbox" value="' + x[0] + '"' + (IA.tipos.indexOf(x[0]) >= 0 ? ' checked' : '') + '>' + x[1] + '</label>'; }).join('') + '</div></div>' +
+      '<div class="error" id="iaError"></div><div id="iaRes"></div>' +
+      '<div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px"><button class="btn claro" data-cerrar>Cancelar</button><button class="btn claro oculto" id="iaAgregar"></button><button class="btn primario" id="iaGen">✨ Generar</button></div>', true);
+    $('iaDif').onclick = function (e) { var b = e.target.closest('[data-d]'); if (!b) return; $('iaDif').querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); };
+    var marcar = function (v) { $('iaTipos').querySelectorAll('input').forEach(function (x) { x.checked = v; }); };
+    $('iaTodos').onclick = function () { marcar(true); }; $('iaNinguno').onclick = function () { marcar(false); };
+    var lista = [];
+    $('iaGen').onclick = function () {
+      IA.tema = $('iaTema').value.trim(); IA.texto = $('iaTexto').value.trim(); IA.cantidad = Math.max(1, Math.min(30, Number($('iaCant').value) || 10));
+      IA.dificultad = ($('iaDif').querySelector('.on') || {}).dataset ? $('iaDif').querySelector('.on').dataset.d : 'MEDIA';
+      IA.tipos = [].map.call($('iaTipos').querySelectorAll('input:checked'), function (x) { return x.value; });
+      $('iaError').textContent = '';
+      if (!IA.tipos.length) { $('iaError').textContent = 'Elige al menos un tipo de pregunta.'; return; }
+      if (!IA.tema && IA.texto.length < 40) { $('iaError').textContent = 'Escribe el tema o pega un texto.'; return; }
+      try { localStorage.setItem('es-ia', JSON.stringify({ tema: IA.tema, dificultad: IA.dificultad, cantidad: IA.cantidad, tipos: IA.tipos })); } catch (e) {}
+      var b = this; b.disabled = true; b.textContent = 'Generando…'; $('iaAgregar').classList.add('oculto');
+      $('iaRes').innerHTML = '<div class="cargando" style="padding:18px"><div class="girar"></div><p>La IA está creando ' + IA.cantidad + ' preguntas. Tarda de 5 a 60 segundos.</p></div>';
+      A({ action: 'generarIA', tema: IA.tema, texto: IA.texto, tipos: IA.tipos, cantidad: IA.cantidad, dificultad: IA.dificultad, materia: E.ex.materia, curso: E.ex.curso }).then(function (r) {
+        lista = r.preguntas;
+        $('iaRes').innerHTML = '<p class="pequeno" style="margin:12px 0 6px"><b>' + lista.length + ' preguntas</b> · hechas con ' + esc(r.motor) + (r.descartadas ? ' · ' + r.descartadas + ' descartadas por venir mal formadas' : '') + '. Desmarca las que no quieras. <b>Revísalas antes de usarlas</b>: la IA puede equivocarse.</p>' +
+          lista.map(function (q, i) {
+            return '<label class="tarjeta" style="display:flex;gap:10px;padding:10px 12px;margin:0 0 6px;cursor:pointer"><input type="checkbox" data-ia="' + i + '" checked style="margin-top:4px">' +
+              '<span style="min-width:0"><span class="pildora">' + esc(TIPOS_ED[q.tipo] || q.tipo) + '</span>' + (q.dificultad ? ' <span class="pildora ' + ({ facil: 'verde', media: 'amarillo', dificil: 'rojo' }[String(q.dificultad).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')] || '') + '">' + esc(q.dificultad) + '</span>' : '') +
+              '<div style="margin:4px 0;white-space:pre-line"><b>' + esc(q.enunciado) + '</b></div><div class="pequeno suave" style="white-space:pre-line">' + (q.opciones.length && ORDEN_ED.indexOf(q.tipo) < 0 && ['RELACIONAR', 'CLASIFICAR'].indexOf(q.tipo) < 0 ? 'Opciones: ' + esc(q.opciones.join(' · ')) + '\n' : '') + 'Respuesta: ' + esc(claveTexto(q)) + '</div></span></label>';
+          }).join('');
+        var cuenta = function () { var k = $('iaRes').querySelectorAll('[data-ia]:checked').length; $('iaAgregar').textContent = 'Agregar ' + k + ' al examen'; $('iaAgregar').disabled = !k; };
+        $('iaRes').onchange = cuenta; cuenta(); $('iaAgregar').classList.remove('oculto'); $('iaAgregar').className = 'btn primario'; b.className = 'btn claro';
+      }).catch(function (e) { $('iaRes').innerHTML = ''; $('iaError').textContent = e.message; })
+        .then(function () { b.disabled = false; b.textContent = lista.length ? '↻ Generar otras' : '✨ Generar'; });
+    };
+    $('iaAgregar').onclick = function () {
+      var sel = [].map.call($('iaRes').querySelectorAll('[data-ia]:checked'), function (x) { return lista[Number(x.dataset.ia)]; });
+      sel.forEach(function (q) { E.preguntas.push({ tipo: q.tipo, enunciado: q.enunciado, opciones: q.opciones, correcta: q.correcta, puntos: q.puntos, explicacion: q.explicacion, tema: q.tema, media: '' }); });
+      cerrarModal(); AVISO(sel.length + ' preguntas agregadas. Revísalas y pulsa Guardar.'); pasoPreguntas();
+    };
+  }
+  function importar() {
+    modal('<h2>' + ICO('importar') + ' Pegar preguntas</h2><p class="suave pequeno">Separa cada pregunta con una línea en blanco. Marca la correcta con un asterisco (*). Para V/F escribe «Respuesta: V» o «F». Sin opciones y con «Respuesta:» es respuesta corta. <b>Tipos dinámicos:</b> agrega una línea «Tipo: ordenar / algoritmo / diagrama / relacionar / clasificar / numérica», la pregunta y debajo los elementos en orden; para completar, pon las respuestas entre [[ ]]. <b>Banco de palabras:</b> «Tipo: palabras», la oración con [[ ]] y «Relleno: palabra, palabra». <b>V/F justificada:</b> «Tipo: justifica» y «Respuesta: V» o «F». <b>Imagen, video o audio:</b> una línea «Imagen: https://…» (o «Video:», «Audio:»).</p>' +
+      '<textarea class="entrada" id="impTxt" style="min-height:260px;font-family:ui-monospace,Consolas,monospace;font-size:13.5px" placeholder="1. ¿Qué instrucción muestra un valor en pantalla?\na) Leer\n*b) Escribir\nc) Definir\nd) Mientras\nExplicación: Escribir muestra datos.\n\n2. El tipo Real guarda decimales.\nRespuesta: V\n\n3. Símbolo químico del sodio\nRespuesta: Na | sodio\n\nTipo: algoritmo\nArma el algoritmo que muestra el mayor\nInicio\nLeer A, B\nSi A > B entonces\n    Escribir A\nSino\n    Escribir B\nFinSi\nFin\n\nTipo: relacionar\nRelaciona cada parte con su función\nCPU = Procesa los datos\nRAM = Memoria temporal\n\nPara mostrar datos se usa [[Escribir]] y para pedirlos [[Leer]]."></textarea>' +
+      '<div id="impVista" class="pequeno suave" style="margin:8px 0"></div><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn claro" data-cerrar>Cancelar</button><button class="btn primario" id="impOk" disabled>Agregar</button></div>', true);
+    var lista = [];
+    $('impTxt').oninput = function () { lista = analizar(this.value); var mal = lista.filter(function (q) { return q.error; });
+      $('impVista').innerHTML = lista.length ? '<b>' + (lista.length - mal.length) + ' listas</b>' + (mal.length ? ' · <span style="color:var(--rojo)">' + mal.length + ' con problemas: ' + mal.map(function (q) { return esc(q.error); }).join('; ') + '</span>' : '') : '';
+      $('impOk').disabled = !lista.some(function (q) { return !q.error; }); };
+    $('impOk').onclick = function () { var ok = lista.filter(function (q) { return !q.error; }); ok.forEach(function (q) { delete q.error; E.preguntas.push(q); }); cerrarModal(); AVISO(ok.length + ' preguntas agregadas'); pasoPreguntas(); };
+  }
+  function analizar(txt) {
+    return txt.replace(/\r/g, '').split(/\n\s*\n/).map(function (b) { return b.replace(/^\s*\n|\s+$/g, ''); }).filter(function (b) { return b.trim(); }).map(function (b0, n) {
+      var mm = b0.match(/^\s*(imagen|video|audio)\s*[:=]\s*(https:\/\/\S+)\s*$/im), q0 = analizar1(mm ? b0.replace(mm[0], '').replace(/^\s*\n/, '') : b0, n);
+      if (mm) q0.media = mm[1].toLowerCase() + ':' + mm[2];
+      return q0;
+    });
+  }
+  function analizar1(b, n) {
+      var tm = b.match(/^\s*tipo\s*[:=]\s*([^\n]+)$/im), tp = tm ? tipoDe(tm[1]) : /\[\[.+?\]\]/.test(b) ? 'COMPLETAR' : null;
+      if (tp && tp !== 'VFJ') return analizarNuevo(b, tp, n);
+      if (tp === 'VFJ') b = b.replace(tm[0], '');
+      var lin = b.split('\n').map(function (l) { return l.trim(); }).filter(Boolean), q = { tipo: 'MC', enunciado: '', opciones: [], correcta: '', puntos: 1, explicacion: '', tema: '' }, enun = [], resp = '';
+      lin.forEach(function (l) {
+        var m;
+        if ((m = l.match(/^(respuesta|r)\s*[:=]\s*(.+)$/i))) resp = m[2].trim();
+        else if ((m = l.match(/^(explicaci[oó]n|e)\s*[:=]\s*(.+)$/i))) q.explicacion = m[2].trim();
+        else if ((m = l.match(/^(tema)\s*[:=]\s*(.+)$/i))) q.tema = m[2].trim();
+        else if ((m = l.match(/^(\*)?\s*(?:[a-hA-H][\)\.]|[-•])\s+(.+?)\s*(\*|✔|\(x\))?$/))) { var o = m[2].trim(); q.opciones.push(o); if (m[1] || m[3]) q.correcta = o; }
+        else enun.push(l);
+      });
+      q.enunciado = enun.join('\n').replace(/^\d+\s*[\.\)\-]\s*/, '');
+      if (!q.opciones.length) {
+        if (/^(v|verdadero|f|falso)$/i.test(resp)) { q.tipo = 'VF'; q.opciones = ['Verdadero', 'Falso']; q.correcta = /^v/i.test(resp) ? 'Verdadero' : 'Falso'; }
+        else { q.tipo = 'CORTA'; q.correcta = resp.split('|').map(function (s) { return s.trim(); }).filter(Boolean).join('|'); }
+      } else if (resp && !q.correcta) { var k = resp.toLowerCase().charCodeAt(0) - 97; q.correcta = q.opciones[k] || q.opciones.find(function (o) { return o.toLowerCase() === resp.toLowerCase(); }) || ''; }
+      if (tp === 'VFJ') { if (q.tipo === 'VF') q.tipo = 'VFJ'; else q.error = '#' + (n + 1) + ' (V/F justificada: escribe «Respuesta: V» o «F»)'; }
+      if (q.error) return q;
+      if (!q.enunciado) q.error = '#' + (n + 1) + ' sin pregunta';
+      else if (!q.correcta) q.error = '#' + (n + 1) + ' sin respuesta correcta';
+      else if (q.tipo === 'MC' && q.opciones.length < 2) q.error = '#' + (n + 1) + ' con menos de 2 opciones';
+      return q;
+  }
+
+  function tipoDe(s) {
+    s = String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    var m = [['pseudo', 'ALGORITMO'], ['algoritmo', 'ALGORITMO'], ['flujo', 'FLUJO'], ['diagrama', 'FLUJO'], ['ordenar', 'ORDENAR'], ['orden', 'ORDENAR'], ['relacion', 'RELACIONAR'], ['empareja', 'RELACIONAR'], ['aparea', 'RELACIONAR'], ['justific', 'VFJ'], ['palabra', 'PALABRAS'],
+      ['clasific', 'CLASIFICAR'], ['complet', 'COMPLETAR'], ['numer', 'NUMERICA'], ['corta', 'CORTA'], ['verdadero', 'VF'], ['seleccion', 'MC']].find(function (x) { return s.indexOf(x[0]) >= 0; });
+    return m && AUTO.concat(['NUMERICA', 'VFJ']).indexOf(m[1]) >= 0 ? m[1] : null;
+  }
+  /** Bloque pegado de un tipo dinámico: «Tipo: …», la pregunta en la primera línea y los elementos debajo. */
+  function analizarNuevo(b, tipo, n) {
+    var q = { tipo: tipo, enunciado: '', opciones: [], correcta: AUTO.indexOf(tipo) >= 0 ? 'auto' : '', puntos: 1, explicacion: '', tema: '' }, cont = [], tol = '0';
+    b.split('\n').forEach(function (l) {
+      var m;
+      if ((m = l.match(/^\s*tipo\s*[:=]/i))) return;
+      if ((m = l.match(/^\s*(explicaci[oó]n)\s*[:=]\s*(.+)$/i))) { q.explicacion = m[2].trim(); return; }
+      if ((m = l.match(/^\s*tema\s*[:=]\s*(.+)$/i))) { q.tema = m[1].trim(); return; }
+      if ((m = l.match(/^\s*puntos\s*[:=]\s*([\d.,]+)/i))) { q.puntos = Number(m[1].replace(',', '.')) || 1; return; }
+      if (tipo === 'NUMERICA' && (m = l.match(/^\s*(respuesta|r)\s*[:=]\s*(.+)$/i))) { q.correcta = m[2].trim().replace(',', '.'); return; }
+      if (tipo === 'NUMERICA' && (m = l.match(/^\s*(tolerancia|margen)\s*[:=]\s*(.+)$/i))) { tol = m[2].trim().replace(',', '.'); return; }
+      if (tipo === 'PALABRAS' && (m = l.match(/^\s*(relleno|distractores|palabras extra)\s*[:=]\s*(.+)$/i))) { q.opciones = m[2].split(/[,;]/).map(function (s) { return s.trim(); }).filter(Boolean); return; }
+      if (l.trim()) cont.push(l);
+    });
+    if (HUECOS_ED.indexOf(tipo) >= 0) q.enunciado = cont.join('\n').replace(/^\s*\d+\s*[\.\)\-]\s*/, '');
+    else { q.enunciado = (cont.shift() || '').trim().replace(/^\d+\s*[\.\)\-]\s*/, ''); q.opciones = deLineas(tipo, cont.map(function (l) { return tipo === 'ALGORITMO' ? l : l.replace(/^\s*(?:\d+[\.\)]|[-•*])\s+/, ''); }).join('\n')); }
+    if (tipo === 'NUMERICA') q.opciones = [tol];
+    var e = validarP(q, n); if (e) q.error = '#' + e;
+    return q;
+  }
+
+  /* Restricciones */
+  function pasoReglas() {
+    var r = E.ex.reglas;
+    $('edCuerpo').innerHTML = '<h3>' + ICO('estrella') + ' Atajos</h3><div class="presets">' + Object.keys(PRESETS).map(function (k) { var p = PRESETS[k]; return '<button type="button" class="preset" data-preset="' + k + '"><b>' + ICO(p.i) + esc(p.t) + '</b><span>' + esc(p.d) + '</span></button>'; }).join('') + '</div>' +
+      '<h3>' + ICO('ajustes') + ' Una por una</h3>' + REGLAS.map(function (g) {
+        var ctrl = g[5] === 'n' ? '<div class="contador" data-num="' + g[0] + '"><button type="button" data-d="-1">−</button><span>' + (Number(r[g[0]]) || 0) + '</span><button type="button" data-d="1">+</button></div>'
+          : '<label class="interruptor"><input type="checkbox" data-regla="' + g[0] + '"' + (r[g[0]] ? ' checked' : '') + '><i></i></label>';
+        var apagado = g[0] === 'toleranciaSalidas' && !r.salirEntrega || g[0] === 'soloAdelante' && !r.unaPorPagina;
+        return '<div class="regla-ed" style="' + (apagado ? 'opacity:.5' : '') + '"><span class="chip-ico ' + g[2] + '">' + ICO(g[1]) + '</span><div class="txt"><b>' + g[3] + '</b><span class="d">' + g[4] + '</span></div>' + ctrl + '</div>';
+      }).join('');
+    var c = $('edCuerpo');
+    c.onchange = function (e) { var k = e.target.dataset.regla; if (k) { r[k] = e.target.checked; if (k === 'salirEntrega' || k === 'unaPorPagina') pasoReglas(); } };
+    c.onclick = function (e) {
+      var p = e.target.closest('[data-preset]'); if (p) { E.ex.reglas = r = Object.assign(JSON.parse(JSON.stringify(PRESETS[p.dataset.preset].r)), { pedirPin: r.pedirPin !== false }); AVISO('Atajo aplicado: ' + PRESETS[p.dataset.preset].t); pasoReglas(); return; }
+      var b = e.target.closest('[data-d]'); if (!b) return;
+      var k = b.parentNode.dataset.num, max = REGLAS.find(function (g) { return g[0] === k; })[6];
+      r[k] = Math.max(0, Math.min(max, (Number(r[k]) || 0) + Number(b.dataset.d))); b.parentNode.querySelector('span').textContent = r[k];
+    };
+  }
+
+  /* Compartir */
+  function pasoCompartir() {
+    var x = E.ex;
+    if (!x.id) { $('edCuerpo').innerHTML = '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('qr') + '</div><p>Guarda el examen para obtener su código, enlace y QR.</p></div>'; return; }
+    var url = WEB + '?c=' + encodeURIComponent(x.codigo);
+    $('edCuerpo').innerHTML = '<div class="dos"><div class="tarjeta"><h3>' + ICO('llave') + ' Código</h3><div class="compartir-codigo">' + esc(x.codigo) + '</div>' +
+      '<div class="filtros" style="margin-top:12px"><button class="btn claro" data-cp="' + esc(x.codigo) + '">' + ICO('copiar') + ' Copiar código</button><button class="btn claro" id="btnNuevoCod">' + ICO('recargar') + ' Cambiar código</button></div>' +
+      '<h3 style="margin-top:14px">' + ICO('enlace') + ' Enlace directo</h3><input class="entrada" readonly value="' + esc(url) + '"><div class="filtros" style="margin-top:10px"><button class="btn claro" data-cp="' + esc(url) + '">' + ICO('copiar') + ' Copiar enlace</button>' +
+      '<button class="btn claro" id="btnTextoCl">' + ICO('copiar') + ' Copiar texto para Classroom</button><button class="btn claro" id="btnPapel">' + ICO('imprimir') + ' Versión en papel (PDF)</button></div>' +
+      '<p class="suave pequeno">' + (x.modo === 'EXAMEN' ? 'Consejo: en un examen, da el código en el aula y publica el enlace sin el código.' : 'En una práctica puedes publicar el enlace completo en Classroom.') + '</p></div>' +
+      '<div class="tarjeta" style="text-align:center"><h3 style="justify-content:center">' + ICO('qr') + ' Código QR</h3><div id="qr"></div><p class="suave pequeno">Proyéctalo en el aula: lo escanean con la cámara.</p><button class="btn claro" id="btnQrGrande">' + ICO('pantalla') + ' Mostrar en grande</button></div></div>';
+    try { new QRCode($('qr'), { text: url, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M }); } catch (e) { $('qr').textContent = 'QR no disponible'; }
+    $('edCuerpo').onclick = function (e) { var b = e.target.closest('[data-cp]'); if (b) copiar(b.dataset.cp); };
+    $('btnNuevoCod').onclick = function () { confirmar('¿Cambiar el código?', 'El código anterior dejará de funcionar.', 'Cambiar', function () { A({ action: 'nuevoCodigo', id: x.id }).then(function (r) { x.codigo = r.codigo; AVISO('Código nuevo: ' + r.codigo); pasoCompartir(); refrescarPanel(); }).catch(function (er) { AVISO(er.message, 'error'); }); }); };
+    $('btnTextoCl').onclick = function () { copiar('📝 ' + x.titulo + '\n\n1️⃣ Abre: ' + (x.modo === 'EXAMEN' ? WEB : url) + '\n2️⃣ ' + (x.modo === 'EXAMEN' ? 'Escribe el código que te daré en clase.' : 'El código ya viene en el enlace: ' + x.codigo) + '\n3️⃣ Elige tu nombre y responde.\n\n' + (x.minutos ? '⏱️ Tienes ' + x.minutos + ' minutos. ' : '') + (E.ex.reglas.pantallaCompleta ? 'Se abre en pantalla completa; si sales de la ventana se entrega solo.' : '')); };
+    $('btnPapel').onclick = function () { AVISO('Preparando el PDF…'); bajarPapel(x, E.preguntas); };
+    $('btnQrGrande').onclick = function () { modal('<div style="text-align:center"><h1>' + esc(x.codigo) + '</h1><div id="qrG" style="display:grid;place-items:center;background:#fff;padding:18px;border-radius:18px;width:max-content;margin:12px auto"></div><p class="suave">' + esc(WEB) + '</p><button class="btn claro" data-cerrar>Cerrar</button></div>', true);
+      try { new QRCode($('qrG'), { text: url, width: 360, height: 360 }); } catch (e) {} };
+  }
+
+  function guardarEditor() {
+    leerPaso();
+    var x = E.ex;
+    if (!x.titulo.trim()) { E.paso = 'datos'; pintarEditor(); AVISO('Ponle un título al examen', 'error'); return; }
+    var malas = E.preguntas.map(validarP).filter(Boolean);
+    if (malas.length) { E.paso = 'preguntas'; pintarEditor(); AVISO('Revisa la pregunta ' + malas[0], 'error'); return; }
+    $('edGuardar').disabled = true; $('edEstado').textContent = 'Guardando…';
+    var datos = { action: 'guardarExamen', examen: { id: x.id, titulo: x.titulo, materia: x.materia, curso: x.curso, modo: x.modo, minutos: x.minutos, preguntas: x.preguntas, notaMinima: x.notaMinima,
+      inicio: x.inicio, fin: x.fin, instrucciones: x.instrucciones, activo: x.activo, reglas: x.reglas, compartido: !!x.compartido },
+      preguntas: E.preguntas.map(function (q) { return { tipo: q.tipo, enunciado: q.enunciado, opciones: q.tipo === 'CORTA' ? [] : q.opciones.filter(function (o) { return o.trim(); }), correcta: q.correcta, puntos: q.puntos, explicacion: q.explicacion, tema: q.tema, media: q.media || '' }; }) };
+    A(datos).then(function (r) {
+      var nuevo = !x.id; x.id = r.id; x.codigo = r.codigo; x.multiBanco = false;
+      AVISO(nuevo ? 'Examen creado · código ' + r.codigo : 'Cambios guardados');
+      refrescarPanel(); if (nuevo) { E.paso = 'compartir'; pintarEditor(); } else { $('edEstado').textContent = 'Guardado ✓'; }
+    }).catch(function (e) { AVISO(e.message, 'error'); $('edEstado').textContent = ''; }).then(function () { if ($('edGuardar')) $('edGuardar').disabled = false; });
+  }
+
+  /* ---------- Resultados ---------- */
+  var R = null;
+  function resultados(id) {
+    cargando('Calculando resultados…'); S.resTab = 'est';
+    var cargar = function (silencioso) {
+      return A({ action: 'resultados', id: id }).then(function (r) { R = r; pintarResultados(id); }).catch(function (e) { if (!silencioso) { AVISO(e.message, 'error'); ir('examenes'); } });
+    };
+    cargar();
+    S.recargar = cargar;
+  }
+  function pintarResultados(id) {
+    var r = R, s = r.stats, x = r.examen, vivo = !!S.vivo;
+    var aprob = s.entregados ? Math.round(s.aprobados / s.entregados * 100) : 0;
+    var hmax = Math.max.apply(null, s.histograma.concat([1])), pend = r.intentos.reduce(function (a, i) { return a + (i.pendientes || 0); }, 0);
+    $('pagina').innerHTML = cabeza(esc(x.titulo), esc([x.curso, x.materia].filter(Boolean).join(' · ')) + ' · <span class="pildora">' + esc(x.codigo) + '</span>',
+      '<button class="btn claro" data-volver>' + ICO('atras') + '</button><button class="btn ' + (vivo ? 'ok' : 'claro') + '" id="btnVivo">' + ICO('vivo') + (vivo ? ' En vivo' : ' Ver en vivo') + '</button>' +
+      '<button class="btn claro" id="btnRecargar">' + ICO('recargar') + '</button><button class="btn claro" id="btnXls">' + ICO('descargar') + ' Excel</button><button class="btn claro" id="btnPdf">' + ICO('descargar') + ' PDF</button><button class="btn claro no-imprimir" onclick="print()">' + ICO('imprimir') + '</button>' +
+      '<button class="btn primario" data-ed="' + id + '">' + ICO('editar') + ' Editar</button>') +
+      '<div class="kpis">' + kpi('check', 'azul', s.entregados + (s.estudiantes ? ' / ' + s.estudiantes : ''), 'Entregaron') + kpi('vivo', 'verde', s.enCurso, 'En curso ahora') +
+      kpi('premio', 'amarillo', s.promedio === null ? '—' : s.promedio, 'Promedio · mediana ' + (s.mediana === null ? '—' : s.mediana)) + kpi('estrella', 'verde', aprob + '%', 'Aprobados (≥ ' + x.notaMinima + ')') +
+      kpi('reloj', 'morado', DURACION(s.duracionMedia), 'Tiempo promedio') + kpi('salida', 'rojo', s.conSalidas, 'Con salidas de la ventana') + '</div>' +
+      '<div class="dos"><div class="tarjeta"><h3>' + ICO('grafica') + ' Distribución de notas</h3><div class="histo">' + s.histograma.map(function (n, i) {
+        return '<div><em>' + (n || '') + '</em><i class="' + (i < 5 ? 'bajo' : i < 7 ? 'medio' : '') + '" style="height:' + (n / hmax * 100) + '%"></i><small>' + (i * 10) + (i === 9 ? '+' : '') + '</small></div>'; }).join('') + '</div>' +
+      '<p class="suave pequeno" style="margin:10px 0 0">Máxima ' + (s.maxima === null ? '—' : s.maxima) + ' · mínima ' + (s.minima === null ? '—' : s.minima) + '</p></div>' +
+      '<div class="tarjeta"><h3>' + ICO('usuarios') + ' Sin presentar (' + s.sinIntento.length + ')</h3>' + (s.sinIntento.length ? '<div class="chips-n">' + s.sinIntento.map(function (n) { return '<span class="pildora">' + esc(n) + '</span>'; }).join('') + '</div>' : '<p class="suave">¡Todos lo hicieron! 🎉</p>') + '</div></div>' +
+      '<div class="segmento" id="resTab" style="margin-bottom:12px"><button class="on" data-t="est">' + ICO('usuarios') + ' Estudiantes</button><button data-t="rej">' + ICO('vivo') + ' Rejilla</button><button data-t="preg">' + ICO('lista') + ' Preguntas</button>' +
+      '<button data-t="corr">' + ICO('corregir') + ' Por corregir' + (pend ? ' <span class="pildora amarillo">' + pend + '</span>' : '') + '</button></div><div id="resCuerpo"></div>';
+    var tab = S.resTab || 'est';
+    $('resTab').querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.t === tab); });
+    function cuerpo() {
+      if (tab === 'est') $('resCuerpo').innerHTML = r.intentos.length ? '<div class="tarjeta desliza"><table class="tabla"><thead><tr><th>Estudiante</th><th>Estado</th><th>Nota</th><th>Correctas</th><th>Tiempo</th><th>Salidas</th><th>Cómo terminó</th><th></th></tr></thead><tbody>' + r.intentos.map(function (i) {
+        var cur = i.estado === 'EN_CURSO';
+        return '<tr><td><b>' + esc(i.nombre) + '</b><div class="tenue pequeno">' + FECHA(i.inicio) + '</div></td><td>' + (cur ? '<span class="pildora verde"><span class="punto vivo"></span>En curso · ' + i.respondidas + '/' + i.total + '</span>' : '<span class="pildora azul">Entregado</span>') + '</td>' +
+          '<td>' + (i.nota === null ? '—' : '<div style="display:flex;gap:8px;align-items:center"><b style="min-width:42px">' + i.nota + '</b><div class="barra-nota"><i class="' + claseNota(i.nota) + '" style="width:' + i.nota + '%"></i></div></div>') +
+            (i.pendientes ? '<span class="pildora amarillo pequeno" title="Respuestas cortas sin corregir">' + ICO('corregir') + ' ' + i.pendientes + ' por corregir</span>' : '') + '</td>' +
+          '<td>' + (cur ? '—' : i.correctas + ' / ' + i.total) + '</td><td>' + DURACION(i.duracion) + '</td><td>' + (i.salidas ? '<span class="pildora rojo">' + i.salidas + '</span>' : '<span class="tenue">0</span>') + '</td>' +
+          '<td class="pequeno suave" style="max-width:220px">' + esc(i.motivo) + '</td><td style="white-space:nowrap"><button class="btn fantasma icono" data-ver="' + i.id + '" title="Ver respuestas">' + ICO('ver') + '</button>' +
+          (cur ? (i.limite ? '<button class="btn fantasma icono" data-mas="' + i.id + '" title="Darle más tiempo">' + ICO('reloj') + '</button>' : '') + '<button class="btn fantasma icono" data-cerrar-int="' + i.id + '" title="Entregar ya">' + ICO('check') + '</button>' : '') + '<button class="btn fantasma icono" data-anular="' + i.id + '" title="Anular (puede repetir)" style="color:var(--rojo)">' + ICO('intentos') + '</button></td></tr>';
+      }).join('') + '</tbody></table></div>' : '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('usuarios') + '</div><p>Nadie ha empezado todavía. Comparte el código <b>' + esc(x.codigo) + '</b>.</p></div>';
+      else if (tab === 'corr') pintarCorregir();
+      else if (tab === 'rej') pintarRejilla();
+      else $('resCuerpo').innerHTML = r.preguntas.length ? '<p class="suave pequeno">Ordenadas de la más difícil a la más fácil: las primeras son las que debes repasar en clase.</p>' + r.preguntas.map(function (q) {
+        var tot = Object.keys(q.elegidas).reduce(function (a, k) { return a + q.elegidas[k]; }, 0) || 1;
+        return '<div class="pq"><b style="white-space:pre-line">' + esc(q.enunciado) + '</b>' + (q.tema ? ' <span class="pildora">' + esc(q.tema) + '</span>' : '') +
+          '<div class="linea"><div class="barra-nota" style="flex:1"><i class="' + claseNota(q.acierto) + '" style="width:' + q.acierto + '%"></i></div><b>' + q.acierto + '%</b><span class="suave pequeno">acierto · ' + q.vistas + ' vistas' + (q.blanco ? ' · ' + q.blanco + ' en blanco' : '') + '</span></div>' +
+          '<div class="dist">' + Object.keys(q.elegidas).sort(function (a, b) { return q.elegidas[b] - q.elegidas[a]; }).slice(0, 5).map(function (k) {
+            var ok = k.toLowerCase() === String(q.correcta).toLowerCase();
+            return '<div class="' + (ok ? 'ok' : '') + '"><span class="pequeno">' + (ok ? '✔ ' : '') + esc(k) + '</span><div class="b"><i style="width:' + (q.elegidas[k] / tot * 100) + '%"></i></div><b class="pequeno">' + q.elegidas[k] + '</b></div>';
+          }).join('') + '</div></div>';
+      }).join('') : '<div class="tarjeta vacio"><p>Cuando haya entregas verás aquí qué preguntas costaron más.</p></div>';
+    }
+    cuerpo();
+    $('resTab').onclick = function (e) { var b = e.target.closest('[data-t]'); if (!b) return; tab = S.resTab = b.dataset.t; this.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); cuerpo(); };
+    $('pagina').querySelector('[data-volver]').onclick = function () { refrescarPanel().then(function () { ir('examenes'); }); };
+    $('btnRecargar').onclick = function () { S.recargar(); };
+    $('btnVivo').onclick = function () { if (S.vivo) { parar(); } else { S.vivo = setInterval(function () { S.recargar(true); }, 15000); AVISO('Se actualiza cada 15 segundos'); } pintarResultados(id); };
+    var ordenados = function () { return r.intentos.slice().sort(function (a, b) { return a.nombre.localeCompare(b.nombre, 'es'); }); };
+    var subTit = [x.curso, x.materia, 'Código ' + x.codigo].filter(Boolean).join(' · ') + ' · Promedio ' + (s.promedio === null ? '—' : s.promedio) + ' · Aprobados ' + s.aprobados + ' de ' + s.entregados + ' (nota mínima ' + x.notaMinima + ')';
+    $('btnXls').onclick = function () {
+      AVISO('Preparando el Excel…');
+      bajarExcel('Resultados ' + x.titulo + ' ' + x.curso, [
+        { nombre: 'Resultados', filas: [['Estudiante', 'Estado', 'Nota', 'Correctas', 'Total', 'Por corregir', 'Tiempo (min)', 'Salidas', 'Cómo terminó', 'Inicio', 'Fin']].concat(ordenados().map(function (i) {
+          return [i.nombre, i.estado === 'EN_CURSO' ? 'En curso' : 'Entregado', i.nota, i.correctas, i.total, i.pendientes || 0, i.duracion ? Math.round(i.duracion / 6) / 10 : '', i.salidas, i.motivo, FECHA(i.inicio), FECHA(i.fin)]; }))
+          .concat([[], ['Sin presentar'].concat(s.sinIntento)]) },
+        { nombre: 'Preguntas', filas: [['Pregunta', 'Tema', '% acierto', 'Vistas', 'En blanco', 'Respuesta correcta']].concat(r.preguntas.map(function (q) { return [q.enunciado, q.tema, q.acierto, q.vistas, q.blanco, q.correcta]; })) }
+      ]);
+    };
+    $('btnPdf').onclick = function () {
+      AVISO('Preparando el PDF…');
+      var filas = ordenados().map(function (i, k) { return [k + 1, i.nombre, i.nota === null ? '—' : i.nota, i.correctas + ' / ' + i.total + (i.pendientes ? ' *' : ''), DURACION(i.duracion), i.salidas, i.motivo]; });
+      s.sinIntento.forEach(function (n) { filas.push(['', n, '—', 'No presentó', '', '', '']); });
+      bajarPdf('Resultados ' + x.titulo + ' ' + x.curso, x.titulo, subTit + (pend ? ' · * tiene respuestas cortas sin corregir' : ''), ['#', 'Estudiante', 'Nota', 'Correctas', 'Tiempo', 'Salidas', 'Cómo terminó'], filas,
+        { minimo: x.notaMinima, desdeCol: 2, columnas: { 0: { cellWidth: 22, halign: 'center' }, 6: { cellWidth: 150 } } });
+    };
+    $('resCuerpo').onclick = function (e) {
+      var b = e.target.closest('[data-ver],[data-anular],[data-cerrar-int],[data-mas],[data-int]'); if (!b) return;
+      if (b.dataset.mas) { modal('<h2>' + ICO('reloj') + ' Darle más tiempo</h2><p class="suave">Sirve si se le fue el internet o empezó tarde. Se suma a su reloj sin reiniciar el examen.</p><div class="filtros">' +
+        [5, 10, 15].map(function (m) { return '<button class="btn claro" data-min="' + m + '">+' + m + ' min</button>'; }).join('') + '</div><div style="text-align:right"><button class="btn claro" data-cerrar>Cancelar</button></div>');
+        $('modalCaja').onclick = function (ev) { var m = ev.target.closest('[data-min]'); if (!m) return; cerrarModal(); $('modalCaja').onclick = null;
+          A({ action: 'extenderTiempo', id: b.dataset.mas, minutos: Number(m.dataset.min) }).then(function () { AVISO('Listo: +' + m.dataset.min + ' minutos'); S.recargar(); }).catch(function (er) { AVISO(er.message, 'error'); }); };
+        return; }
+      if (b.dataset.int) A({ action: 'detalleIntento', id: b.dataset.int }).then(function (d) {   // una celda de la rejilla
+        var q = d.revision.filter(function (x) { return x.k === Number(b.dataset.k); })[0]; if (!q) return;
+        modal('<h2>' + ICO('ver') + ' ' + esc(d.intento.nombre) + '</h2>' + revQ(q) + (q.explicacion ? '<p class="suave pequeno" style="white-space:pre-line">' + esc(q.explicacion) + '</p>' : '') +
+          '<div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px"><button class="btn claro" id="mTodo">Ver todo el intento</button><button class="btn claro" data-cerrar>Cerrar</button></div>');
+        $('mTodo').onclick = function () { cerrarModal(); var v = document.createElement('button'); v.dataset.ver = b.dataset.int; $('resCuerpo').appendChild(v); v.click(); v.remove(); };
+      }).catch(function (er) { AVISO(er.message, 'error'); });
+      if (b.dataset.ver) A({ action: 'detalleIntento', id: b.dataset.ver }).then(function (d) {
+        var it = d.intento;
+        modal('<h2>' + ICO('ver') + ' ' + esc(it.nombre) + '</h2><p class="suave">Nota <b>' + (it.nota === '' ? '—' : it.nota) + '</b> · ' + DURACION(it.duracion) + ' · ' + esc(it.motivo || 'En curso') + '</p>' +
+          (it.eventos && it.eventos.length ? '<div class="pq"><b>' + ICO('alerta') + ' Salidas registradas</b>' + it.eventos.map(function (v) { return '<div class="pequeno suave">' + FECHA(v.t) + ' · ' + esc(v.e) + '</div>'; }).join('') + '</div>' : '') +
+          d.revision.map(revQ).join('') +
+          '<div style="text-align:right;margin-top:10px"><button class="btn claro" data-cerrar>Cerrar</button></div>', true);
+      }).catch(function (er) { AVISO(er.message, 'error'); });
+      if (b.dataset.anular) confirmar('¿Anular este intento?', 'Se borra de las estadísticas y el estudiante podrá hacer el examen otra vez.', 'Anular', function () { A({ action: 'anularIntento', id: b.dataset.anular }).then(function () { AVISO('Intento anulado'); S.recargar(); }).catch(function (er) { AVISO(er.message, 'error'); }); }, true);
+      if (b.dataset.cerrarInt) confirmar('¿Entregar ahora?', 'Se califica con lo que lleva respondido.', 'Entregar', function () { A({ action: 'cerrarIntento', id: b.dataset.cerrarInt }).then(function () { AVISO('Entregado'); S.recargar(); }).catch(function (er) { AVISO(er.message, 'error'); }); });
+    };
+  }
+
+  /** Una pregunta revisada (detalleIntento): enunciado, lo que respondió y la correcta. */
+  function revQ(q) {
+    return '<div class="pq" style="border-left:5px solid ' + (q.pendiente ? 'var(--amarillo)' : q.bien ? 'var(--verde)' : q.obtenidos ? 'var(--amarillo)' : 'var(--rojo)') + '"><b style="white-space:pre-line">' + q.n + '. ' + esc(q.enunciado) + '</b>' +
+      ' <span class="pildora">' + q.obtenidos + ' / ' + q.puntos + ' pt</span>' + (q.pendiente ? ' <span class="pildora amarillo">Por corregir</span>' : '') + '<div class="pequeno" style="margin-top:6px;white-space:pre-line">' +
+      (q.bien ? '✔ ' + esc(q.tu) : (q.pendiente ? '✎ ' : '✘ ') + esc(q.tu || '(sin responder)') + ' · <span style="color:var(--verde)">' + (q.tipo === 'CORTA' ? 'Modelo: ' : 'Correcta: ') + esc(q.correcta) + '</span>') + '</div></div>';
+  }
+
+  /* Rejilla en vivo: estudiantes × preguntas (se actualiza con «Ver en vivo») */
+  function pintarRejilla() {
+    var id = R.examen.id;
+    var dibujar = function (m) {
+      var c = $('resCuerpo'), prev = $('rejDesliza'), sl = prev ? prev.scrollLeft : (S.rejSL || 0);
+      if (!c) return;
+      if (!m.intentos.length) { c.innerHTML = '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('usuarios') + '</div><p>Nadie ha empezado todavía. Comparte el código <b>' + esc(R.examen.codigo) + '</b>.</p></div>'; return; }
+      c.innerHTML = '<p class="suave pequeno leyenda-rej"><i class="c1"></i>Bien <i class="c5"></i>Parcial o por corregir <i class="c0"></i>Mal <i class="cn"></i>Sin responder' +
+        (S.vivo ? '' : ' · Pulsa <b>Ver en vivo</b> para que se actualice sola.') + ' Toca un cuadro para ver la pregunta y la respuesta.</p>' +
+        '<div class="tarjeta" style="padding:10px"><div class="desliza" id="rejDesliza"><table class="rej"><thead><tr><th class="fijo">Estudiante</th>' + m.preguntas.map(function (q) { return '<th title="' + esc(q.n + '. ' + q.enunciado) + '">' + q.n + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        m.intentos.map(function (i) {
+          var suyas = i.celdas.filter(function (x) { return x !== -1; }), hechas = suyas.filter(function (x) { return x !== null; }).length, cur = i.estado === 'EN_CURSO';
+          return '<tr><th class="fijo">' + esc(i.nombre) + '<small' + (cur ? ' style="color:var(--verde)"' : '') + '>' + (cur ? 'En curso · ' + hechas + '/' + suyas.length : 'Nota ' + (i.nota === null ? '—' : i.nota)) + '</small></th>' + i.celdas.map(function (x, j) {
+            if (x === -1) return '<td></td>';
+            return '<td><button class="' + (x === null ? 'cn' : x === 1 ? 'c1' : x === 0 ? 'c0' : 'c5') + '" data-int="' + esc(i.id) + '" data-k="' + i.ks[j] + '" aria-label="' + esc(i.nombre + ', pregunta ' + m.preguntas[j].n) + '"></button></td>';
+          }).join('') + '</tr>';
+        }).join('') + '</tbody></table></div></div>';
+      $('rejDesliza').scrollLeft = sl; $('rejDesliza').onscroll = function () { S.rejSL = this.scrollLeft; };
+    };
+    if (S.mat && S.mat.id === id) dibujar(S.mat.m); else { S.rejSL = 0; $('resCuerpo').innerHTML = '<div class="girar" style="margin:30px auto"></div>'; }
+    A({ action: 'vivoMatriz', id: id }).then(function (m) { S.mat = { id: id, m: m }; if (S.vista === 'resultados' && S.resTab === 'rej' && R.examen.id === id) dibujar(m); })
+      .catch(function (er) { if ($('resCuerpo')) $('resCuerpo').innerHTML = '<p class="error">' + esc(er.message) + '</p>'; });
+  }
+
+  /* Corrección manual de respuestas cortas: pregunta por pregunta, todo el curso */
+  function pintarCorregir() {
+    $('resCuerpo').innerHTML = '<div id="corrCaja"><div class="girar" style="margin:30px auto"></div></div>'; var c0 = $('corrCaja');
+    A({ action: 'porCorregir', id: R.examen.id }).then(function (c) {
+      if (!c.preguntas.length) { c0.innerHTML = '<div class="tarjeta vacio"><div class="chip-ico verde">' + ICO('check') + '</div><h3 style="justify-content:center">Nada que corregir</h3><p>Este examen no tiene respuestas cortas entregadas.</p></div>'; return; }
+      var cambios = {};
+      var fmt = function (p) { return String(Math.round(p * 100) / 100).replace('.', ','); };
+      c0.innerHTML = '<p class="suave pequeno">Corrige una pregunta a la vez para todo el curso. La respuesta modelo es solo una guía: tú decides los puntos (0, la mitad, todo o el número que quieras). Las amarillas aún no las has corregido.</p>' +
+        c.preguntas.map(function (g) {
+          return '<div class="tarjeta" style="margin-bottom:14px"><b style="white-space:pre-line">' + esc(g.enunciado) + '</b><div class="pequeno" style="margin:6px 0 12px;color:var(--verde)">' + ICO('check') + ' Respuesta modelo: ' + esc(g.correcta) + ' · vale ' + fmt(g.puntos) + ' pt</div>' +
+            g.respuestas.map(function (r) {
+              var v = r.puntos;
+              return '<div class="corr' + (v === null ? ' pend' : '') + '" data-key="' + r.intento + ':' + r.k + '" data-max="' + g.puntos + '"><div class="txt"><span class="pequeno suave">' + esc(r.nombre) + (r.sugerido ? ' · coincide con el modelo' : '') + '</span><div>' + esc(r.texto) + '</div></div>' +
+                '<div class="pts">' + [0, g.puntos / 2, g.puntos].map(function (p) { return '<button type="button" data-p="' + p + '" class="' + (v === p ? 'on' : '') + '">' + fmt(p) + '</button>'; }).join('') +
+                '<input type="number" min="0" max="' + g.puntos + '" step="0.25" value="' + (v === null ? '' : v) + '" aria-label="Puntos"></div></div>';
+            }).join('') + '</div>';
+        }).join('') +
+        '<div class="guardar-fijo vidrio"><span class="suave pequeno" id="corrEstado" style="margin-right:auto">' + c.pendientes + ' sin corregir</span><button class="btn primario" id="corrGuardar" disabled>' + ICO('check') + ' Guardar correcciones</button></div>';
+      var marcar = function (fila, val) {
+        var max = Number(fila.dataset.max); val = val === '' ? '' : Math.max(0, Math.min(max, Number(val)));
+        cambios[fila.dataset.key] = val; fila.querySelector('input').value = val;
+        fila.querySelectorAll('[data-p]').forEach(function (b) { b.classList.toggle('on', val !== '' && Number(b.dataset.p) === val); });
+        fila.classList.toggle('pend', val === '');
+        $('corrGuardar').disabled = false; $('corrEstado').textContent = Object.keys(cambios).length + ' cambio(s) sin guardar';
+      };
+      c0.onclick = function (e) { var b = e.target.closest('[data-p]'); if (b) marcar(b.closest('.corr'), Number(b.dataset.p)); };
+      c0.onchange = function (e) { if (e.target.matches('.corr input')) marcar(e.target.closest('.corr'), e.target.value); };
+      $('corrGuardar').onclick = function () {
+        var lista = Object.keys(cambios).map(function (k) { var p = k.split(':'); return { intento: p[0], k: Number(p[1]), puntos: cambios[k] === '' ? null : cambios[k] }; });
+        this.disabled = true; $('corrEstado').textContent = 'Guardando…';
+        A({ action: 'corregir', lista: lista }).then(function () { AVISO('Correcciones guardadas y notas recalculadas'); S.recargar(); })
+          .catch(function (er) { AVISO(er.message, 'error'); $('corrGuardar').disabled = false; });
+      };
+    }).catch(function (e) { c0.innerHTML = '<p class="error">' + esc(e.message) + '</p>'; });
+  }
+
+  /* ---------- Banco de exámenes ---------- */
+  function banco() {
+    cargando('Abriendo el banco de exámenes…');
+    A({ action: 'banco' }).then(function (b) {
+      var area = '', tipo = '', lista = b.examenes;
+      var mias = S.panel.asignaciones.map(function (a) { return a.materia.toLowerCase(); });
+      $('pagina').innerHTML = cabeza('Banco de exámenes', 'Exámenes <b>modelo</b> listos para usar y exámenes de <b>referencia</b> que comparten tus colegas. Cópialo a tu curso y ajústalo a tu gusto.') +
+        '<div class="kpis">' + kpi('banco', 'azul', lista.length, 'Exámenes en el banco') + kpi('libro', 'amarillo', lista.filter(function (e) { return e.area === 'ACADEMICO'; }).length, 'Formación académica') +
+        kpi('ajustes', 'morado', lista.filter(function (e) { return e.area === 'TECNICO'; }).length, 'Formación técnica') + kpi('usuarios', 'verde', lista.filter(function (e) { return e.tipo === 'REFERENCIA'; }).length, 'Compartidos por colegas') + '</div>' +
+        '<div class="filtros"><label class="buscar">' + ICO('buscar') + '<input class="entrada" id="bBuscar" placeholder="Buscar por materia, tema o nivel"></label>' +
+        '<div class="segmento" id="bArea"><button class="on" data-a="">Todas</button><button data-a="MIAS">Mis materias</button><button data-a="ACADEMICO">Académico</button><button data-a="TECNICO">Técnico</button></div>' +
+        '<div class="segmento" id="bTipo"><button class="on" data-t="">Todos</button><button data-t="MODELO">Modelos</button><button data-t="REFERENCIA">Referencia</button></div></div><div id="bLista"></div>';
+      function pintar() {
+        var q = $('bBuscar').value.toLowerCase();
+        var l = lista.filter(function (e) {
+          return (!tipo || e.tipo === tipo) && (!area || (area === 'MIAS' ? mias.some(function (m) { return m.indexOf(e.materia.toLowerCase().slice(0, 8)) >= 0 || e.materia.toLowerCase().indexOf(m.slice(0, 8)) >= 0; }) : e.area === area)) &&
+            (!q || (e.titulo + ' ' + e.materia + ' ' + e.nivel + ' ' + e.autor).toLowerCase().indexOf(q) >= 0); });
+        $('bLista').innerHTML = l.length ? '<div class="rejilla">' + l.map(function (e) {
+          return '<article class="tarjeta examen-t ' + (e.area === 'TECNICO' ? 'tecnico' : 'academico') + '"><div class="franja"></div><div class="cuerpo"><div style="display:flex;gap:6px;flex-wrap:wrap">' +
+            '<span class="pildora ' + (e.area === 'TECNICO' ? 'azul' : 'amarillo') + '">' + (e.area === 'TECNICO' ? 'Técnico' : 'Académico') + '</span><span class="pildora ' + (e.tipo === 'MODELO' ? 'morado' : 'verde') + '">' + (e.tipo === 'MODELO' ? ICO('estrella') + ' Modelo' : ICO('usuarios') + ' Referencia') + '</span>' +
+            (e.nivel ? '<span class="pildora">' + esc(e.nivel) + '</span>' : '') + '</div><h3>' + esc(e.titulo) + '</h3><div class="suave pequeno">' + esc(e.materia) + (e.autor ? ' · ' + esc(e.autor) : '') + '</div>' +
+            '<div class="metricas"><div><b>' + e.nPreguntas + '</b><span>preguntas</span></div><div><b>' + (e.minutos || '—') + '</b><span>minutos</span></div><div><b>' + (e.modo === 'PRACTICA' ? 'Práctica' : 'Examen') + '</b><span>tipo</span></div></div></div>' +
+            '<div class="acciones"><button class="btn fantasma mini" data-bver="' + e.id + '">' + ICO('ver') + ' Ver preguntas</button><button class="btn primario mini" data-busar="' + e.id + '">' + ICO('copiar') + ' Usar en mi curso</button></div></article>';
+        }).join('') + '</div>' : '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('banco') + '</div><p>No hay exámenes con ese filtro.</p></div>';
+      }
+      $('bBuscar').oninput = pintar;
+      $('bArea').onclick = function (e) { var x = e.target.closest('[data-a]'); if (!x) return; area = x.dataset.a; this.querySelectorAll('button').forEach(function (y) { y.classList.toggle('on', y === x); }); pintar(); };
+      $('bTipo').onclick = function (e) { var x = e.target.closest('[data-t]'); if (!x) return; tipo = x.dataset.t; this.querySelectorAll('button').forEach(function (y) { y.classList.toggle('on', y === x); }); pintar(); };
+      $('bLista').onclick = function (e) {
+        var v = e.target.closest('[data-bver]'), u = e.target.closest('[data-busar]');
+        if (v) A({ action: 'examen', id: v.dataset.bver }).then(function (r) {
+          modal('<h2>' + ICO('ver') + ' ' + esc(r.examen.titulo) + '</h2><p class="suave pequeno">' + esc(r.examen.instrucciones || '') + '</p>' + r.preguntas.map(function (q, i) {
+            return '<div class="pq"><b style="white-space:pre-line">' + (i + 1) + '. ' + esc(q.enunciado) + '</b> <span class="pildora">' + (TIPOS_ED[q.tipo] || q.tipo) + '</span>' +
+              (AUTO.concat(['NUMERICA']).indexOf(q.tipo) >= 0 ? '<div class="pequeno" style="color:var(--verde);margin-top:6px;white-space:pre-line">' + esc(claveTexto(q)) + '</div>' : q.tipo === 'CORTA' ? '<div class="pequeno" style="color:var(--verde);margin-top:6px">Modelo: ' + esc(q.correcta) + '</div>' : '<div class="pequeno" style="margin-top:6px">' + q.opciones.map(function (o) { return o === q.correcta ? '<b style="color:var(--verde)">✔ ' + esc(o) + '</b>' : esc(o); }).join(' · ') + '</div>') + '</div>';
+          }).join('') + '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px"><button class="btn claro" data-cerrar>Cerrar</button><button class="btn primario" data-busar2="' + r.examen.id + '">' + ICO('copiar') + ' Usar en mi curso</button></div>', true);
+          $('modalCaja').querySelector('[data-busar2]').onclick = function () { usarBanco(lista.find(function (x) { return x.id === r.examen.id; })); };
+        }).catch(function (er) { AVISO(er.message, 'error'); });
+        if (u) usarBanco(lista.find(function (x) { return x.id === u.dataset.busar; }));
+      };
+      pintar();
+    }).catch(function (e) { $('pagina').innerHTML = '<div class="tarjeta"><p class="error">' + esc(e.message) + '</p></div>'; });
+  }
+  function usarBanco(e) {
+    var cursos = S.panel.cursos;
+    if (!cursos.length) { AVISO('No tienes cursos asignados. Pídeselos a la coordinación.', 'error'); return; }
+    modal('<h2>' + ICO('copiar') + ' Usar en mi curso</h2><p class="suave pequeno">Se crea una copia tuya de «' + esc(e.titulo) + '». Después puedes cambiar preguntas, tiempo y reglas.</p>' +
+      '<label class="campo"><span>Título</span><input class="entrada" id="ubTit" value="' + esc(e.titulo.replace(/^Examen modelo · /, '')) + '"></label>' +
+      '<div class="fila"><label class="campo"><span>Curso</span><select class="entrada" id="ubCurso">' + cursos.map(function (c) { return '<option>' + esc(c) + '</option>'; }).join('') + '</select></label>' +
+      '<label class="campo"><span>Materia</span><select class="entrada" id="ubMat"></select></label></div>' +
+      '<div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn claro" data-cerrar>Cancelar</button><button class="btn primario" id="ubOk">' + ICO('check') + ' Crear mi copia</button></div>');
+    var mats = function () { var c = $('ubCurso').value, m = S.panel.asignaciones.filter(function (a) { return a.curso === c; }).map(function (a) { return a.materia; });
+      if (m.indexOf(e.materia) < 0) m.push(e.materia); $('ubMat').innerHTML = m.map(function (x) { return '<option' + (x.toLowerCase().slice(0, 8) === e.materia.toLowerCase().slice(0, 8) ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join(''); };
+    $('ubCurso').onchange = mats; mats();
+    $('ubOk').onclick = function () {
+      this.disabled = true;
+      A({ action: 'usarDelBanco', id: e.id, curso: $('ubCurso').value, materia: $('ubMat').value, titulo: $('ubTit').value }).then(function (r) {
+        cerrarModal(); AVISO('Copia creada: revísala y guárdala'); return refrescarPanel().then(function () { ir('editor', r.id); });
+      }).catch(function (er) { AVISO(er.message, 'error'); $('ubOk').disabled = false; });
+    };
+  }
+
+  /* ---------- Reportes por curso ---------- */
+  function reportes() {
+    var cursos = S.panel.cursos;
+    $('pagina').innerHTML = cabeza('Reportes por curso', 'Las notas de todos tus exámenes del curso en una sola tabla. Descárgala en Excel o PDF.') +
+      '<div class="filtros"><select class="entrada" id="rCurso">' + cursos.map(function (c) { return '<option>' + esc(c) + '</option>'; }).join('') + '</select>' +
+      '<select class="entrada" id="rMat"></select><button class="btn claro" id="rXls">' + ICO('descargar') + ' Excel</button><button class="btn claro" id="rPdf">' + ICO('descargar') + ' PDF</button></div><div id="rCuerpo"></div>';
+    var D = null;
+    function mats() {
+      var c = $('rCurso').value, m = S.panel.asignaciones.filter(function (a) { return a.curso === c; }).map(function (a) { return a.materia; });
+      S.panel.examenes.forEach(function (e) { if (e.curso === c && e.materia && m.indexOf(e.materia) < 0) m.push(e.materia); });
+      $('rMat').innerHTML = '<option value="">Todas las materias</option>' + m.map(function (x) { return '<option>' + esc(x) + '</option>'; }).join('');
+    }
+    function cargar() {
+      if (!$('rCurso').value) { $('rCuerpo').innerHTML = '<div class="tarjeta vacio"><p>No tienes cursos asignados.</p></div>'; return; }
+      $('rCuerpo').innerHTML = '<div class="girar" style="margin:30px auto"></div>';
+      A({ action: 'reporteCurso', curso: $('rCurso').value, materia: $('rMat').value }).then(function (d) {
+        D = d;
+        if (!d.examenes.length) { $('rCuerpo').innerHTML = '<div class="tarjeta vacio"><div class="chip-ico">' + ICO('grafica') + '</div><p>Todavía no tienes exámenes en ' + esc(d.curso) + (d.materia ? ' · ' + esc(d.materia) : '') + '.</p></div>'; return; }
+        var con = d.filas.filter(function (f) { return f.promedio !== null; }), prom = con.length ? Math.round(con.reduce(function (a, f) { return a + f.promedio; }, 0) / con.length * 100) / 100 : '—';
+        var aprob = con.filter(function (f) { return f.promedio >= 70; }).length;
+        $('rCuerpo').innerHTML = '<div class="kpis">' + kpi('usuarios', 'azul', d.filas.length, 'Estudiantes') + kpi('examen', 'morado', d.examenes.length, 'Exámenes') + kpi('premio', 'amarillo', prom, 'Promedio del curso') + kpi('estrella', 'verde', aprob + ' / ' + con.length, 'Con promedio ≥ 70') + '</div>' +
+          '<div class="tarjeta desliza"><table class="tabla"><thead><tr><th>#</th><th>Estudiante</th>' + d.examenes.map(function (e) { return '<th class="rot" title="' + esc(e.titulo + ' · ' + e.materia) + '">' + esc(e.titulo.length > 34 ? e.titulo.slice(0, 32) + '…' : e.titulo) + '</th>'; }).join('') + '<th>Promedio</th></tr></thead><tbody>' +
+          d.filas.map(function (f, i) { return '<tr><td class="tenue">' + (i + 1) + '</td><td><b>' + esc(f.nombre) + '</b></td>' + f.notas.map(function (n, j) { return '<td class="n ' + (n === null ? 'tenue' : claseNota(n)) + '">' + (n === null ? '—' : n + (f.pendiente[j] ? '*' : '')) + '</td>'; }).join('') +
+            '<td class="n ' + (f.promedio === null ? '' : claseNota(f.promedio)) + '">' + (f.promedio === null ? '—' : f.promedio) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+          '<p class="suave pequeno">— = no lo presentó · * = tiene respuestas cortas sin corregir · Se toma la mejor nota de cada estudiante.</p>';
+      }).catch(function (e) { $('rCuerpo').innerHTML = '<p class="error">' + esc(e.message) + '</p>'; });
+    }
+    var nombre = function () { return 'Reporte ' + D.curso + (D.materia ? ' ' + D.materia : '') + ' ' + D.generado.slice(0, 10); };
+    $('rCurso').onchange = function () { mats(); cargar(); }; $('rMat').onchange = cargar;
+    $('rXls').onclick = function () {
+      if (!D || !D.examenes.length) return AVISO('No hay notas para descargar', 'error');
+      AVISO('Preparando el Excel…');
+      bajarExcel(nombre(), [
+        { nombre: 'Notas ' + D.curso, filas: [['#', 'Estudiante'].concat(D.examenes.map(function (e) { return e.titulo; })).concat(['Promedio'])].concat(D.filas.map(function (f, i) { return [i + 1, f.nombre].concat(f.notas.map(function (n) { return n === null ? '' : n; })).concat([f.promedio === null ? '' : f.promedio]); })) },
+        { nombre: 'Exámenes', filas: [['Examen', 'Materia', 'Tipo', 'Fecha', 'Nota mínima']].concat(D.examenes.map(function (e) { return [e.titulo, e.materia, e.modo === 'PRACTICA' ? 'Práctica' : 'Examen', e.fecha, e.notaMinima]; })) }
+      ]);
+    };
+    $('rPdf').onclick = function () {
+      if (!D || !D.examenes.length) return AVISO('No hay notas para descargar', 'error');
+      AVISO('Preparando el PDF…');
+      var muchas = D.examenes.length > 5;
+      bajarPdf(nombre(), 'Reporte de notas · ' + D.curso + (D.materia ? ' · ' + D.materia : ''), 'Docente: ' + D.docente + ' · Generado: ' + FECHA(D.generado) + ' · — no presentó · * respuestas cortas sin corregir',
+        ['#', 'Estudiante'].concat(D.examenes.map(function (e, j) { return (j + 1) + '. ' + (e.titulo.length > 28 ? e.titulo.slice(0, 26) + '…' : e.titulo); })).concat(['Promedio']),
+        D.filas.map(function (f, i) { return [i + 1, f.nombre].concat(f.notas.map(function (n, j) { return n === null ? '—' : n + (f.pendiente[j] ? '*' : ''); })).concat([f.promedio === null ? '—' : f.promedio]); }),
+        { horizontal: muchas || D.examenes.length > 3, chica: muchas, minimo: 70, desdeCol: 2, columnas: { 0: { cellWidth: 22, halign: 'center' }, 1: { cellWidth: muchas ? 120 : 160 } } });
+    };
+    mats(); cargar();
+  }
+
+  /* ---------- Ayuda ---------- */
+  function ayuda() {
+    var P = [
+      ['examen', 'Crear un examen', ['Exámenes ▸ <b>Nuevo examen</b> (o Banco ▸ <b>Usar en mi curso</b>).', 'Datos: título, curso, materia, minutos y, si quieres, la hora en que abre y cierra.', 'Preguntas: agrégalas una a una o pégalas todas con <b>Pegar preguntas</b> (la correcta lleva *).', 'Restricciones: elige un atajo (Estricto, Con avisos, Práctica, Libre) o ajusta cada regla.', '<b>Guardar</b>: obtienes el código, el enlace y el QR.']],
+      ['qr', 'Aplicarlo en el aula', ['Proyecta el QR o escribe el código en la pizarra.', 'El estudiante abre la página, escribe el código y elige su nombre.', 'En Resultados pulsa <b>Ver en vivo</b>: ves quién está dentro, cuánto lleva y quién salió.', 'Si a alguien se le va el internet, usa el reloj ⏱ para darle más minutos.']],
+      ['corregir', 'Corregir respuestas cortas', ['Las respuestas cortas quedan <b>por corregir</b>: la nota del estudiante es provisional.', 'Resultados ▸ pestaña <b>Por corregir</b>: ves la misma pregunta de todo el curso.', 'Toca 0, la mitad o el puntaje completo (o escribe el número) y pulsa <b>Guardar correcciones</b>.', 'La nota se recalcula sola.']],
+      ['grafica', 'Resultados, Excel y PDF', ['En cada examen: <b>Excel</b> (notas y análisis por pregunta) o <b>PDF</b> (lista para imprimir o archivar).', 'Reportes ▸ elige el curso: todas tus notas del curso en una tabla, en Excel o PDF.', 'La pestaña Preguntas te dice qué temas repasar: las primeras son las más falladas.']],
+      ['banco', 'Banco de exámenes', ['<b>Modelos</b>: exámenes listos de cada materia, académica y técnica.', '<b>Referencia</b>: los que tus colegas comparten (en Datos ▸ «Compartir en el banco»).', 'Filtra por Académico, Técnico o Mis materias. «Usar en mi curso» crea tu copia para editar.']],
+      ['imprimir', 'Versión en papel', ['Editar ▸ Compartir ▸ <b>Versión en papel (PDF)</b>: el examen listo para imprimir y, al final, la clave.']],
+      ['candado', 'Qué hace la seguridad', ['Pantalla completa y entrega automática si sale de la ventana (o avisos antes, si lo eliges).', 'No deja copiar, pegar ni imprimir. Marca de agua con el nombre.', 'Señuelos anti-IA: si fotografían la pregunta, la IA tiende a elegir una opción incorrecta.']]
+    ];
+    $('pagina').innerHTML = cabeza('Ayuda', 'Video tutorial y guía paso a paso.', '<a class="btn primario" href="index.html?demo" target="_blank" rel="noopener">' + ICO('estrella') + ' Ver la demo</a><a class="btn claro" href="guia.html" target="_blank" rel="noopener">' + ICO('libro') + ' Guía completa</a><a class="btn claro" href="material/Guia_Examen_Seguro.pdf" target="_blank" rel="noopener">' + ICO('descargar') + ' Guía en PDF</a>') +
+      '<div class="dos"><div class="tarjeta"><h3>' + ICO('video') + ' Video tutorial</h3><video id="vidAyuda" controls preload="metadata" playsinline style="width:100%;border-radius:14px;background:#0b0b14;aspect-ratio:16/9" src="material/tutorial.mp4" poster="material/tutorial.jpg"></video>' +
+      '<p class="suave pequeno" id="vidNota" style="margin:8px 0 0">Cómo crear, aplicar y corregir un examen en pocos minutos.</p></div>' +
+      '<div class="ayuda-pasos">' + P.map(function (p, i) { return '<details' + (i === 0 ? ' open' : '') + '><summary><span class="chip-ico">' + ICO(p[0]) + '</span>' + p[1] + '</summary><ol>' + p[2].map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol></details>'; }).join('') + '</div></div>';
+    $('vidAyuda').onerror = function () { $('vidNota').textContent = 'El video todavía no está disponible. Mientras tanto, usa la guía.'; };
+  }
+
+  /* ---------- Estudiantes ---------- */
+  function estudiantes() {
+    var cursos = S.panel.cursos;
+    $('pagina').innerHTML = cabeza('Estudiantes', 'Las listas que ven tus estudiantes al entrar a un examen.') +
+      '<div class="filtros"><select class="entrada" id="eCurso">' + cursos.map(function (c) { return '<option>' + esc(c) + '</option>'; }).join('') + '</select><span class="suave pequeno" id="eCuenta"></span>' +
+      '<button class="btn claro" id="eTarjetas" title="Imprime una tarjeta por estudiante con su PIN para entrar a los exámenes">' + ICO('imprimir') + ' Tarjetas de PIN</button></div>' +
+      '<div class="dos"><div class="tarjeta desliza" id="eLista"></div><div class="tarjeta"><h3>' + ICO('mas') + ' Agregar estudiantes</h3><p class="suave pequeno">Pega los nombres, uno por línea (puedes copiarlos de Excel).</p>' +
+      '<textarea class="entrada" id="ePegar" style="min-height:180px" placeholder="Ana María Pérez\nLuis Gómez"></textarea><button class="btn primario" id="eAgregar" style="margin-top:10px">' + ICO('check') + ' Agregar a la lista</button></div></div>';
+    function cargar() {
+      var c = $('eCurso').value; if (!c) { $('eLista').innerHTML = '<p class="suave">No tienes cursos asignados.</p>'; return; }
+      $('eLista').innerHTML = '<div class="girar" style="margin:20px auto"></div>';
+      A({ action: 'estudiantes', curso: c }).then(function (r) {
+        lista = r.estudiantes;
+        $('eCuenta').textContent = r.estudiantes.filter(function (s) { return s.activo; }).length + ' activos';
+        $('eLista').innerHTML = r.estudiantes.length ? '<table class="tabla lista-est"><thead><tr><th>#</th><th>Nombre</th><th>PIN</th><th>En la lista</th></tr></thead><tbody>' + r.estudiantes.map(function (s, i) {
+          return '<tr><td class="tenue">' + (i + 1) + '</td><td>' + esc(s.nombre) + '</td><td><code>' + esc(s.pin || '—') + '</code> <button class="btn fantasma mini" data-pin="' + esc(s.id) + '" title="Darle un PIN nuevo (si lo perdió o alguien más lo vio)">' + ICO('recargar') + '</button></td>' +
+            '<td><label class="interruptor"><input type="checkbox" data-est="' + esc(s.id) + '"' + (s.activo ? ' checked' : '') + '><i></i></label></td></tr>'; }).join('') + '</tbody></table>'
+          : '<div class="vacio"><p>Este curso todavía no tiene lista.</p></div>';
+      }).catch(function (e) { $('eLista').innerHTML = '<p class="error">' + esc(e.message) + '</p>'; });
+    }
+    var lista = [];
+    $('eCurso').onchange = cargar;
+    $('eLista').onclick = function (e) {
+      var b = e.target.closest('[data-pin]'); if (!b) return;
+      if (!confirm('¿Darle un PIN nuevo? El anterior deja de servir y tendrás que entregarle el nuevo.')) return;
+      A({ action: 'reiniciarPin', curso: $('eCurso').value, id: b.dataset.pin }).then(function (r) { AVISO('PIN nuevo: ' + r.pin); cargar(); }).catch(function (er) { AVISO(er.message, 'error'); });
+    };
+    $('eTarjetas').onclick = function () {
+      var act = lista.filter(function (s) { return s.activo; }), curso = $('eCurso').value;
+      if (!act.length) { AVISO('Este curso no tiene estudiantes activos.', 'error'); return; }
+      var w = window.open('', '_blank'); if (!w) { AVISO('Permite las ventanas emergentes para imprimir las tarjetas.', 'error'); return; }
+      w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Tarjetas de PIN · ' + esc(curso) + '</title><style>' +
+        'body{font-family:system-ui,sans-serif;margin:12px;color:#111}.g{display:grid;grid-template-columns:repeat(3,1fr);gap:0}' +
+        '.t{border:1px dashed #888;padding:12px 14px;break-inside:avoid;min-height:118px}.t b{display:block;font-size:15px}.t small{color:#555}' +
+        '.p{font:700 28px ui-monospace,monospace;letter-spacing:6px;margin:6px 0}.u{font-size:11px;word-break:break-all;color:#333}' +
+        '.no{margin-bottom:10px}@media print{.no{display:none}}</style></head><body>' +
+        '<p class="no">Recorta por las líneas y entrega cada tarjeta a su estudiante. El PIN es personal: no lo compartas. <button onclick="print()">Imprimir</button></p><div class="g">' +
+        act.map(function (s) { return '<div class="t"><b>' + esc(s.nombre) + '</b><small>' + esc(curso) + ' · ' + esc(MARCA) + '</small><div class="p">' + esc(s.pin || '----') + '</div><div class="u">Entra en: ' + esc(WEB) + '</div></div>'; }).join('') +
+        '</div></body></html>');
+      w.document.close(); setTimeout(function () { w.print(); }, 300);
+    };
+    $('eLista').onchange = function (e) { var id = e.target.dataset.est; if (id) A({ action: 'guardarEstudiantes', curso: $('eCurso').value, id: id, activo: e.target.checked }).then(function () { AVISO(e.target.checked ? 'Activado' : 'Quitado de la lista'); }).catch(function (er) { AVISO(er.message, 'error'); }); };
+    $('eAgregar').onclick = function () { A({ action: 'guardarEstudiantes', curso: $('eCurso').value, pegado: $('ePegar').value }).then(function (r) { AVISO(r.nuevos + ' agregados'); $('ePegar').value = ''; cargar(); }).catch(function (er) { AVISO(er.message, 'error'); }); };
+    cargar();
+  }
+
+  /* ---------- Docentes (coordinación) ---------- */
+  function docentes() {
+    cargando('Cargando docentes…');
+    Promise.all([A({ action: 'docentes' }), A({ action: 'asignaciones' })]).then(function (rs) {
+      if (S.vista !== 'docentes') return;
+      var ds = rs[0].docentes, asig = rs[1].asignaciones;
+      $('pagina').innerHTML = cabeza('Docentes', ds.length + ' docentes · ' + ds.filter(function (d) { return d.activado; }).length + ' ya activaron su cuenta', '<button class="btn primario" id="dNuevo">' + ICO('mas') + ' Agregar docente</button>') +
+        '<div class="tarjeta" style="margin-bottom:14px"><b>' + ICO('escudo') + ' ' + esc(rs[0].centro.nombre) + '</b><p class="suave pequeno" style="margin:6px 0 8px">Código de invitación: los docentes que ya tienen cuenta (por ejemplo, de otro centro) lo escriben en <b>Mi cuenta ▸ Mis centros ▸ Unirme</b>.</p>' +
+          '<div class="filtros"><span class="pildora morado" style="font-size:15px;letter-spacing:1px">' + esc(rs[0].centro.invitacion) + '</span><button class="btn fantasma mini" id="ceCopiar">' + ICO('copiar') + ' Copiar</button><button class="btn fantasma mini" id="ceNuevoCod">' + ICO('recargar') + ' Código nuevo</button><button class="btn fantasma mini" id="ceRenombrar">Cambiar nombre</button></div></div>' +
+        '<div class="tarjeta" style="margin-bottom:14px"><b>' + ICO('llave') + ' Cómo entra cada docente</b><p class="suave pequeno" style="margin:6px 0 0">Entrégale su <b>usuario</b> y su <b>código de activación</b>. En «Activar mi cuenta» crea su contraseña; el código deja de servir. Si olvida la contraseña, usa «Reiniciar acceso» para darle un código nuevo.</p></div>' +
+        '<div class="tarjeta desliza"><table class="tabla"><thead><tr><th>Docente</th><th>Usuario</th><th>Acceso</th><th>Materias</th><th>Último acceso</th><th></th></tr></thead><tbody>' + ds.map(function (d) {
+          return '<tr style="' + (d.activo ? '' : 'opacity:.5') + '"><td><b>' + esc(d.nombre) + '</b> ' + (d.rol === 'ADMIN' ? '<span class="pildora morado">Coordinación</span>' : '') + '</td><td><code>' + esc(d.usuario) + '</code></td>' +
+            '<td>' + (d.activado ? '<span class="pildora verde">' + ICO('check') + ' Activada</span>' : '<span class="pildora amarillo" title="Código de activación">' + ICO('llave') + ' ' + esc(d.activacion) + '</span> <button class="btn fantasma icono" data-cp="Usuario: ' + esc(d.usuario) + ' · Código de activación: ' + esc(d.activacion) + '" title="Copiar">' + ICO('copiar') + '</button>') + '</td>' +
+            '<td><button class="btn fantasma mini" data-asig="' + d.id + '">' + ICO('libro') + ' ' + d.materias + '</button></td><td class="pequeno suave">' + FECHA(d.ultimoAcceso) + '</td>' +
+            '<td style="white-space:nowrap"><button class="btn fantasma mini" data-reini="' + d.id + '">' + ICO('recargar') + ' Reiniciar acceso</button><button class="btn fantasma icono" data-rol="' + d.id + '" data-r="' + d.rol + '" title="Cambiar rol">' + ICO('docentes') + '</button>' +
+            '<button class="btn fantasma icono" data-act="' + d.id + '" data-a="' + (d.activo ? 1 : 0) + '" title="' + (d.activo ? 'Desactivar' : 'Activar') + '">' + ICO(d.activo ? 'x' : 'check') + '</button></td></tr>';
+        }).join('') + '</tbody></table></div>';
+      $('ceCopiar').onclick = function () { copiar('Código de invitación de ' + rs[0].centro.nombre + ': ' + rs[0].centro.invitacion); };
+      $('ceNuevoCod').onclick = function () { confirmar('¿Crear un código nuevo?', 'El código anterior deja de servir. Quienes ya se unieron siguen en el centro.', 'Crear', function () { A({ action: 'guardarCentro', nuevaInvitacion: true }).then(function () { AVISO('Código nuevo creado'); docentes(); }); }); };
+      $('ceRenombrar').onclick = function () { var n = prompt('Nombre del centro:', rs[0].centro.nombre); if (n) A({ action: 'guardarCentro', nombre: n }).then(function () { AVISO('Nombre cambiado'); abrirApp().then(function () { ir('docentes'); }); }).catch(function (er) { AVISO(er.message, 'error'); }); };
+      var guardar = function (doc, msg) { A({ action: 'guardarDocente', docente: doc }).then(function () { AVISO(msg); docentes(); }).catch(function (er) { AVISO(er.message, 'error'); }); };
+      $('pagina').onclick = function (e) {
+        var b = e.target.closest('[data-cp],[data-reini],[data-rol],[data-act],[data-asig],#dNuevo'); if (!b) return;
+        if (b.dataset.cp) copiar(b.dataset.cp);
+        if (b.id === 'dNuevo') { modal('<h2>' + ICO('mas') + ' Agregar docente</h2><label class="campo"><span>Nombre completo</span><input class="entrada" id="dnNombre"></label><label class="campo"><span>Rol</span><select class="entrada" id="dnRol"><option value="DOCENTE">Docente</option><option value="ADMIN">Coordinación (ve todo)</option></select></label><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn claro" data-cerrar>Cancelar</button><button class="btn primario" id="dnOk">Agregar</button></div>');
+          $('dnOk').onclick = function () { cerrarModal(); guardar({ nombre: $('dnNombre').value, rol: $('dnRol').value }, 'Docente agregado'); }; }
+        if (b.dataset.reini) confirmar('¿Reiniciar el acceso?', 'Su contraseña deja de servir y se crea un código de activación nuevo.', 'Reiniciar', function () { guardar({ id: b.dataset.reini, reiniciar: true }, 'Código nuevo creado'); });
+        if (b.dataset.rol) guardar({ id: b.dataset.rol, rol: b.dataset.r === 'ADMIN' ? 'DOCENTE' : 'ADMIN' }, 'Rol cambiado');
+        if (b.dataset.act) guardar({ id: b.dataset.act, activo: b.dataset.a !== '1' }, b.dataset.a === '1' ? 'Desactivado' : 'Activado');
+        if (b.dataset.asig) { var d = ds.find(function (x) { return x.id === b.dataset.asig; }); editarAsignaciones(d, asig); }
+      };
+    }).catch(function (e) { $('pagina').innerHTML = '<div class="tarjeta"><p class="error">' + esc(e.message) + '</p></div>'; });
+  }
+  function editarAsignaciones(d, todas) {
+    var mias = todas.filter(function (a) { return a.docenteId === d.id; });
+    modal('<h2>' + ICO('libro') + ' ' + esc(d.nombre) + '</h2><p class="suave pequeno">Cursos y materias que puede usar en sus exámenes.</p><div class="chips-n" style="margin-bottom:14px">' + (mias.length ? mias.map(function (a) {
+      return '<span class="pildora morado">' + esc(a.curso + ' · ' + a.materia) + ' <button class="btn fantasma icono" style="width:22px;height:22px" data-quita="' + a.id + '">' + ICO('x') + '</button></span>'; }).join('') : '<span class="suave">Sin asignaciones</span>') + '</div>' +
+      '<div class="fila"><input class="entrada" id="asCurso" placeholder="Curso (ej. 4toA)"><input class="entrada" id="asMat" placeholder="Materia"></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px"><button class="btn claro" data-cerrar>Cerrar</button><button class="btn primario" id="asOk">' + ICO('mas') + ' Agregar</button></div>');
+    $('modalCaja').onclick = function (e) { var q = e.target.closest('[data-quita]'); if (q) A({ action: 'guardarAsignacion', eliminar: q.dataset.quita }).then(function () { cerrarModal(); AVISO('Quitada'); docentes(); }); };
+    $('asOk').onclick = function () { A({ action: 'guardarAsignacion', docenteId: d.id, curso: $('asCurso').value, materia: $('asMat').value }).then(function () { cerrarModal(); AVISO('Asignación agregada'); docentes(); }).catch(function (er) { AVISO(er.message, 'error'); }); };
+  }
+
+  /* ---------- Membresías (solo la cuenta dueña, instalación de venta) ---------- */
+  function membresias() {
+    cargando('Cargando membresías…');
+    A({ action: 'membresiasListar' }).then(function (r) {
+      if (S.vista !== 'membresias') return;
+      var fc = function (x) { return x ? String(x).slice(0, 10).split('-').reverse().join('/') : '—'; }, nom = {};
+      r.docentes.forEach(function (d) { nom[d.id] = d.nombre; });
+      var conAcceso = r.docentes.filter(function (d) { return d.dueno || !d.vencida; }).length;
+      $('pagina').innerHTML = cabeza('Membresías', conAcceso + ' con acceso · ' + (r.docentes.length - conAcceso) + ' vencidas') +
+        '<div class="dos"><div class="tarjeta desliza"><h3>' + ICO('usuarios') + ' Docentes</h3><table class="tabla"><thead><tr><th>Docente</th><th>Plan</th><th>Vence</th><th>Días</th><th>Pagado</th><th></th></tr></thead><tbody>' +
+        r.docentes.map(function (d) {
+          var col = d.dueno ? 'morado' : d.vencida ? 'rojo' : d.dias <= 5 ? 'amarillo' : 'verde';
+          return '<tr style="' + (d.activo ? '' : 'opacity:.5') + '"><td><b>' + esc(d.nombre) + '</b><div class="tenue pequeno">' + esc(d.usuario) + '</div></td><td>' + (d.dueno ? 'Dueño' : esc(d.plan)) + '</td>' +
+            '<td style="white-space:nowrap">' + (d.dueno ? '—' : fc(d.vence)) + '</td><td><span class="pildora ' + col + '">' + (d.dueno ? 'Sin límite' : d.vencida ? 'Vencida' : d.dias + ' d') + '</span></td>' +
+            '<td style="white-space:nowrap">' + (d.total ? esc(d.total + ' ' + d.moneda) : '—') + '</td><td>' + (d.dueno ? '' : '<button class="btn fantasma mini" data-pagar="' + esc(d.id) + '">' + ICO('mas') + ' Pago</button>') + '</td></tr>';
+        }).join('') + '</tbody></table></div>' +
+        '<form class="tarjeta" id="mbForm"><h3>' + ICO('mas') + ' Registrar un pago</h3><p class="suave pequeno" style="margin-top:0">Alarga el acceso desde hoy o desde su vencimiento actual (lo que sea más tarde).</p>' +
+        '<label class="campo"><span>Docente</span><select class="entrada" id="mbDoc">' + r.docentes.filter(function (d) { return !d.dueno; }).map(function (d) { return '<option value="' + esc(d.id) + '">' + esc(d.nombre + ' (' + d.usuario + ')') + '</option>'; }).join('') + '</select></label>' +
+        '<div class="fila"><label class="campo"><span>Plan</span><input class="entrada" id="mbPlan" list="mbPlanes" value="Mensual" maxlength="40"><datalist id="mbPlanes"><option>Mensual</option><option>Trimestral</option><option>Semestral</option><option>Anual</option></datalist></label>' +
+        '<label class="campo"><span>Meses</span><input class="entrada" id="mbMeses" type="number" min="1" max="36" value="1" inputmode="numeric"></label></div>' +
+        '<label class="campo"><span>O vence el (opcional)</span><input class="entrada" id="mbVence" type="date"></label>' +
+        '<div class="fila"><label class="campo"><span>Monto</span><input class="entrada" id="mbMonto" type="number" min="0" step="0.01" inputmode="decimal"></label>' +
+        '<label class="campo"><span>Moneda</span><select class="entrada" id="mbMoneda"><option>USD</option><option>DOP</option><option>EUR</option></select></label></div>' +
+        '<label class="campo"><span>Método</span><select class="entrada" id="mbMetodo"><option>Transferencia</option><option>Efectivo</option><option>Tarjeta</option><option>PayPal</option><option>Otro</option></select></label>' +
+        '<label class="campo"><span>Nota</span><input class="entrada" id="mbNota" maxlength="200" placeholder="Referencia, comprobante…"></label>' +
+        '<button class="btn primario ancho">' + ICO('check') + ' Registrar pago</button></form></div>' +
+        '<div class="tarjeta desliza"><h3>' + ICO('lista') + ' Pagos registrados</h3>' + (r.pagos.length ? '<table class="tabla"><thead><tr><th>Fecha</th><th>Docente</th><th>Plan</th><th>Periodo</th><th>Monto</th><th>Método</th><th></th></tr></thead><tbody>' +
+        r.pagos.map(function (m) {
+          return '<tr style="' + (m.anulada ? 'opacity:.5;text-decoration:line-through' : '') + '"><td style="white-space:nowrap">' + fc(m.creado) + '</td><td>' + esc(nom[m.docenteId] || m.docenteId) + '</td><td>' + esc(m.plan) + '</td>' +
+            '<td style="white-space:nowrap">' + fc(m.inicio) + ' → ' + fc(m.vence) + '</td><td style="white-space:nowrap">' + esc(m.monto + ' ' + m.moneda) + '</td><td>' + esc(m.metodo) + (m.nota ? '<div class="tenue pequeno">' + esc(m.nota) + '</div>' : '') + '</td>' +
+            '<td>' + (m.anulada ? '<span class="pildora">Anulado</span>' : '<button class="btn fantasma mini" data-anula="' + esc(m.id) + '" style="color:var(--rojo)">Anular</button>') + '</td></tr>';
+        }).join('') + '</tbody></table>' : '<p class="suave">Todavía no hay pagos.</p>') + '</div>';
+      $('mbForm').onsubmit = function (e) {
+        e.preventDefault(); var b = this.querySelector('button'); b.disabled = true;
+        A({ action: 'membresiaRegistrar', docenteId: $('mbDoc').value, plan: $('mbPlan').value, meses: Number($('mbMeses').value), vence: $('mbVence').value, monto: $('mbMonto').value === '' ? '' : Number($('mbMonto').value),
+          moneda: $('mbMoneda').value, metodo: $('mbMetodo').value, nota: $('mbNota').value })
+          .then(function (x) { AVISO('Pago registrado · vence el ' + fc(x.vence)); membresias(); }).catch(function (er) { AVISO(er.message, 'error'); b.disabled = false; });
+      };
+      $('pagina').onclick = function (e) {
+        var p = e.target.closest('[data-pagar]'); if (p) { $('mbDoc').value = p.dataset.pagar; $('mbForm').scrollIntoView({ behavior: 'smooth' }); $('mbMonto').focus(); return; }
+        var a = e.target.closest('[data-anula]'); if (a) confirmar('¿Anular este pago?', 'Se descuenta su tiempo. El registro queda tachado en la lista.', 'Anular', function () { A({ action: 'membresiaAnular', id: a.dataset.anula }).then(function () { AVISO('Pago anulado'); membresias(); }).catch(function (er) { AVISO(er.message, 'error'); }); }, true);
+      };
+    }).catch(function (e) { $('pagina').innerHTML = '<div class="tarjeta"><p class="error">' + esc(e.message) + '</p></div>'; });
+  }
+
+  /* ---------- Mi cuenta ---------- */
+  function cuenta() {
+    var y = S.panel.yo;
+    $('pagina').innerHTML = cabeza('Mi cuenta') + avisoMembresia(false) + '<div class="dos"><div class="tarjeta"><div style="display:flex;gap:14px;align-items:center"><div class="avatar" style="width:56px;height:56px;font-size:20px">' + esc($('yoIni').textContent) + '</div><div><h2 style="margin:0">' + esc(y.nombre) + '</h2><span class="suave">' + esc(y.usuario) + ' · ' + (y.rol === 'ADMIN' ? 'Coordinación' : 'Docente') + '</span></div></div>' +
+      '<h3 style="margin-top:18px">' + ICO('libro') + ' Mis cursos y materias</h3><div class="chips-n">' + (S.panel.asignaciones.length ? S.panel.asignaciones.map(function (a) { return '<span class="pildora morado">' + esc(a.curso + ' · ' + a.materia) + '</span>'; }).join('') : '<span class="suave">Pídele a la coordinación que te asigne tus materias.</span>') + '</div>' +
+      '<h3 style="margin-top:18px">' + ICO('ajustes') + ' Apariencia</h3><div class="tema"></div></div>' +
+      '<form class="tarjeta" id="fClave"><h3>' + ICO('llave') + ' Cambiar contraseña</h3><label class="campo"><span>Contraseña actual</span><input class="entrada" type="password" id="cActual" autocomplete="current-password"></label>' +
+      '<label class="campo"><span>Nueva (mínimo 8)</span><input class="entrada" type="password" id="cNueva" autocomplete="new-password"></label><label class="campo"><span>Repite la nueva</span><input class="entrada" type="password" id="cNueva2" autocomplete="new-password"></label>' +
+      '<div class="error" id="cError"></div><button class="btn primario">' + ICO('check') + ' Guardar contraseña</button></form></div>';
+    var g = $('pagina').querySelector('.tema'); g.innerHTML = '<button type="button" data-tema="light">' + ICO('sol') + '</button><button type="button" data-tema="dark">' + ICO('luna') + '</button>';
+    g.onclick = function (e) { var b = e.target.closest('[data-tema]'); if (b) TEMA(b.dataset.tema); }; TEMA(document.documentElement.getAttribute('data-theme'));
+    $('fClave').onsubmit = function (e) {
+      e.preventDefault(); $('cError').textContent = '';
+      if ($('cNueva').value !== $('cNueva2').value) { $('cError').textContent = 'Las contraseñas nuevas no son iguales.'; return; }
+      A({ action: 'cambiarClave', actual: $('cActual').value, clave: $('cNueva').value }).then(function () { AVISO('Contraseña cambiada'); e.target.reset(); }).catch(function (er) { $('cError').textContent = er.message; });
+    };
+    misCentros();
+    conectarIA();
+  }
+
+  /* ---------- Mis centros (escuela, liceo, universidad…) ---------- */
+  function misCentros() {
+    var y = S.panel.yo, caja = document.createElement('div'); caja.className = 'tarjeta'; caja.style.marginTop = '14px';
+    caja.innerHTML = '<h3>' + ICO('escudo') + ' Mis centros</h3><p class="suave pequeno" style="margin:4px 0 10px">Si das clases en otro lugar (universidad, instituto, academia), créalo o únete con el código que te dé su administración. Cada centro tiene sus propios cursos, estudiantes y exámenes.</p>' +
+      '<div class="desliza"><table class="tabla"><tr><th>Centro</th><th>Tu rol</th><th></th></tr>' + (y.centros || []).map(function (c) {
+        return '<tr><td><b>' + esc(c.nombre) + '</b>' + (c.id === y.centro ? ' <span class="pildora verde">Ahora</span>' : '') + '</td><td>' + (c.rol === 'ADMIN' ? 'Administración' : 'Docente') + '</td><td style="white-space:nowrap">' +
+          '<button class="btn fantasma mini" data-ce="' + esc(c.id) + '" data-mo="DOCENTE">Entrar como docente</button>' + (c.rol === 'ADMIN' ? '<button class="btn fantasma mini" data-ce="' + esc(c.id) + '" data-mo="ADMIN">Entrar como administración</button>' : '') + '</td></tr>';
+      }).join('') + '</table></div>' +
+      '<div class="dos" style="margin-top:12px"><div><b class="pequeno">Crear un centro</b><div class="filtros" style="margin-top:6px"><input class="entrada" id="ceNombre" maxlength="80" placeholder="Nombre (ej. Universidad X)"><select class="entrada" id="ceTipo"><option>Universidad</option><option>Instituto</option><option>Liceo</option><option>Escuela</option><option>Academia</option><option>Otro</option></select><button class="btn primario" id="ceCrear">' + ICO('mas') + ' Crear</button></div></div>' +
+      '<div><b class="pequeno">Unirme con un código</b><div class="filtros" style="margin-top:6px"><input class="entrada" id="ceCodigo" placeholder="XXXX-XXXX" autocapitalize="characters"><button class="btn claro" id="ceUnir">Unirme</button></div></div></div>';
+    $('pagina').appendChild(caja);
+    caja.onclick = function (e) { var b = e.target.closest('[data-ce]'); if (b) cambiarCentro(b.dataset.ce, b.dataset.mo); };
+    $('ceCrear').onclick = function () {
+      A({ action: 'crearCentro', nombre: $('ceNombre').value, tipo: $('ceTipo').value }).then(function (r) { AVISO('Centro creado: eres su administración'); cambiarCentro(r.id, 'ADMIN'); }).catch(function (er) { AVISO(er.message, 'error'); });
+    };
+    $('ceUnir').onclick = function () {
+      A({ action: 'unirseCentro', codigo: $('ceCodigo').value }).then(function (r) { AVISO('Te uniste a ' + r.nombre); cambiarCentro(r.id, 'DOCENTE'); }).catch(function (er) { AVISO(er.message, 'error'); });
+    };
+  }
+
+  /* ---------- Conectar mi IA (servidor MCP con clave de 30 días) ---------- */
+  function conectarIA() {
+    var caja = document.createElement('div'); caja.className = 'tarjeta'; caja.id = 'cIA'; caja.style.marginTop = '14px';
+    caja.innerHTML = '<h3>' + ICO('llave') + ' Conectar mi IA</h3><p class="suave pequeno" style="margin:4px 0 10px">Crea una clave para que tu IA (Claude Code, Gemini CLI, Codex, Cursor…) haga exámenes por ti. ' +
+      'Tú eliges si dura 30 días o es permanente (la puedes revocar cuando quieras). Tiene tus mismos permisos en este centro. Guía paso a paso: <a href="guia.html#mi-ia" target="_blank">Conectar tu IA</a>.</p>' +
+      '<div class="filtros"><input class="entrada" id="iaNombre" maxlength="40" placeholder="Nombre (ej. Claude en mi laptop)"><select class="entrada" id="iaDur" title="Duración" style="max-width:150px"><option value="30">Dura 30 días</option><option value="P">Permanente</option></select><button class="btn primario" id="iaCrear">' + ICO('mas') + ' Crear clave</button><button class="btn claro" id="iaVideo">' + ICO('video') + ' Ver video: cómo usar esta clave</button></div>' +
+      '<div id="iaVid" class="oculto" style="margin:10px 0"><video controls preload="none" playsinline style="width:100%;border-radius:14px;background:#0b0b14;aspect-ratio:16/9" src="material/conectar-ia.mp4" poster="material/conectar-ia.jpg"></video></div>' +
+      '<div id="iaNueva"></div><div id="iaLista" class="suave pequeno">Cargando…</div>';
+    $('pagina').appendChild(caja);
+    function lista() {
+      A({ action: 'clavesIA' }).then(function (r) {
+        $('iaLista').innerHTML = r.claves.length ? '<div class="desliza"><table class="tabla"><tr><th>Nombre</th><th>Vence</th><th>Último uso</th><th>Usos</th><th></th></tr>' + r.claves.map(function (c) {
+          return '<tr><td>' + esc(c.nombre) + '</td><td>' + (c.vence ? esc(String(c.vence).slice(0, 10)) : 'Permanente') + '</td><td>' + esc(String(c.ultimoUso || '—').replace('T', ' ').slice(0, 16)) + '</td><td>' + c.usos + '</td><td>' +
+            (c.activa ? '<button class="btn fantasma mini" data-rev="' + esc(c.id) + '">Revocar</button>' : '<span class="pildora">Inactiva</span>') + '</td></tr>';
+        }).join('') + '</table></div>' : 'Todavía no tienes claves.';
+      }).catch(function (er) { $('iaLista').textContent = er.message; });
+    }
+    $('iaLista').onclick = function (e) {
+      var b = e.target.closest('[data-rev]'); if (!b || !confirm('¿Revocar esta clave? La IA que la usa deja de conectarse.')) return;
+      A({ action: 'revocarClaveIA', id: b.dataset.rev }).then(function () { AVISO('Clave revocada'); lista(); }).catch(function (er) { AVISO(er.message, 'error'); });
+    };
+    $('iaVideo').onclick = function () { var v = $('iaVid'); v.classList.toggle('oculto'); if (!v.classList.contains('oculto')) v.querySelector('video').play().catch(function () {}); };
+    $('iaCrear').onclick = function () {
+      A({ action: 'crearClaveIA', nombre: $('iaNombre').value, permanente: $('iaDur').value === 'P' }).then(function (r) {
+        var url = window.EXAMEN_API + '?k=' + r.clave, j = JSON.stringify(url);
+        var cmds = [
+          ['Claude Code (terminal)', 'claude mcp add --transport http --scope user examen-seguro ' + j],
+          ['Gemini CLI (archivo .gemini/settings.json)', '{ "mcpServers": { "examen-seguro": { "httpUrl": ' + j + ' } } }'],
+          ['Codex (archivo .codex/config.toml)', '[mcp_servers.examen-seguro]\nurl = ' + j],
+          ['Cursor (archivo .cursor/mcp.json)', '{ "mcpServers": { "examen-seguro": { "url": ' + j + ' } } }'],
+          ['Otra IA: dirección del servidor MCP (HTTP)', url]
+        ];
+        $('iaNueva').innerHTML = '<div class="pildora ambar" style="display:block;white-space:normal;margin:10px 0;padding:10px"><b>Copia esto ahora:</b> la clave no se vuelve a mostrar. ' + (r.vence ? 'Vence el ' + esc(String(r.vence).slice(0, 10)) + '.' : 'Es permanente: revócala si ya no la usas.') + ' No la compartas: quien la tenga entra como tú.</div>' +
+          '<div class="pildora rojo" style="display:block;white-space:normal;margin:0 0 10px;padding:10px"><b>⚠ No la pegues en el chat de tu IA.</b> Claude Code: pulsa la tecla Windows, escribe <b>PowerShell</b>, ábrelo, haz clic derecho para pegar y pulsa Enter. Luego abre Claude Code y escribe <b>/mcp</b>: debe salir examen-seguro conectado. Después pídele: «créame un examen en borrador de…».</div>' +
+          cmds.map(function (c, i) { return '<label class="campo"><span>' + esc(c[0]) + '</span><div class="filtros"><textarea class="entrada" rows="' + (c[1].indexOf('\n') >= 0 ? 2 : 1) + '" readonly style="font-family:monospace;font-size:12px">' + esc(c[1]) + '</textarea><button class="btn claro mini" data-cp="' + i + '">' + ICO('copiar') + '</button></div></label>'; }).join('');
+        $('iaNueva').onclick = function (e) { var b = e.target.closest('[data-cp]'); if (b) copiar(cmds[b.dataset.cp][1]); };
+        $('iaNombre').value = ''; lista();
+      }).catch(function (er) { AVISO(er.message, 'error'); });
+    };
+    lista();
+  }
+
+  /* Arranque: si hay sesión guardada, entra directo */
+  if (S.token) abrirApp().catch(function () {});
+})();
+</script>
+</body>
+</html>
