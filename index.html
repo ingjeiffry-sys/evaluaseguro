@@ -91,7 +91,8 @@
   .hero { position: relative; color: #fff; background: radial-gradient(900px 500px at 85% 10%, rgb(124 92 255 / .55), transparent 60%), radial-gradient(700px 500px at 0% 100%, rgb(49 232 192 / .22), transparent 60%), linear-gradient(160deg, #120d33 0%, #1f1660 55%, #160f40 100%); padding: 130px 0 90px; overflow: hidden; isolation: isolate; }
   .grano::after { content: ''; position: absolute; inset: 0; z-index: -1; opacity: .09; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
   .hero .envoltura { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
-  .pildora { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border-radius: 999px; background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .16); font-size: 14px; font-weight: 600; color: rgb(255 255 255 / .9); }
+  .pildora { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border-radius: 999px; background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .16); font-size: 14px; font-weight: 600; color: rgb(255 255 255 / .9); text-decoration: none; }
+  a.pildora:hover { border-color: var(--menta); }
   .pildora b { background: var(--coral); color: var(--noche); padding: 2px 10px; border-radius: 999px; font-size: 12px; }
   .hero h1 { font-size: clamp(40px, 6.4vw, 72px); font-weight: 800; margin: 22px 0 18px; }
   .hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--menta), #a5fff0 45%, var(--violeta-c)); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -219,8 +220,99 @@
   .cta h2 { font-size: clamp(30px, 5vw, 54px); font-weight: 800; max-width: 820px; margin: 0 auto; }
   .cta p { margin: 16px auto 0; max-width: 560px; color: rgb(255 255 255 / .8); font-size: 18px; }
   .cta .acciones { justify-content: center; }
-  .contacto { margin: 28px auto 0; max-width: 520px; padding: 16px 20px; border-radius: 16px; background: rgb(255 255 255 / .08); border: 1px dashed rgb(255 255 255 / .3); font-size: 15px; }
-  .contacto[hidden] { display: none; }
+  .cta { text-align: left; }
+  .cta .envoltura { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: start; }
+  .cta h2 { margin: 0; }
+  .cta .eti { color: var(--menta); }
+  .cta p { margin: 16px 0 0; }
+  .dudas { display: inline-block; margin-top: 22px; color: var(--menta); font-weight: 700; text-underline-offset: 4px; }
+  .dudas[hidden] { display: none; }
+  .caja { background: #fff; color: var(--tinta); border-radius: 24px; padding: 28px; box-shadow: 0 40px 80px -30px rgb(0 0 0 / .6); }
+  .campo { display: grid; gap: 6px; margin-bottom: 16px; }
+  .campo label { font-weight: 700; font-size: 15px; }
+  .campo label span { font-weight: 500; color: var(--tinta-s); }
+  .campo input, .campo select { width: 100%; min-height: 48px; padding: 10px 14px; border: 1.5px solid var(--borde); border-radius: 12px; font: 500 16px var(--cuerpo); color: var(--tinta); background: #fff; }
+  .campo input:focus, .campo select:focus { border-color: var(--violeta); outline: 3px solid rgb(124 92 255 / .25); outline-offset: 0; }
+  .campo input[aria-invalid="true"] { border-color: #d93a5a; }
+  .cta .caja p, .caja .ayuda { margin: 0; color: var(--tinta-s); font-size: 14px; }
+  .err { color: #b4233f; font-size: 14px; font-weight: 600; }
+  .err:empty { display: none; }
+  .cta .caja .err.general { margin: 0 0 14px; color: #b4233f; font-size: 15px; }
+  .incluye { list-style: none; margin: 6px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--papel); display: grid; gap: 4px; font-size: 14px; color: var(--tinta-s); }
+  .incluye li { display: flex; gap: 8px; } .incluye li::before { content: '✓'; color: var(--menta-o); font-weight: 800; }
+  .enviar { width: 100%; }
+  .enviar[disabled] { opacity: .7; cursor: progress; transform: none; }
+  .girar { width: 18px; height: 18px; border-radius: 50%; border: 3px solid rgb(18 13 51 / .25); border-top-color: var(--noche); animation: girar .8s linear infinite; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  .resultado[hidden] { display: none; }
+  .resultado h3 { font-size: 26px; margin-bottom: 8px; }
+  .resultado h3:focus { outline: none; }
+  .sello { display: inline-block; margin: 4px 0 14px; padding: 6px 14px; border-radius: 999px; background: #e3fbf5; color: var(--menta-o); font-weight: 800; font-size: 14px; }
+  .datos { display: grid; gap: 10px; margin: 16px 0; }
+  .dato { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 12px 14px; border-radius: 12px; background: var(--papel); border: 1px solid var(--borde); }
+  .dato span { font-size: 13px; font-weight: 700; color: var(--tinta-s); display: block; }
+  .dato strong { font: 700 17px ui-monospace, monospace; overflow-wrap: anywhere; }
+  .copiar { min-height: 40px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--violeta); background: #fff; color: var(--violeta); font: 700 14px var(--cuerpo); cursor: pointer; }
+  .copiar:hover { background: #f0ecff; }
+  .pago { margin: 18px 0; padding: 18px; border-radius: 16px; border: 2px dashed var(--coral); background: #fff7f3; }
+  .pago h4 { margin: 0 0 10px; font: 800 18px var(--display); }
+  .pago dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 0 0 12px; font-size: 15px; }
+  .pago dt { color: var(--tinta-s); font-weight: 600; } .pago dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+  .pago .cuenta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .nota-codigo { margin: 12px 0; padding: 14px; border-radius: 12px; background: var(--noche); color: #fff; text-align: center; }
+  .cta .caja .nota-codigo p { color: rgb(255 255 255 / .8); }
+  .nota-codigo strong { display: block; margin: 6px 0; font: 800 clamp(26px, 7vw, 36px)/1.1 ui-monospace, monospace; letter-spacing: .08em; color: var(--menta); overflow-wrap: anywhere; }
+  .resultado .btn { width: 100%; margin-top: 8px; }
+  .otra { display: block; margin: 14px auto 0; background: none; border: 0; color: var(--violeta); font: 700 15px var(--cuerpo); text-decoration: underline; cursor: pointer; min-height: 40px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 880px) { .cta .envoltura { grid-template-columns: 1fr; gap: 32px; } }
+  @media (max-width: 400px) { .caja { padding: 20px 16px; } }
+
+  /* Demo */
+  .demo-sec { padding-top: 0; }
+  .demo { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: center; padding: 44px; border-radius: 28px; color: #fff; background: radial-gradient(500px 260px at 100% 0%, rgb(255 138 92 / .35), transparent 70%), linear-gradient(135deg, #1f1660, var(--noche)); }
+  .demo .eti { color: var(--menta); }
+  .demo h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; }
+  .demo p { margin-top: 14px; color: rgb(255 255 255 / .82); font-size: 17px; }
+  .demo .acciones { margin-top: 24px; }
+  .demo-panel { padding: 24px; border-radius: 20px; background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .16); }
+  .demo-panel h3 { font-size: 20px; }
+  .demo-panel p { font-size: 15px; margin: 8px 0 16px; }
+  @media (max-width: 820px) { .demo { grid-template-columns: 1fr; padding: 28px 20px; } }
+
+  /* IA */
+  .ia-sec { background: #fff; }
+  .ia-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 24px; align-items: start; }
+  .ia-card { padding: 30px; border-radius: 24px; background: var(--papel); border: 1px solid var(--borde); }
+  .ia-card h3 { font-size: 24px; margin: 12px 0 8px; }
+  .ia-card > p { color: var(--tinta-s); }
+  .ia-card ul:not(.chips) { margin: 14px 0 0; padding-left: 20px; display: grid; gap: 6px; color: var(--tinta-s); }
+  .ia-tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: #e3fbf5; color: var(--menta-o); font-weight: 800; font-size: 13px; }
+  .ia-propia { background: linear-gradient(165deg, #1f1660, var(--noche)); color: #fff; border-color: transparent; box-shadow: 0 30px 60px -24px rgb(124 92 255 / .7); }
+  .ia-propia > p, .ia-propia ul:not(.chips) { color: rgb(255 255 255 / .8); }
+  .ia-propia .ia-tag { background: var(--coral); color: var(--noche); }
+  .ia-propia .chips li { background: rgb(255 255 255 / .08); border-color: rgb(255 255 255 / .2); color: #fff; }
+  .ia-propia .chips li:hover { background: rgb(49 232 192 / .2); }
+  .ia-sub { margin-top: 18px; font-weight: 800; }
+  .pie { font-size: 13.5px; color: var(--tinta-s); }
+  .ia-pie { max-width: 820px; margin: 22px auto 0; text-align: center; }
+  .chat { margin: 20px 0 4px; padding: 16px; border-radius: 18px; background: rgb(0 0 0 / .25); border: 1px solid rgb(255 255 255 / .1); display: grid; gap: 10px; }
+  .msg { max-width: 88%; padding: 10px 14px; border-radius: 16px; font-size: 14.5px; line-height: 1.45; }
+  .msg.yo { justify-self: end; background: var(--violeta); color: #fff; border-bottom-right-radius: 4px; }
+  .resp { display: grid; }
+  .resp > * { grid-area: 1 / 1; }
+  .msg.ia { justify-self: start; background: #fff; color: var(--tinta); border-bottom-left-radius: 4px; }
+  .msg.ia b { color: var(--menta-o); }
+  .tipeo { justify-self: start; align-self: start; display: inline-flex; gap: 5px; padding: 14px 16px; border-radius: 16px; background: #fff; opacity: 0; }
+  .tipeo i { width: 7px; height: 7px; border-radius: 50%; background: var(--tinta-s); animation: punto 1s infinite; }
+  .tipeo i:nth-child(2) { animation-delay: .15s; } .tipeo i:nth-child(3) { animation-delay: .3s; }
+  @keyframes punto { 50% { transform: translateY(-4px); opacity: .4; } }
+  .ia-propia.visto .msg.yo { animation: entra .5s .3s both; }
+  .ia-propia.visto .tipeo { animation: tipea 1.6s 1s both; }
+  .ia-propia.visto .msg.ia { animation: entra .5s 2.6s both; }
+  @keyframes entra { from { opacity: 0; transform: translateY(10px); } }
+  @keyframes tipea { 0% { opacity: 0; } 15%, 85% { opacity: 1; } 100% { opacity: 0; } }
+  @media (max-width: 880px) { .ia-grid { grid-template-columns: 1fr; } .ia-card { padding: 24px 20px; } }
 
   footer { background: #0c0826; color: rgb(255 255 255 / .7); padding: 36px 0; font-size: 14.5px; }
   footer .envoltura { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; justify-content: space-between; }
@@ -251,7 +343,8 @@
       <button class="hamburguesa" id="hamburguesa" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><span></span></button>
       <ul class="menu" id="menu">
         <li><a href="#funciones">Funciones</a></li>
-        <li><a href="#como">Cómo funciona</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#ia">IA</a></li>
         <li><a href="#precios">Precios</a></li>
         <li><a href="#preguntas">Preguntas</a></li>
         <li><a class="btn btn-menta" href="docente.html">Entrar</a></li>
@@ -264,12 +357,12 @@
   <section class="hero grano" id="inicio" aria-labelledby="titulo-hero">
     <div class="envoltura">
       <div>
-        <span class="pildora revelar"><b>Nuevo</b> Genera exámenes con IA</span>
+        <a class="pildora revelar" href="#ia"><b>Nuevo</b> Conecta tu propia IA</a>
         <h1 id="titulo-hero" class="revelar" style="--d:.08s">Exámenes en línea que <em>no se pueden copiar</em></h1>
         <p class="sub revelar" style="--d:.16s">EvaluaSeguro es la plataforma para docentes y centros educativos: preguntas interactivas, antitrampa y cada respuesta en vivo mientras tus estudiantes toman el examen.</p>
         <div class="acciones revelar" style="--d:.24s">
-          <button class="btn btn-menta" type="button" data-contacto="Prueba gratis">Solicitar mi cuenta</button>
-          <a class="btn btn-vidrio" href="docente.html">Entrar</a>
+          <button class="btn btn-menta" type="button" data-plan="prueba">Solicitar mi cuenta</button>
+          <a class="btn btn-vidrio" href="examen.html?demo" target="_blank" rel="noopener">Prueba la demo<span class="sr"> (se abre en una pestaña nueva)</span></a>
         </div>
         <a class="estudiante revelar" style="--d:.3s" href="examen.html">Soy estudiante, tengo un código <span aria-hidden="true">→</span></a>
         <div class="cifras revelar" style="--d:.36s">
@@ -378,6 +471,73 @@
     </div>
   </section>
 
+  <section class="demo-sec" id="demo" aria-labelledby="titulo-demo">
+    <div class="envoltura">
+      <div class="demo revelar">
+        <div>
+          <span class="eti">Demo</span>
+          <h2 id="titulo-demo">Tómalo como si fueras tu estudiante</h2>
+          <p>Un examen de muestra con todos los tipos de pregunta: ordenar, relacionar con líneas, clasificar, completar, diagramas de flujo, algoritmos, numéricas, V/F justificada, imágenes, audio y video.</p>
+          <div class="acciones">
+            <a class="btn btn-menta" href="examen.html?demo" target="_blank" rel="noopener">Prueba la demo<span class="sr"> (se abre en una pestaña nueva)</span> <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <aside class="demo-panel">
+          <h3>¿Y el panel docente?</h3>
+          <p>Para probar el panel (crear exámenes, la rejilla en vivo, la IA y los reportes) solicita la prueba gratis: 14 días con todas las funciones.</p>
+          <button class="btn btn-claro" type="button" data-plan="prueba">Solicitar prueba gratis</button>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="ia-sec" id="ia" aria-labelledby="titulo-ia">
+    <div class="envoltura">
+      <div class="titulo revelar">
+        <span class="eti">Inteligencia artificial</span>
+        <h2 id="titulo-ia">Dos formas de crear exámenes con IA</h2>
+        <p>Usa la IA que trae la plataforma o conecta la que ya usas.</p>
+      </div>
+      <div class="ia-grid">
+        <article class="ia-card revelar">
+          <span class="ia-tag">Incluida</span>
+          <h3>IA integrada</h3>
+          <p><strong>IA integrada incluida para generar exámenes (cupo diario, actualmente hasta 3 por día*)</strong>, desde el panel docente.</p>
+          <ul>
+            <li>Escribe un tema o pega un texto y recibe preguntas de varios tipos.</li>
+            <li>Eliges la dificultad y la cantidad de preguntas.</li>
+            <li>Revisas y editas todo antes de publicar.</li>
+          </ul>
+        </article>
+        <article class="ia-card ia-propia revelar" style="--d:.1s">
+          <span class="ia-tag">Sin límite diario</span>
+          <h3>Conecta tu propia IA</h3>
+          <p>Claude, ChatGPT u otra compatible con MCP, con una clave personal desde <strong>Mi cuenta ▸ Conectar mi IA</strong>. Le hablas en lenguaje natural y ella trabaja en tu cuenta.</p>
+          <div class="chat" role="img" aria-label="Ejemplo de conversación: el docente pide «Créame un examen de 20 preguntas de fracciones para 3ro B con 5 de ordenar» y la IA responde «Listo: examen creado como borrador (20 preguntas)».">
+            <p class="msg yo" aria-hidden="true">Créame un examen de 20 preguntas de fracciones para 3ro B con 5 de ordenar</p>
+            <div class="resp" aria-hidden="true">
+              <span class="tipeo"><i></i><i></i><i></i></span>
+              <p class="msg ia"><b>✓</b> Listo: examen creado como borrador (20 preguntas)</p>
+            </div>
+          </div>
+          <p class="ia-sub">Tu IA puede:</p>
+          <ul class="chips">
+            <li>Crear y editar exámenes</li><li>Bancos de preguntas</li><li>Duplicar</li><li>Revisar resultados y notas</li><li>Corregir respuestas abiertas</li><li>Extender tiempo</li><li>Generar reportes</li>
+          </ul>
+          <p class="ia-sub">Ventajas:</p>
+          <ul>
+            <li>Velocidad: un examen completo en una sola petición.</li>
+            <li>Usa tus propios materiales.</li>
+            <li>Aprovechas la IA que ya pagas, sin límite diario de la plataforma.</li>
+            <li>Clave revocable y con vencimiento.</li>
+            <li>Solo ve lo de tu cuenta y no ve contraseñas.</li>
+          </ul>
+        </article>
+      </div>
+      <p class="pie ia-pie revelar">*La IA integrada depende de servicios externos: el cupo puede ajustarse y en horas de mucha demanda puede tardar o no estar disponible. Con tu propia IA conectada no dependes de ese cupo.</p>
+    </div>
+  </section>
+
   <section class="pasos-sec" id="como" aria-labelledby="titulo-como">
     <div class="envoltura">
       <div class="titulo revelar">
@@ -400,7 +560,7 @@
         <p>Empieza gratis. Sin tarjeta de crédito.</p>
       </div>
       <div class="precios" id="planes"></div>
-      <p class="letra revelar">Precios en pesos dominicanos. Pago por transferencia o en efectivo.</p>
+      <p class="letra revelar">Precios en pesos dominicanos. Pago por transferencia bancaria.<br><small>*La IA integrada depende de servicios externos: el cupo puede ajustarse y en horas de mucha demanda puede tardar o no estar disponible. Con tu propia IA conectada no dependes de ese cupo.</small></p>
     </div>
   </section>
 
@@ -415,22 +575,51 @@
         <details class="revelar"><summary>¿Funciona en celular?</summary><p>Sí. Las preguntas se adaptan a la pantalla del celular, la tableta o la computadora, incluso las de arrastrar y relacionar.</p></details>
         <details class="revelar"><summary>¿Pueden hacer trampa?</summary><p>Ninguna página web puede impedirlo al 100 %. Lo que sí hace EvaluaSeguro es ponérselo muy difícil (pantalla completa, bloqueo de copiar y pegar, trampas para IA, marca de agua) y, si el estudiante sale del examen, queda registrado y el examen se entrega.</p></details>
         <details class="revelar"><summary>¿Qué pasa si vence mi membresía?</summary><p>Puedes seguir viendo y descargando todos tus resultados. Lo que no podrás es crear exámenes nuevos hasta que renueves.</p></details>
-        <details class="revelar"><summary>¿Cómo pago?</summary><p>Por transferencia o en efectivo. Lo coordinamos contigo por WhatsApp.</p></details>
+        <details class="revelar"><summary>¿Cómo pago?</summary><p>Por transferencia a Banreservas. Al solicitar tu plan recibes un código de solicitud: escríbelo en la nota de la transferencia junto con tu nombre. Verificamos la transferencia y activamos tu plan.</p></details>
+        <details class="revelar"><summary>¿Qué es conectar mi IA?</summary><p>Desde Mi cuenta ▸ Conectar mi IA creas una clave personal para Claude, ChatGPT u otra IA compatible con MCP. Así tu IA crea y edita exámenes, revisa resultados, corrige respuestas abiertas y genera reportes cuando se lo pides en lenguaje natural. La clave se puede revocar, vence, solo ve lo de tu cuenta y no ve contraseñas.</p></details>
+        <details class="revelar"><summary>¿Cuántos exámenes puede generar la IA integrada?</summary><p>IA integrada incluida para generar exámenes (cupo diario, actualmente hasta 3 por día*). Con tu propia IA conectada no hay límite de la plataforma.</p><p class="pie">*La IA integrada depende de servicios externos: el cupo puede ajustarse y en horas de mucha demanda puede tardar o no estar disponible. Con tu propia IA conectada no dependes de ese cupo.</p></details>
         <details class="revelar"><summary>¿Qué datos de mis estudiantes guardan?</summary><p>Solo nombre y curso. No pedimos teléfono, cédula ni dirección.</p></details>
       </div>
     </div>
   </section>
 
-  <section class="cta grano" id="contacto" aria-labelledby="titulo-cta">
-    <div class="envoltura revelar">
-      <h2 id="titulo-cta">Tu próximo examen puede ser el más fácil de corregir</h2>
-      <p>Prueba EvaluaSeguro 14 días gratis y mira las respuestas llegar en vivo.</p>
-      <div class="acciones">
-        <button class="btn btn-menta" type="button" data-contacto="Prueba gratis">Solicitar mi cuenta</button>
-        <a class="btn btn-vidrio" href="docente.html">Entrar</a>
+  <section class="cta grano" id="empieza" aria-labelledby="titulo-cta">
+    <div class="envoltura">
+      <div class="cta-texto revelar">
+        <span class="eti">Empieza hoy</span>
+        <h2 id="titulo-cta">Tu próximo examen puede ser el más fácil de corregir</h2>
+        <p>Solicita tu cuenta y recibe al instante tu usuario y tu código de activación.</p>
+        <a class="dudas" id="dudas" hidden target="_blank" rel="noopener">¿Dudas? Escríbenos</a>
       </div>
-      <p class="contacto" id="escribenos" hidden tabindex="-1"><strong>Escríbenos</strong> para activar tu cuenta o cotizar para tu centro. Muy pronto publicaremos aquí nuestro WhatsApp y correo.</p>
+      <div class="caja revelar" style="--d:.1s">
+        <form id="solicitud" novalidate>
+          <div class="campo">
+            <label for="f-nombre">Nombre completo</label>
+            <input id="f-nombre" name="nombre" autocomplete="name" maxlength="80" required aria-describedby="e-nombre">
+            <small class="err" id="e-nombre"></small>
+          </div>
+          <div class="campo">
+            <label for="f-contacto">WhatsApp o correo</label>
+            <input id="f-contacto" name="contacto" maxlength="120" required aria-describedby="a-contacto e-contacto" placeholder="809 555 1234 o tu@correo.com">
+            <small class="ayuda" id="a-contacto">Lo usamos para identificar tu cuenta.</small>
+            <small class="err" id="e-contacto"></small>
+          </div>
+          <div class="campo">
+            <label for="f-centro">Centro educativo <span>(opcional)</span></label>
+            <input id="f-centro" name="centro" autocomplete="organization" maxlength="120">
+          </div>
+          <div class="campo">
+            <label for="f-plan">Plan</label>
+            <select id="f-plan" name="plan" aria-describedby="f-incluye"></select>
+            <ul class="incluye" id="f-incluye" aria-label="El plan incluye"></ul>
+          </div>
+          <p class="err general" id="e-general" role="alert"></p>
+          <button class="btn btn-menta enviar" id="f-enviar" type="submit">Solicitar mi cuenta</button>
+        </form>
+        <div class="resultado" id="resultado" hidden></div>
+      </div>
     </div>
+    <p class="sr" id="anuncio" aria-live="polite"></p>
   </section>
 </main>
 
@@ -446,20 +635,22 @@
   </div>
 </footer>
 
+<script src="config.js"></script>
 <script>
-  // Contacto: llena whatsapp (solo dígitos, con 1 + código de área, p. ej. '18095551234') o correo.
+  // Contacto opcional («¿Dudas? Escríbenos»): whatsapp (solo dígitos, con 1 + código de área, p. ej. '18095551234') o correo.
   var CONTACTO = { whatsapp: '', correo: '' };
 
-  // PROPUESTA de precios: edita aquí y la sección se actualiza sola.
+  // Precios: edita aquí y la sección y el formulario se actualizan solos. El id es el que recibe el servidor.
+  var DOCENTE_INCLUYE = ['1 docente', 'Exámenes y estudiantes ilimitados', 'IA integrada incluida para generar exámenes (cupo diario, actualmente hasta 3 por día*)', 'Conectar tu propia IA', 'Rejilla en vivo', 'Antitrampa con PIN por estudiante', 'Reportes en Excel y PDF'];
   var PLANES = [
-    { nombre: 'Prueba gratis', desc: 'Conoce todo sin compromiso.', precio: 'RD$0', periodo: '14 días', extra: '', boton: 'Empezar gratis',
-      incluye: ['Todas las funciones', 'Exámenes y prácticas', 'Rejilla en vivo'] },
-    { nombre: 'Docente', desc: 'Para un docente con sus cursos.', precio: 'RD$350', periodo: '/mes', extra: '', boton: 'Elegir mensual',
-      incluye: ['Exámenes ilimitados', 'Antitrampa y PIN por estudiante', 'Reportes en Excel y PDF', 'Generar con IA'] },
-    { nombre: 'Docente anual', desc: 'El mismo plan, pagando una vez al año.', precio: 'RD$3,500', periodo: '/año', extra: '2 meses gratis', boton: 'Elegir anual', destacado: true,
-      incluye: ['Todo lo del plan Docente', 'Un solo pago al año', 'Ahorras RD$700 al año'] },
-    { nombre: 'Centro educativo', desc: 'Para todo el equipo docente.', precio: 'Desde RD$3,000', periodo: '/mes', extra: 'Hasta 15 docentes', boton: 'Cotizar',
-      incluye: ['Cuentas para cada docente', 'Todas las funciones', 'Varios cursos y centros'] }
+    { id: 'prueba', nombre: 'Prueba gratis', desc: 'Conoce todo sin compromiso.', precio: 'RD$0', periodo: '14 días', extra: '', boton: 'Empezar gratis',
+      incluye: ['Todas las funciones', 'Exámenes y prácticas', 'IA integrada incluida para generar exámenes (cupo diario, actualmente hasta 3 por día*)', 'Conectar tu propia IA', 'Rejilla en vivo'] },
+    { id: 'docente_mensual', nombre: 'Docente', desc: 'Para un docente con sus cursos.', precio: 'RD$350', periodo: '/mes', extra: '', boton: 'Elegir mensual',
+      incluye: DOCENTE_INCLUYE },
+    { id: 'docente_anual', nombre: 'Docente anual', desc: 'El mismo plan, pagando una vez al año.', precio: 'RD$3,500', periodo: '/año', extra: '2 meses gratis', boton: 'Elegir anual', destacado: true,
+      incluye: DOCENTE_INCLUYE.concat(['Un solo pago al año: ahorras RD$700']) },
+    { id: 'centro', nombre: 'Centro educativo', desc: 'Para todo el equipo docente.', precio: 'Desde RD$3,000', periodo: '/mes', extra: 'Hasta 15 docentes', boton: 'Solicitar para mi centro',
+      incluye: ['Hasta 15 docentes con cuenta propia', 'Cuenta de Administración del centro: ve los exámenes, resultados y reportes de todo el centro', 'Cursos, estudiantes y exámenes ilimitados', 'Tarjetas de PIN por curso', 'IA integrada incluida para cada docente (cupo diario, actualmente hasta 3 exámenes por día cada uno*) y cada docente puede conectar su propia IA', 'Reportes por curso en Excel y PDF', 'Acompañamiento para empezar: carga de cursos y estudiantes'] }
   ];
 
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
@@ -472,23 +663,138 @@
       '<p class="precio">' + escapar(p.precio) + ' <small>' + escapar(p.periodo) + '</small></p>' +
       '<p class="extra">' + escapar(p.extra) + '</p>' +
       '<ul>' + p.incluye.map(function (x) { return '<li>' + CHECK + escapar(x) + '</li>'; }).join('') + '</ul>' +
-      '<button type="button" class="btn ' + (p.destacado ? 'btn-menta' : 'btn-oscuro') + '" data-contacto="' + escapar(p.nombre) + '">' + escapar(p.boton) + '</button>' +
+      '<button type="button" class="btn ' + (p.destacado ? 'btn-menta' : 'btn-oscuro') + '" data-plan="' + p.id + '">' + escapar(p.boton) + '</button>' +
       '</article>';
   }).join('');
 
-  // Botones de contacto: WhatsApp si hay número, si no correo, si no la nota «Escríbenos».
+  // «¿Dudas? Escríbenos»: solo aparece si hay WhatsApp o correo.
+  var wa = CONTACTO.whatsapp.replace(/\D/g, ''), dudas = document.getElementById('dudas');
+  if (wa || CONTACTO.correo) {
+    dudas.href = wa ? 'https://wa.me/' + wa + '?text=' + encodeURIComponent('Hola, tengo una pregunta sobre EvaluaSeguro.') : 'mailto:' + CONTACTO.correo + '?subject=' + encodeURIComponent('EvaluaSeguro');
+    dudas.hidden = false;
+  }
+
+  // Formulario «Empieza hoy»
+  var PAGO = window.PAGO || {};
+  var form = document.getElementById('solicitud'), selPlan = document.getElementById('f-plan'), resultado = document.getElementById('resultado');
+  var enviar = document.getElementById('f-enviar'), errGeneral = document.getElementById('e-general'), anuncio = document.getElementById('anuncio');
+  var planPorId = function (id) { return PLANES.filter(function (p) { return p.id === id; })[0]; };
+  selPlan.innerHTML = PLANES.map(function (p) { return '<option value="' + p.id + '">' + escapar(p.nombre + ' · ' + p.precio + ' ' + p.periodo) + '</option>'; }).join('');
+  var mostrarIncluye = function () {
+    document.getElementById('f-incluye').innerHTML = planPorId(selPlan.value).incluye.map(function (x) { return '<li>' + escapar(x) + '</li>'; }).join('');
+  };
+  selPlan.addEventListener('change', mostrarIncluye); mostrarIncluye();
+
   document.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-contacto]');
+    var b = e.target.closest('[data-plan]');
     if (!b) return;
-    var msg = 'Hola, me interesa EvaluaSeguro, plan: ' + b.getAttribute('data-contacto') + '.';
-    var wa = CONTACTO.whatsapp.replace(/\D/g, '');
-    if (wa) return window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
-    if (CONTACTO.correo) return location.href = 'mailto:' + CONTACTO.correo + '?subject=' + encodeURIComponent('EvaluaSeguro') + '&body=' + encodeURIComponent(msg);
-    var nota = document.getElementById('escribenos');
-    nota.hidden = false;
-    nota.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    nota.focus({ preventScroll: true });
+    selPlan.value = b.getAttribute('data-plan'); mostrarIncluye();
+    var dest = document.getElementById('empieza');
+    dest.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth' });
+    (resultado.hidden ? document.getElementById('f-nombre') : resultado.querySelector('h3')).focus({ preventScroll: true });
   });
+
+  var marcarError = function (id, msg) {
+    var inp = document.getElementById('f-' + id);
+    document.getElementById('e-' + id).textContent = msg;
+    if (msg) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
+    return !msg;
+  };
+  var validar = function (d) {
+    var esCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.contacto), digitos = d.contacto.replace(/\D/g, '').length;
+    var okN = marcarError('nombre', d.nombre.length < 3 ? 'Escribe tu nombre completo.' : '');
+    var okC = marcarError('contacto', !d.contacto ? 'Escribe tu WhatsApp o tu correo.' :
+      (d.contacto.indexOf('@') >= 0 ? !esCorreo : (digitos < 10 || digitos > 15 || /[^\d\s()+-]/.test(d.contacto))) ? 'Escribe un WhatsApp de 10 dígitos (p. ej. 809 555 1234) o un correo válido.' : '');
+    if (!okN) document.getElementById('f-nombre').focus(); else if (!okC) document.getElementById('f-contacto').focus();
+    return okN && okC;
+  };
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (enviar.disabled) return;
+    errGeneral.textContent = '';
+    var d = { action: 'solicitarCuenta', nombre: form.nombre.value.trim(), contacto: form.contacto.value.trim(), centro: form.centro.value.trim(), plan: selPlan.value };
+    if (!validar(d)) return;
+    if (!window.EXAMEN_API) { errGeneral.textContent = 'El servicio no está disponible en este momento. Intenta más tarde.'; return; }
+    enviar.disabled = true; form.setAttribute('aria-busy', 'true');
+    enviar.innerHTML = '<span class="girar" aria-hidden="true"></span> Enviando…';
+    anuncio.textContent = 'Enviando tu solicitud…';
+    // Cuerpo text/plain sin cabeceras propias: no hay preflight CORS con Apps Script.
+    fetch(window.EXAMEN_API, { method: 'POST', body: JSON.stringify(d), redirect: 'follow' })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok) { var err = new Error((res && res.error) || 'No pudimos procesar tu solicitud. Intenta de nuevo.'); err.servidor = true; throw err; }
+        mostrarResultado(res, d);
+      })
+      .catch(function (err) {
+        errGeneral.textContent = err.servidor ? err.message : 'No pudimos conectar con el servidor. Revisa tu conexión a internet e intenta de nuevo.';
+        anuncio.textContent = '';
+      })
+      .then(function () { enviar.disabled = false; form.removeAttribute('aria-busy'); enviar.textContent = 'Solicitar mi cuenta'; });
+  });
+
+  var copiable = function (etiqueta, valor) {
+    return '<div class="dato"><div><span>' + escapar(etiqueta) + '</span><strong>' + escapar(valor) + '</strong></div>' +
+      '<button type="button" class="copiar" data-copiar="' + escapar(valor) + '" aria-label="Copiar ' + escapar(etiqueta.toLowerCase()) + '">Copiar</button></div>';
+  };
+  var dinero = function (monto, moneda) {
+    if (monto === undefined || monto === null || monto === '') return '';
+    var sim = !moneda || /^(DOP|RD\$?)$/i.test(moneda) ? 'RD$' : moneda + ' ';
+    return sim + (typeof monto === 'number' ? monto.toLocaleString('en-US') : monto);
+  };
+
+  function mostrarResultado(res, d) {
+    var plan = planPorId(res.plan || d.plan) || planPorId(d.plan), gratis = plan.id === 'prueba', h = '';
+    if (res.activacion) {
+      h += '<h3 tabindex="-1">Tu cuenta está lista</h3>';
+      if (gratis) h += '<span class="sello">Tienes 14 días gratis</span>';
+      h += '<div class="datos">' + (res.usuario ? copiable('Usuario', res.usuario) : '') + copiable('Código de activación', res.activacion) + '</div>' +
+        '<p>Entra al panel docente, abre la pestaña <strong>Activar mi cuenta</strong> y crea tu contraseña con este código.</p>' +
+        '<a class="btn btn-menta" href="docente.html">Activar mi cuenta</a>';
+    } else {
+      h += '<h3 tabindex="-1">Ya tienes una cuenta</h3>' +
+        '<p>Este WhatsApp o correo ya tiene una cuenta. Inicia sesión en el panel docente.</p>' +
+        (res.usuario ? '<div class="datos">' + copiable('Usuario', res.usuario) + '</div>' : '') +
+        '<a class="btn btn-menta" href="docente.html">Iniciar sesión</a>';
+    }
+    if (!gratis) {
+      var codigo = res.codigo || '';
+      h += '<div class="pago"><h4>Pago del plan ' + escapar(plan.nombre) + '</h4><dl>' +
+        (PAGO.banco ? '<dt>Banco</dt><dd>' + escapar(PAGO.banco) + '</dd>' : '') +
+        (PAGO.tipo ? '<dt>Tipo</dt><dd>' + escapar(PAGO.tipo) + '</dd>' : '') +
+        (PAGO.cuenta ? '<dt>Cuenta</dt><dd class="cuenta">' + escapar(PAGO.cuenta) + ' <button type="button" class="copiar" data-copiar="' + escapar(PAGO.cuenta) + '" aria-label="Copiar número de cuenta">Copiar</button></dd>' : '') +
+        (PAGO.titular ? '<dt>Titular</dt><dd>' + escapar(PAGO.titular) + '</dd>' : '') +
+        (dinero(res.monto, res.moneda) ? '<dt>Monto</dt><dd>' + escapar(dinero(res.monto, res.moneda)) + '</dd>' : '') +
+        '</dl>' +
+        (codigo ? '<div class="nota-codigo"><p>Escribe en la nota de la transferencia:</p><strong>' + escapar(codigo) + '</strong><p>+ tu nombre</p></div>' +
+          '<button type="button" class="copiar" data-copiar="' + escapar(codigo) + '" aria-label="Copiar código de solicitud">Copiar código</button>' : '') +
+        (PAGO.instrucciones ? '<p style="margin-top:10px">' + escapar(PAGO.instrucciones) + '</p>' : '') +
+        '<p style="margin-top:10px"><strong>Verificamos la transferencia y activamos tu plan.</strong> Mientras tanto ya puedes usar la prueba gratis.</p></div>';
+    }
+    h += '<button type="button" class="otra" id="otra">Hacer otra solicitud</button>';
+    resultado.innerHTML = h;
+    form.hidden = true; resultado.hidden = false;
+    anuncio.textContent = '';
+    resultado.querySelector('h3').focus();
+  }
+
+  resultado.addEventListener('click', function (e) {
+    if (e.target.id === 'otra') { resultado.hidden = true; form.hidden = false; form.reset(); mostrarIncluye(); form.nombre.focus(); return; }
+    var b = e.target.closest('[data-copiar]');
+    if (!b) return;
+    var txt = b.getAttribute('data-copiar'), listo = function () {
+      var antes = b.textContent; b.textContent = 'Copiado ✓'; anuncio.textContent = 'Copiado: ' + txt;
+      setTimeout(function () { b.textContent = antes; }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(listo, function () { copiarViejo(txt) && listo(); });
+    else if (copiarViejo(txt)) listo();
+  });
+  function copiarViejo(txt) {
+    var t = document.createElement('textarea'); t.value = txt; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (x) {}
+    t.remove(); return ok;
+  }
 
   // Barra translúcida y menú móvil
   var barra = document.getElementById('barra'), ham = document.getElementById('hamburguesa'), menu = document.getElementById('menu');
